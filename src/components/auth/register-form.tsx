@@ -16,12 +16,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox"; // Keep for UI, 2FA handled by Firebase
 import { useToast } from "@/hooks/use-toast";
 import { UserPlus, Mail, KeyRound, ShieldCheck, Smartphone, Loader2 } from "lucide-react";
-import { useMockAuth } from "@/hooks/use-mock-auth";
+import { useAuth } from "@/hooks/use-auth"; // Updated import
 import {
-  Dialog,
+  Dialog, // Keep for potential future 2FA UI, though Firebase handles it differently
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -31,14 +31,14 @@ import {
 
 const registerSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
-  password: z.string().min(8, { message: "Password must be at least 8 characters." }) // Proposal: 12, using 8 for demo ease
+  password: z.string().min(8, { message: "Password must be at least 8 characters." })
     .regex(/[A-Z]/, "Must contain an uppercase letter")
     .regex(/[a-z]/, "Must contain a lowercase letter")
     .regex(/[0-9]/, "Must contain a number")
     .regex(/[^A-Za-z0-9]/, "Must contain a special character"),
   confirmPassword: z.string(),
-  enable2FA: z.boolean().default(false).optional(),
-  phone: z.string().optional(), // Optional for demo
+  // enable2FA: z.boolean().default(false).optional(), // 2FA setup is usually post-registration via Firebase
+  // phone: z.string().optional(), // For Firebase phone auth or 2FA SMS if used
 }).refine(data => data.password === data.confirmPassword, {
   message: "Passwords don't match.",
   path: ["confirmPassword"],
@@ -64,13 +64,12 @@ const AppleIcon = () => (
   </svg>
 );
 
-
 export function RegisterForm() {
   const { toast } = useToast();
-  const { register } = useMockAuth();
-  const [isLoading, setIsLoading] = useState(false);
-  const [show2FASetup, setShow2FASetup] = useState(false);
-  const [otp, setOtp] = useState("");
+  const { signUpWithEmail, signInWithGoogle, signInWithApple, isLoading: authLoading } = useAuth(); // Updated to useAuth
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [show2FASetup, setShow2FASetup] = useState(false); // 2FA dialog might be removed or repurposed
+  // const [otp, setOtp] = useState("");
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -78,59 +77,35 @@ export function RegisterForm() {
       email: "",
       password: "",
       confirmPassword: "",
-      enable2FA: false,
-      phone: "",
+      // enable2FA: false,
+      // phone: "",
     },
   });
 
   async function onSubmit(data: RegisterFormValues) {
-    setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-
-    if (data.enable2FA) {
-      setShow2FASetup(true);
-      // In a real app, you'd generate a QR code secret here
-    } else {
-      toast({
-        title: "Registration Successful",
-        description: "Welcome to CryptoDapper Demo!",
-      });
-      register(); // Mock register and redirect
-    }
-    setIsLoading(false);
+    setIsSubmitting(true);
+    await signUpWithEmail(data.email, data.password);
+    // If signUpWithEmail is successful, useAuth hook will redirect
+    setIsSubmitting(false);
   }
 
-  async function handle2FASetup() {
-    setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate OTP verification
-    
-    if (otp === "123456") { // Mock OTP
-      setShow2FASetup(false);
-      toast({
-        title: "2FA Setup Successful!",
-        description: "Your account is now protected with 2FA.",
-      });
-      toast({
-        title: "Registration Successful",
-        description: "Welcome to CryptoDapper Demo!",
-      });
-      register(); // Mock register and redirect
-    } else {
-      toast({
-        variant: "destructive",
-        title: "Invalid OTP",
-        description: "The OTP you entered is incorrect. Please try again.",
-      });
-    }
-    setIsLoading(false);
-  }
+  // 2FA setup would typically be handled within Firebase user management settings
+  // after initial registration, or by enabling multi-factor auth in Firebase project.
+  // The existing dialog logic might be removed or simplified if Firebase handles UI.
 
-  const handleSocialRegister = (provider: string) => {
-    toast({
-      title: "Social Sign-up (Demo)",
-      description: `${provider} sign-up is not implemented in this demo.`,
-    });
+  const handleGoogleRegister = async () => {
+    setIsSubmitting(true);
+    await signInWithGoogle(); // Firebase handles new user creation with social providers
+    setIsSubmitting(false);
   };
+
+  const handleAppleRegister = async () => {
+    setIsSubmitting(true);
+    await signInWithApple();
+    setIsSubmitting(false);
+  };
+  
+  const currentIsLoading = authLoading || isSubmitting;
 
   return (
     <>
@@ -184,48 +159,11 @@ export function RegisterForm() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="enable2FA"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm bg-primary/20">
-                 <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    className="border-accent data-[state=checked]:bg-gold-accent data-[state=checked]:text-primary"
-                  />
-                </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel className="text-foreground">
-                    Enable Two-Factor Authentication (2FA)
-                  </FormLabel>
-                  <FormMessage />
-                </div>
-              </FormItem>
-            )}
-          />
-          {form.getValues("enable2FA") && (
-             <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-foreground">Phone Number (for SMS 2FA - optional demo)</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                      <Input type="tel" placeholder="+1 555-123-4567" {...field} className="pl-10" />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+          {/* 2FA checkbox can be removed as Firebase MFA is typically managed post-signup */}
+          {/* Or it can be a user preference saved to their profile later */}
           
-          <Button type="submit" className="w-full btn-gold" disabled={isLoading}>
-            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
+          <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading}>
+            {currentIsLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
             Register
           </Button>
 
@@ -240,52 +178,27 @@ export function RegisterForm() {
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Button variant="outline" className="w-full" onClick={() => handleSocialRegister("Google")} disabled={isLoading}>
-              <GoogleIcon /> <span className="ml-2">Google</span>
+            <Button variant="outline" className="w-full" onClick={handleGoogleRegister} disabled={currentIsLoading}>
+             {currentIsLoading && form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
+              <span className="ml-2">Google</span>
             </Button>
-            <Button variant="outline" className="w-full" onClick={() => handleSocialRegister("Apple")} disabled={isLoading}>
-              <AppleIcon /> <span className="ml-2">Apple</span>
+            <Button variant="outline" className="w-full" onClick={handleAppleRegister} disabled={currentIsLoading}>
+              {currentIsLoading && form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <AppleIcon />}
+              <span className="ml-2">Apple</span>
             </Button>
           </div>
 
         </form>
       </Form>
 
+      {/* The 2FA dialog may no longer be needed here if Firebase handles MFA setup flows */}
+      {/*
       <Dialog open={show2FASetup} onOpenChange={setShow2FASetup}>
         <DialogContent className="sm:max-w-[425px] bg-card border-border">
-          <DialogHeader>
-            <DialogTitle className="text-foreground text-2xl">Setup Two-Factor Authentication</DialogTitle>
-            <DialogDescription className="text-muted-foreground">
-              Scan the QR code with your authenticator app (e.g., Google Authenticator).
-              For demo purposes, use any QR code and enter OTP '123456'.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="flex justify-center">
-              {/* Placeholder QR Code */}
-              <img src="https://placehold.co/200x200/2E3B55/C0C0C0?text=Mock+QR+Code" alt="Mock QR Code" data-ai-hint="qr code" className="rounded-md border border-border"/>
-            </div>
-            <div className="space-y-2">
-              <FormLabel htmlFor="otp" className="text-foreground">Enter OTP</FormLabel>
-              <Input 
-                id="otp" 
-                value={otp} 
-                onChange={(e) => setOtp(e.target.value)}
-                placeholder="Enter 6-digit code"
-                className="text-center text-xl tracking-widest"
-                maxLength={6}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShow2FASetup(false)} className="text-accent border-accent hover:bg-accent hover:text-accent-foreground">Cancel</Button>
-            <Button onClick={handle2FASetup} className="btn-silver" disabled={isLoading}>
-              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShieldCheck className="mr-2 h-4 w-4" />}
-              Verify & Complete Setup
-            </Button>
-          </DialogFooter>
+         ... Dialog content for mock 2FA setup ...
         </DialogContent>
       </Dialog>
+      */}
     </>
   );
 }

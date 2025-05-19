@@ -1,57 +1,60 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation'; // useRouter removed as redirect is in useAuth
 import { Header } from '@/components/layout/header';
-import { Footer } from '@/components/layout/footer';
+// import { Footer } from '@/components/layout/footer'; // Footer not typically in app shells
 import { DynamicLogo } from '@/components/core/dynamic-logo';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { NAV_LINKS_AUTHENTICATED } from '@/constants';
-import { LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LogOut, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-// Mock authentication
-const MOCK_AUTH_KEY = 'cryptoDapperMockAuth';
+import { useAuth } from '@/hooks/use-auth'; // Updated import
 
 interface AppShellProps {
   children: React.ReactNode;
 }
 
 export function AppShell({ children }: AppShellProps) {
-  const router = useRouter();
   const pathname = usePathname();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(undefined);
+  const { user, isLoading: authIsLoading, logout } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  useEffect(() => {
-    // Client-side check for mock authentication
-    const authStatus = localStorage.getItem(MOCK_AUTH_KEY) === 'true';
-    setIsAuthenticated(authStatus);
-    if (!authStatus) {
-      router.replace('/auth/login');
-    }
-  }, [router]);
+  // useAuth hook now handles redirection if user is not authenticated.
+  // The loading state from useAuth indicates if Firebase auth state is being determined.
 
-  const handleLogout = () => {
-    localStorage.removeItem(MOCK_AUTH_KEY);
-    setIsAuthenticated(false);
-    router.replace('/auth/login');
+  if (authIsLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background text-foreground">
+        <Loader2 className="h-8 w-8 animate-spin text-gold-accent" />
+        <span className="ml-2">Loading application...</span>
+      </div>
+    );
+  }
+
+  if (!user) {
+    // This case should ideally be handled by redirection in useAuth,
+    // but as a fallback or if redirection hasn't completed yet.
+    // Depending on how useAuth is structured, this might not even be hit if redirection is synchronous enough.
+    return (
+       <div className="flex items-center justify-center min-h-screen bg-background text-foreground">
+        <Loader2 className="h-8 w-8 animate-spin text-gold-accent" />
+        <span className="ml-2">Redirecting to login...</span>
+      </div>
+    );
+  }
+  
+  const handleLogout = async () => {
+    await logout();
   };
 
-  if (isAuthenticated === undefined) {
-    // Optional: Add a loading spinner or skeleton screen here
-    return <div className="flex items-center justify-center min-h-screen bg-background text-foreground">Loading...</div>;
-  }
-
-  if (!isAuthenticated) {
-    return null; // Router will redirect
-  }
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header isAuthenticated={true} />
+      <Header isAuthenticated={!!user} />
       <div className="flex flex-1">
         {/* Sidebar */}
         <aside 
@@ -110,8 +113,9 @@ export function AppShell({ children }: AppShellProps) {
                 )} 
               onClick={handleLogout}
               title={!isSidebarOpen ? "Logout" : undefined}
+              disabled={authIsLoading}
             >
-              <LogOut className="h-5 w-5 shrink-0" />
+              {authIsLoading ? <Loader2 className="h-5 w-5 shrink-0 animate-spin" /> : <LogOut className="h-5 w-5 shrink-0" />}
               {isSidebarOpen && <span>Logout</span>}
             </Button>
           </div>
@@ -122,8 +126,6 @@ export function AppShell({ children }: AppShellProps) {
           {children}
         </main>
       </div>
-      {/* Footer is not typically part of an app shell like this, but can be added if needed */}
-      {/* <Footer /> */}
     </div>
   );
 }

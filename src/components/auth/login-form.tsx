@@ -18,15 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { LogIn, Mail, KeyRound, ShieldAlert, Loader2 } from "lucide-react";
-import { useMockAuth } from "@/hooks/use-mock-auth";
-
-const loginSchema = z.object({
-  email: z.string().email({ message: "Invalid email address." }),
-  password: z.string().min(1, { message: "Password is required." }), // Min 1 for demo, proposal says 12 for actual
-  otp: z.string().optional(),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
+import { useAuth } from "@/hooks/use-auth"; // Updated import
 
 // SVG Icon for Google
 const GoogleIcon = () => (
@@ -46,165 +38,116 @@ const AppleIcon = () => (
   </svg>
 );
 
+const loginSchema = z.object({
+  email: z.string().email({ message: "Invalid email address." }),
+  password: z.string().min(1, { message: "Password is required." }), // Min 1 for demo, usually 8-12
+  // OTP might be handled by Firebase multi-factor auth if implemented
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
+
 export function LoginForm() {
   const { toast } = useToast();
-  const { login } = useMockAuth();
-  const [isLoading, setIsLoading] = useState(false);
-  const [showOtp, setShowOtp] = useState(false);
+  const { logInWithEmail, signInWithGoogle, signInWithApple, isLoading: authLoading } = useAuth(); // Updated to useAuth
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [showOtp, setShowOtp] = useState(false); // 2FA to be handled by Firebase if needed
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
-      otp: "",
     },
   });
 
   async function onSubmit(data: LoginFormValues) {
-    setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    if (!showOtp) {
-      // Simulate OTP requirement for a specific demo user
-      if (data.email === "user@example.com" && data.password === "password123") {
-        setShowOtp(true);
-        toast({
-          title: "2FA Required",
-          description: "Please enter the OTP from your authenticator app.",
-        });
-      } else if (data.password === "password123") { // Generic successful login for demo
-        toast({
-          title: "Login Successful",
-          description: "Welcome back!",
-        });
-        login();
-      } else {
-         toast({
-          variant: "destructive",
-          title: "Login Failed",
-          description: "Invalid email or password.",
-        });
-      }
-    } else {
-      // Simulate OTP verification
-      if (data.otp === "123456") {
-        toast({
-          title: "Login Successful",
-          description: "Welcome back! 2FA verified.",
-        });
-        login();
-      } else {
-        toast({
-          variant: "destructive",
-          title: "2FA Failed",
-          description: "Invalid OTP. Please try again.",
-        });
-      }
-    }
-    setIsLoading(false);
+    setIsSubmitting(true);
+    await logInWithEmail(data.email, data.password);
+    setIsSubmitting(false);
   }
 
-  const handleSocialLogin = (provider: string) => {
-    toast({
-      title: "Social Login (Demo)",
-      description: `${provider} login is not implemented in this demo.`,
-    });
+  const handleGoogleLogin = async () => {
+    setIsSubmitting(true);
+    await signInWithGoogle();
+    setIsSubmitting(false);
   };
+
+  const handleAppleLogin = async () => {
+    setIsSubmitting(true);
+    await signInWithApple();
+    setIsSubmitting(false);
+  };
+  
+  const currentIsLoading = authLoading || isSubmitting;
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {!showOtp && (
-          <>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-foreground">Email</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                      <Input placeholder="you@example.com" {...field} className="pl-10" />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-foreground">Password</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                      <Input type="password" placeholder="••••••••" {...field} className="pl-10" />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </>
-        )}
-
-        {showOtp && (
-          <FormField
-            control={form.control}
-            name="otp"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-foreground">One-Time Password (OTP)</FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <ShieldAlert className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input placeholder="Enter 6-digit OTP" {...field} className="pl-10" />
-                  </div>
-                </FormControl>
-                <FormMessage />
-                <p className="text-xs text-muted-foreground pt-1">Demo OTP: 123456</p>
-              </FormItem>
-            )}
-          />
-        )}
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-foreground">Email</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                  <Input placeholder="you@example.com" {...field} className="pl-10" />
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-foreground">Password</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                  <Input type="password" placeholder="••••••••" {...field} className="pl-10" />
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         
-        <Button type="submit" className="w-full btn-gold" disabled={isLoading}>
-          {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogIn className="mr-2 h-4 w-4" />}
-          {showOtp ? "Verify OTP" : "Login"}
+        <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading}>
+          {currentIsLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogIn className="mr-2 h-4 w-4" />}
+          Login
         </Button>
         
-        {!showOtp && (
-          <>
-            <div className="relative my-4">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-border/50" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">
-                  Or sign in with
-                </span>
-              </div>
+        <>
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-border/50" />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Button variant="outline" className="w-full" onClick={() => handleSocialLogin("Google")} disabled={isLoading}>
-                <GoogleIcon /> <span className="ml-2">Google</span>
-              </Button>
-              <Button variant="outline" className="w-full" onClick={() => handleSocialLogin("Apple")} disabled={isLoading}>
-                <AppleIcon /> <span className="ml-2">Apple</span>
-              </Button>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">
+                Or sign in with
+              </span>
             </div>
-            <div className="text-sm text-center mt-4">
-              <Link href="/auth/recover" className="font-medium text-gold-accent hover:underline">
-                Forgot password?
-              </Link>
-            </div>
-          </>
-        )}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Button variant="outline" className="w-full" onClick={handleGoogleLogin} disabled={currentIsLoading}>
+              {currentIsLoading && form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
+              <span className="ml-2">Google</span>
+            </Button>
+            <Button variant="outline" className="w-full" onClick={handleAppleLogin} disabled={currentIsLoading}>
+              {currentIsLoading && form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <AppleIcon />}
+              <span className="ml-2">Apple</span>
+            </Button>
+          </div>
+          <div className="text-sm text-center mt-4">
+            <Link href="/auth/recover" className="font-medium text-gold-accent hover:underline">
+              Forgot password?
+            </Link>
+          </div>
+        </>
       </form>
     </Form>
   );
