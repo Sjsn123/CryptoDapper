@@ -11,11 +11,11 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
-  // GoogleAuthProvider, // Type is implicitly handled by googleProvider instance
-  // OAuthProvider,    // Type is implicitly handled by appleProvider instance
+  GoogleAuthProvider, // Type is implicitly handled by googleProvider instance
+  OAuthProvider, // Type is implicitly handled by appleProvider instance
 } from 'firebase/auth';
-import { auth, googleProvider, appleProvider } from '@/lib/firebase'; // Ensured path is correct
-import { useToast } from '@/hooks/use-toast'; // Ensured path is correct
+import { auth, googleProvider, appleProvider } from '@/lib/firebase.ts'; // Added .ts
+import { useToast } from '@/hooks/use-toast.ts'; // Added .ts
 
 interface AuthContextType {
   user: User | null;
@@ -41,8 +41,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(currentUser);
       setIsLoading(false); // Set loading to false once auth state is determined
 
-      const isAuthPage = typeof window !== 'undefined' && window.location.pathname.startsWith('/auth');
-      
+      const isAuthPage =
+        typeof window !== 'undefined' && window.location.pathname.startsWith('/auth');
       const protectedPaths = ['/dashboard', '/education', '/events'];
       const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
       
@@ -59,58 +59,64 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const handleAuthError = useCallback((error: any, context: string) => {
     console.error(`${context} Error:`, error);
+
     let description = error.message || `Failed to perform action with ${context}.`;
     if (error.code) {
-        switch (error.code) {
-            case 'auth/popup-closed-by-user':
-                description = `You closed the ${context} sign-in window. Please try again.`;
-                break;
-            case 'auth/account-exists-with-different-credential':
-                description = "An account already exists with this email using a different sign-in method. Try that method.";
-                break;
-            case 'auth/email-already-in-use':
-                description = "This email address is already in use. Try logging in or use a different email.";
-                break;
-            case 'auth/wrong-password':
-            case 'auth/user-not-found': 
-            case 'auth/invalid-credential':
-                description = "Invalid email or password. Please check your credentials and try again.";
-                break;
-            case 'auth/network-request-failed':
-                description = "A network error occurred. Check your internet connection and try again.";
-                break;
-            case 'auth/requires-recent-login':
-                description = "This action requires a recent login. Please log out and log back in to continue.";
-                break;
-            case 'auth/identity-toolkit-api-has-not-been-used-before-or-it-is-disabled':
-                description = "Authentication service is not enabled for this project. Please enable it in your Firebase console (Identity Toolkit API).";
-                break;
-            case 'auth/requests-from-referer-are-blocked':
-                 description = "Sign-in requests from this website are blocked. Check your API key's HTTP referrer restrictions in Google Cloud Console.";
-                 break;
-            default:
-                // Use the default description if the code is not specifically handled
-                break;
-        }
+      switch (error.code) {
+        case 'auth/popup-closed-by-user':
+          description = `You closed the ${context} sign-in window. Please try again.`;
+          break;
+        case 'auth/account-exists-with-different-credential':
+          description =
+            'An account already exists with this email using a different sign-in method. Try that method.';
+          break;
+        case 'auth/email-already-in-use':
+          description =
+            'This email address is already in use. Try logging in or use a different email.';
+          break;
+        case 'auth/wrong-password':
+        case 'auth/user-not-found':
+        case 'auth/invalid-credential':
+          description = 'Invalid email or password. Please check your credentials and try again.';
+          break;
+        case 'auth/network-request-failed':
+          description = 'A network error occurred. Check your internet connection and try again.';
+          break;
+        case 'auth/requires-recent-login':
+          description =
+            'This action requires a recent login. Please log out and log back in to continue.';
+          break;
+        case 'auth/identity-toolkit-api-has-not-been-used-before-or-it-is-disabled':
+          description =
+            'Authentication service is not enabled for this project. Please enable it in your Firebase console (Identity Toolkit API).';
+          break;
+        case 'auth/requests-from-referer-are-blocked':
+           description = "Sign-in requests from this website's address (referer) are blocked. Check your API key's HTTP referrer restrictions in Google Cloud Console.";
+          break;
+        default:
+          // Use the default description if the code is not specifically handled
+          break;
+      }
     }
-    toast({ variant: "destructive", title: `${context} Error`, description });
+    toast({ variant: 'destructive', title: `${context} Error`, description });
   }, [toast]);
 
   const handleAuthSuccess = useCallback((context: string, message?: string) => {
-    toast({ title: `${context} Successful`, description: message || "Redirecting..." });
+    toast({ title: `${context} Successful`, description: message || 'Redirecting...' });
   }, [toast]);
 
   const signInWithGoogle = useCallback(async () => {
     setIsLoading(true);
     try {
       await signInWithPopup(auth, googleProvider);
-      // handleAuthSuccess("Google Sign-In"); // Success handled by onAuthStateChanged
+      // Success is handled by onAuthStateChanged redirecting to /dashboard
+      // handleAuthSuccess("Google Sign-In"); 
     } catch (error) {
       handleAuthError(error, "Google Sign-In");
     } finally {
-      // setIsLoading(false); // onAuthStateChanged will set this
+      // setIsLoading(false); // onAuthStateChanged handles loading state changes after auth state is known
     }
-  }, [handleAuthError]);
+  }, [handleAuthError, auth, googleProvider]);
 
   const signInWithApple = useCallback(async () => {
     setIsLoading(true);
@@ -122,13 +128,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       // setIsLoading(false);
     }
-  }, [handleAuthError]);
+  }, [handleAuthError, auth, appleProvider]);
 
   const signUpWithEmail = async (email: string, password: string): Promise<User | null> => {
     setIsLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      handleAuthSuccess("Registration", "Welcome! Your account has been created.");
+      handleAuthSuccess('Registration', 'Welcome! Your account has been created.');
       return userCredential.user;
     } catch (error) {
       handleAuthError(error, "Email Sign Up");
@@ -142,7 +148,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      handleAuthSuccess("Login");
+      handleAuthSuccess('Login');
       return userCredential.user;
     } catch (error) {
       handleAuthError(error, "Email Login");
@@ -156,7 +162,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true); 
     try {
       await sendPasswordResetEmail(auth, email);
-      toast({ title: "Password Reset Email Sent", description: "If an account exists for this email, a reset link has been sent." });
+      toast({
+        title: 'Password Reset Email Sent',
+        description: 'If an account exists for this email, a reset link has been sent.',
+      });
     } catch (error) {
       handleAuthError(error, "Password Reset");
     } finally {
@@ -168,13 +177,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     try {
       await firebaseSignOut(auth);
-      toast({ title: "Logged Out", description: "You have been successfully logged out." });
+      // User will be set to null by onAuthStateChanged, which will trigger redirect
+      toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
     } catch (error) {
       handleAuthError(error, "Logout");
     } finally {
-      // setIsLoading(false); 
+      // setIsLoading(false); // onAuthStateChanged handles this indirectly
     }
-  }, [toast, handleAuthError]);
+  }, [toast, handleAuthError, auth]);
 
   const authContextValue: AuthContextType = {
     user,

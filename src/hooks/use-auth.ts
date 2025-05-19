@@ -17,7 +17,7 @@ import {
 import { auth, googleProvider, appleProvider } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   signInWithGoogle: () => Promise<void>;
@@ -42,15 +42,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
 
       const isAuthPage = typeof window !== 'undefined' && window.location.pathname.startsWith('/auth');
-      const isProtectedPage = typeof window !== 'undefined' &&
+      const isProtectedPage = typeof window !== 'undefined'
         !isAuthPage &&
         !['/', '/privacy-policy', '/terms-of-use', '/about', '/contact'].includes(window.location.pathname) &&
         (window.location.pathname.startsWith('/dashboard') ||
          window.location.pathname.startsWith('/education') ||
          window.location.pathname.startsWith('/events'));
 
-      if (!currentUser && isProtectedPage) {
-        router.replace('/auth/login');
+ if (!currentUser && isProtectedPage) {
+ router.replace('/auth/login');
       } else if (currentUser && isAuthPage) {
         router.replace('/dashboard');
       }
@@ -169,7 +169,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     logout,
   };
 
-  return (
+ return (
     <AuthContext.Provider value={authContextValue}>
       {children}
     </AuthContext.Provider>
