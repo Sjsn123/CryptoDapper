@@ -9,10 +9,10 @@ import { getAnalytics, type Analytics } from "firebase/analytics";
 // IMPORTANT: This hardcoded configuration is for debugging purposes.
 // For production, you should use environment variables.
 const firebaseConfig = {
-  apiKey: "AIzaSyAgAHT7N_Adud87IoOWMN6LA512NTxliGc", // User-provided API key
+  apiKey: "AIzaSyB99GzLRk1CslPNxwnCpWmBQWGEmgiU930", // UPDATED API KEY
   authDomain: "digital-wrapper.firebaseapp.com",
   projectId: "digital-wrapper",
-  storageBucket: "digital-wrapper.appspot.com", // Corrected standard format
+  storageBucket: "digital-wrapper.appspot.com", // Corrected to standard .appspot.com
   messagingSenderId: "643322336591",
   appId: "1:643322336591:web:a45c0d59d7511f1ca9613a",
   measurementId: "G-63YS5VNJCV"

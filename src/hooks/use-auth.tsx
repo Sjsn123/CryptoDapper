@@ -14,8 +14,8 @@ import {
   // GoogleAuthProvider, // Type is implicitly handled by googleProvider instance
   // OAuthProvider,    // Type is implicitly handled by appleProvider instance
 } from 'firebase/auth';
-import { auth, googleProvider, appleProvider } from '@/lib/firebase';
-import { useToast } from '@/hooks/use-toast'; // Corrected import path
+import { auth, googleProvider, appleProvider } from '@/lib/firebase'; // Ensured path is correct
+import { useToast } from '@/hooks/use-toast'; // Ensured path is correct
 
 interface AuthContextType {
   user: User | null;
@@ -43,7 +43,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const isAuthPage = typeof window !== 'undefined' && window.location.pathname.startsWith('/auth');
       
-      // Define protected paths. All paths under /education are protected.
       const protectedPaths = ['/dashboard', '/education', '/events'];
       const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
       
@@ -61,7 +60,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const handleAuthError = useCallback((error: any, context: string) => {
     console.error(`${context} Error:`, error);
     let description = error.message || `Failed to perform action with ${context}.`;
-    // More specific error messages based on error.code
     if (error.code) {
         switch (error.code) {
             case 'auth/popup-closed-by-user':
@@ -74,8 +72,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 description = "This email address is already in use. Try logging in or use a different email.";
                 break;
             case 'auth/wrong-password':
-            case 'auth/user-not-found': // Often grouped with wrong-password for security
-            case 'auth/invalid-credential': // General invalid credential error
+            case 'auth/user-not-found': 
+            case 'auth/invalid-credential':
                 description = "Invalid email or password. Please check your credentials and try again.";
                 break;
             case 'auth/network-request-failed':
@@ -84,7 +82,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             case 'auth/requires-recent-login':
                 description = "This action requires a recent login. Please log out and log back in to continue.";
                 break;
-            // Add more Firebase Auth error codes as needed
+            case 'auth/identity-toolkit-api-has-not-been-used-before-or-it-is-disabled':
+                description = "Authentication service is not enabled for this project. Please enable it in your Firebase console (Identity Toolkit API).";
+                break;
+            case 'auth/requests-from-referer-are-blocked':
+                 description = "Sign-in requests from this website are blocked. Check your API key's HTTP referrer restrictions in Google Cloud Console.";
+                 break;
             default:
                 // Use the default description if the code is not specifically handled
                 break;
@@ -95,21 +98,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const handleAuthSuccess = useCallback((context: string, message?: string) => {
     toast({ title: `${context} Successful`, description: message || "Redirecting..." });
-    // Navigation is handled by onAuthStateChanged effect
   }, [toast]);
 
   const signInWithGoogle = useCallback(async () => {
     setIsLoading(true);
     try {
       await signInWithPopup(auth, googleProvider);
-      // Success is implicitly handled by onAuthStateChanged triggering a redirect and UI update.
-      // If a toast is desired here, uncomment: handleAuthSuccess("Google Sign-In");
+      // handleAuthSuccess("Google Sign-In"); // Success handled by onAuthStateChanged
     } catch (error) {
       handleAuthError(error, "Google Sign-In");
     } finally {
-      // setIsLoading(false); // onAuthStateChanged handles final isLoading state
+      // setIsLoading(false); // onAuthStateChanged will set this
     }
-  }, [handleAuthError, handleAuthSuccess]); // Added handleAuthSuccess for consistency, though it might be redundant
+  }, [handleAuthError]);
 
   const signInWithApple = useCallback(async () => {
     setIsLoading(true);
@@ -121,7 +122,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       // setIsLoading(false);
     }
-  }, [handleAuthError, handleAuthSuccess]); // Added handleAuthSuccess for consistency
+  }, [handleAuthError]);
 
   const signUpWithEmail = async (email: string, password: string): Promise<User | null> => {
     setIsLoading(true);
@@ -133,7 +134,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       handleAuthError(error, "Email Sign Up");
       return null;
     } finally {
-      // setIsLoading(false); // onAuthStateChanged updates loading state
+      // setIsLoading(false);
     }
   };
 
@@ -152,14 +153,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const sendPasswordReset = async (email: string) => {
-    setIsLoading(true);
+    setIsLoading(true); 
     try {
       await sendPasswordResetEmail(auth, email);
       toast({ title: "Password Reset Email Sent", description: "If an account exists for this email, a reset link has been sent." });
     } catch (error) {
       handleAuthError(error, "Password Reset");
     } finally {
-      setIsLoading(false); // Set loading false here as it's a distinct action
+      setIsLoading(false);
     }
   };
 
@@ -167,12 +168,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     try {
       await firebaseSignOut(auth);
-      // User state will be set to null by onAuthStateChanged, which then handles redirection.
       toast({ title: "Logged Out", description: "You have been successfully logged out." });
     } catch (error) {
       handleAuthError(error, "Logout");
     } finally {
-      // setIsLoading(false); // Let onAuthStateChanged handle loading state after user becomes null
+      // setIsLoading(false); 
     }
   }, [toast, handleAuthError]);
 
