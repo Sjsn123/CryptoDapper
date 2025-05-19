@@ -11,17 +11,14 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
-  // GoogleAuthProvider, // Type is implicitly handled by googleProvider instance
-  // OAuthProvider, // Type is implicitly handled by appleProvider instance
 } from 'firebase/auth';
-import { auth, googleProvider, appleProvider } from '@/lib/firebase.ts';
+import { auth, googleProvider } from '@/lib/firebase.ts';
 import { useToast } from '@/hooks/use-toast.ts';
 
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   signInWithGoogle: () => Promise<void>;
-  signInWithApple: () => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<User | null>;
   logInWithEmail: (email: string, password: string) => Promise<User | null>;
   sendPasswordReset: (email: string) => Promise<void>;
@@ -39,7 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setIsLoading(false); // Set loading to false once auth state is determined
+      setIsLoading(false);
 
       const isAuthPage =
         typeof window !== 'undefined' && window.location.pathname.startsWith('/auth');
@@ -94,7 +91,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
            description = "Sign-in requests from this website's address (referer) are blocked. Check your API key's HTTP referrer restrictions in Google Cloud Console.";
           break;
         default:
-          // Use the default description if the code is not specifically handled
           break;
       }
     }
@@ -109,26 +105,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     try {
       await signInWithPopup(auth, googleProvider);
-      // Success is handled by onAuthStateChanged redirecting to /dashboard
-      // handleAuthSuccess("Google Sign-In"); 
+      // Success handled by onAuthStateChanged
     } catch (error) {
       handleAuthError(error, "Google Sign-In");
-    } finally {
-      // setIsLoading(false); // onAuthStateChanged handles loading state changes after auth state is known
     }
-  }, [handleAuthError, handleAuthSuccess, router, toast]);
-
-  const signInWithApple = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      await signInWithPopup(auth, appleProvider);
-      // handleAuthSuccess("Apple Sign-In");
-    } catch (error: any) {
-      handleAuthError(error, "Apple Sign-In");
-    } finally {
-      // setIsLoading(false);
-    }
-  }, [handleAuthError, handleAuthSuccess, router, toast]);
+  }, [handleAuthError, router]);
 
   const signUpWithEmail = async (email: string, password: string): Promise<User | null> => {
     setIsLoading(true);
@@ -139,8 +120,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       handleAuthError(error, "Email Sign Up");
       return null;
-    } finally {
-      // setIsLoading(false);
     }
   };
 
@@ -153,13 +132,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       handleAuthError(error, "Email Login");
       return null;
-    } finally {
-      // setIsLoading(false);
     }
   };
 
   const sendPasswordReset = async (email: string) => {
-    setIsLoading(true); 
+    setIsLoading(true);
     try {
       await sendPasswordResetEmail(auth, email);
       toast({
@@ -177,12 +154,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     try {
       await firebaseSignOut(auth);
-      // User will be set to null by onAuthStateChanged, which will trigger redirect
       toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
     } catch (error) {
       handleAuthError(error, "Logout");
-    } finally {
-      // setIsLoading(false); // onAuthStateChanged handles this indirectly
     }
   }, [toast, handleAuthError, router]);
 
@@ -190,7 +164,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     isLoading,
     signInWithGoogle,
-    signInWithApple,
     signUpWithEmail,
     logInWithEmail,
     sendPasswordReset,

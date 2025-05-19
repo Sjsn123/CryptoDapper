@@ -1,18 +1,18 @@
 
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, OAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth'; // Removed OAuthProvider
 import { getAnalytics, type Analytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // IMPORTANT: This hardcoded configuration is for debugging purposes.
 // For production, you should use environment variables.
+// Ensure this API key is the one you are actively configuring in Google Cloud Console
 const firebaseConfig = {
-  apiKey: "AIzaSyB99GzLRk1CslPNxwnCpWmBQWGEmgiU930", // UPDATED API KEY
+  apiKey: "AIzaSyB99GzLRk1CslPNxwnCpWmBQWGEmgiU930", // Using the specific key you provided
   authDomain: "digital-wrapper.firebaseapp.com",
   projectId: "digital-wrapper",
-  storageBucket: "digital-wrapper.appspot.com", // Corrected to standard .appspot.com
+  storageBucket: "digital-wrapper.appspot.com", // Corrected from firebasestorage.app
   messagingSenderId: "643322336591",
   appId: "1:643322336591:web:a45c0d59d7511f1ca9613a",
   measurementId: "G-63YS5VNJCV"
@@ -28,7 +28,7 @@ if (!getApps().length) {
 
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
-const appleProvider = new OAuthProvider('apple.com'); // Ensure 'apple.com' is enabled in Firebase Console
+// appleProvider removed
 
 let analytics: Analytics | null = null;
 
@@ -46,4 +46,4 @@ if (typeof window !== 'undefined') {
   }
 }
 
-export { app, auth, googleProvider, appleProvider, analytics };
+export { app, auth, googleProvider, analytics }; // appleProvider removed from exports

@@ -17,8 +17,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast.ts";
-import { LogIn, Mail, KeyRound, ShieldAlert, Loader2, Phone } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth.tsx"; 
+import { LogIn, Mail, KeyRound, Loader2, Phone } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth.tsx";
 
 // SVG Icon for Google
 const GoogleIcon = () => (
@@ -31,23 +31,16 @@ const GoogleIcon = () => (
   </svg>
 );
 
-// SVG Icon for Apple
-const AppleIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-    <path d="M19.472 13.052c-.904 2.534-2.202 4.187-3.892 4.187-1.616 0-2.09-.987-3.431-.987s-1.851.987-3.469.987c-1.716 0-3.088-1.692-4.03-4.187C3.252 10.21 4.48 5.926 6.594 5.926c1.58 0 2.559 1.062 3.431 1.062s1.777-1.062 3.543-1.062c1.654 0 3.088 4.187 1.905 7.126zm-4.606-5.128c.39-.47.627-1.133.589-1.834-.664.074-1.48.47-1.905.949-.316.395-.664.987-.551 1.72.702.112 1.48-.278 1.867-.835z"/>
-  </svg>
-);
-
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
-  password: z.string().min(1, { message: "Password is required." }), 
+  password: z.string().min(1, { message: "Password is required." }),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const { toast } = useToast();
-  const { logInWithEmail, signInWithGoogle, signInWithApple, isLoading: authLoading } = useAuth(); 
+  const { logInWithEmail, signInWithGoogle, isLoading: authLoading } = useAuth();
   const [isSubmittingEmail, setIsSubmittingEmail] = useState(false);
   const [isSubmittingSocial, setIsSubmittingSocial] = useState(false);
 
@@ -72,19 +65,13 @@ export function LoginForm() {
     setIsSubmittingSocial(false);
   };
 
-  const handleAppleLogin = async () => {
-    setIsSubmittingSocial(true);
-    await signInWithApple();
-    setIsSubmittingSocial(false);
-  };
-
   const handlePhoneLogin = () => {
     toast({
       title: "Feature Coming Soon",
       description: "Phone number sign-in is currently under development.",
     });
   };
-  
+
   const currentIsLoading = authLoading || isSubmittingEmail || isSubmittingSocial;
 
   return (
@@ -122,12 +109,12 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        
+
         <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading}>
           {isSubmittingEmail ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogIn className="mr-2 h-4 w-4" />}
           Login
         </Button>
-        
+
         <>
           <div className="relative my-4">
             <div className="absolute inset-0 flex items-center">
@@ -139,14 +126,10 @@ export function LoginForm() {
               </span>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3">
             <Button variant="outline" className="w-full" onClick={handleGoogleLogin} disabled={currentIsLoading}>
               {isSubmittingSocial ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
               <span className="ml-2">Google</span>
-            </Button>
-            <Button variant="outline" className="w-full" onClick={handleAppleLogin} disabled={currentIsLoading}>
-              {isSubmittingSocial ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <AppleIcon />}
-              <span className="ml-2">Apple</span>
             </Button>
           </div>
           <Button variant="outline" className="w-full mt-3" onClick={handlePhoneLogin} disabled={currentIsLoading}>
