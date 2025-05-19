@@ -42,6 +42,7 @@ export interface BlogPost {
   title: string;
   summary: string;
   imageUrl: string;
+  dataAiHint?: string;
   date: string;
   category: string;
   tags: string[];
@@ -50,6 +51,18 @@ export interface BlogPost {
 }
 
 export interface TutorialRecommendation {
-  title: string;
+  title:string;
   reason?: string;
+}
+
+export interface PortfolioAsset {
+  id: string;
+  name: string;
+  symbol: string;
+  amount: number;
+  currentPriceUsd: number;
+  valueUsd: number;
+  iconUrl: string;
+  dataAiHint?: string;
+  change24h: number; // Percentage change
 }

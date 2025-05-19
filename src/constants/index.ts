@@ -1,4 +1,4 @@
-import type { Feature, CryptoEvent, PromoCode, FAQ, Tutorial, BlogPost } from "@/types";
+import type { Feature, CryptoEvent, PromoCode, FAQ, Tutorial, BlogPost, PortfolioAsset } from "@/types";
 import { ShieldCheck, Gift, Newspaper, KeyRound, FileText, Video, Search, Rss, Settings, LayoutDashboard, BookOpen } from "lucide-react";
 
 export const APP_NAME = "CryptoDapper Demo";
@@ -79,4 +79,40 @@ export const NAV_LINKS_AUTHENTICATED = [
   { href: "/education/blog", label: "Blog", icon: Rss },
   { href: "/events", label: "Crypto Events", icon: Newspaper },
   // { href: "/settings", label: "Settings", icon: Settings }, // Placeholder
+];
+
+export const MOCK_PORTFOLIO_ASSETS_DATA: PortfolioAsset[] = [
+  {
+    id: "btc",
+    name: "Bitcoin",
+    symbol: "BTC",
+    amount: 0.5,
+    currentPriceUsd: 60000,
+    valueUsd: 30000,
+    iconUrl: "https://placehold.co/32x32.png",
+    dataAiHint: "bitcoin logo",
+    change24h: 2.5,
+  },
+  {
+    id: "eth",
+    name: "Ethereum",
+    symbol: "ETH",
+    amount: 10,
+    currentPriceUsd: 3500,
+    valueUsd: 35000,
+    iconUrl: "https://placehold.co/32x32.png",
+    dataAiHint: "ethereum logo",
+    change24h: -1.2,
+  },
+  {
+    id: "doge",
+    name: "Dogecoin",
+    symbol: "DOGE",
+    amount: 100000,
+    currentPriceUsd: 0.15,
+    valueUsd: 15000,
+    iconUrl: "https://placehold.co/32x32.png",
+    dataAiHint: "dogecoin logo",
+    change24h: 5.7,
+  },
 ];

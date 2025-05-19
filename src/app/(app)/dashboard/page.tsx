@@ -1,19 +1,23 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import { PROMO_CODES_DATA } from "@/constants";
-import type { PromoCode } from "@/types";
-import { DollarSign, Gift, Bell, CheckCircle, XCircle, ExternalLink, Loader2 } from "lucide-react";
+import { PROMO_CODES_DATA, MOCK_PORTFOLIO_ASSETS_DATA } from "@/constants";
+import type { PromoCode, PortfolioAsset } from "@/types";
+import { DollarSign, Gift, Bell, CheckCircle, XCircle, ExternalLink, Loader2, Briefcase, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const MOCK_ACCOUNT_BALANCE_KEY = 'cryptoDapperMockBalance';
-const INITIAL_BALANCE = 10000;
+const INITIAL_BALANCE = 10000; // DD Coins
 
 export default function DashboardPage() {
   const [accountBalance, setAccountBalance] = useState(INITIAL_BALANCE);
@@ -21,6 +25,7 @@ export default function DashboardPage() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const { toast } = useToast();
   const [isApplyingPromo, setIsApplyingPromo] = useState(false);
+  const [portfolioAssets, setPortfolioAssets] = useState<PortfolioAsset[]>([]);
 
   useEffect(() => {
     const storedBalance = localStorage.getItem(MOCK_ACCOUNT_BALANCE_KEY);
@@ -29,6 +34,8 @@ export default function DashboardPage() {
     } else {
       localStorage.setItem(MOCK_ACCOUNT_BALANCE_KEY, String(INITIAL_BALANCE));
     }
+    // Load mock portfolio data
+    setPortfolioAssets(MOCK_PORTFOLIO_ASSETS_DATA);
   }, []);
 
   const handleApplyPromoCode = async () => {
@@ -64,6 +71,8 @@ export default function DashboardPage() {
       description: `Real-time crypto event alerts are now ${enabled ? "on" : "off"}. (Simulated)`,
     });
   };
+  
+  const totalPortfolioValue = portfolioAssets.reduce((sum, asset) => sum + asset.valueUsd, 0);
 
   return (
     <div className="space-y-8">
@@ -72,15 +81,15 @@ export default function DashboardPage() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card className="card-border-gold">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Account Balance</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">DD Coin Balance</CardTitle>
             <DollarSign className="h-5 w-5 text-gold-accent" />
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-gold-accent">
-              {accountBalance.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace('$', '')} DD Coins
+              {accountBalance.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} DD Coins
             </div>
             <p className="text-xs text-muted-foreground pt-1">
-              This is a mock balance for demonstration purposes.
+              Platform-specific mock currency.
             </p>
           </CardContent>
         </Card>
@@ -89,7 +98,7 @@ export default function DashboardPage() {
           <CardHeader>
             <CardTitle className="flex items-center text-xl">
               <Gift className="mr-2 h-6 w-6 text-accent" />
-              Redeem Promo Code
+              Redeem DD Coin Promo
             </CardTitle>
             <CardDescription>
               Enter a promo code to receive bonus DD Coins.
@@ -114,6 +123,62 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Briefcase className="mr-2 h-6 w-6 text-accent" />
+              <CardTitle className="text-xl">Mock Crypto Portfolio</CardTitle>
+            </div>
+             <div className="text-right">
+                <p className="text-sm text-muted-foreground">Total Value</p>
+                <p className="text-2xl font-bold text-foreground">
+                    ${totalPortfolioValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
+            </div>
+          </div>
+          <CardDescription>
+            Overview of your simulated cryptocurrency holdings. This data is for demonstration only.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[80px]"></TableHead>
+                <TableHead>Asset</TableHead>
+                <TableHead>Symbol</TableHead>
+                <TableHead className="text-right">Amount</TableHead>
+                <TableHead className="text-right">Price (USD)</TableHead>
+                <TableHead className="text-right">Value (USD)</TableHead>
+                <TableHead className="text-right">24h Change</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {portfolioAssets.map((asset) => (
+                <TableRow key={asset.id}>
+                  <TableCell>
+                    <Image src={asset.iconUrl} alt={`${asset.name} icon`} width={32} height={32} className="rounded-full" data-ai-hint={asset.dataAiHint} />
+                  </TableCell>
+                  <TableCell className="font-medium text-foreground">{asset.name}</TableCell>
+                  <TableCell className="text-muted-foreground">{asset.symbol}</TableCell>
+                  <TableCell className="text-right font-mono">{asset.amount.toLocaleString()}</TableCell>
+                  <TableCell className="text-right font-mono">${asset.currentPriceUsd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell>
+                  <TableCell className="text-right font-mono text-foreground">${asset.valueUsd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell>
+                  <TableCell className={cn(
+                      "text-right font-mono flex items-center justify-end",
+                      asset.change24h >= 0 ? "text-green-500" : "text-red-500"
+                    )}>
+                      {asset.change24h >= 0 ? <ArrowUpRight className="h-4 w-4 mr-1" /> : <ArrowDownRight className="h-4 w-4 mr-1" />}
+                      {asset.change24h.toFixed(1)}%
+                    </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
 
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
