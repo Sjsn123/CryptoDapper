@@ -11,11 +11,11 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
-  GoogleAuthProvider, // Type is implicitly handled by googleProvider instance
-  OAuthProvider, // Type is implicitly handled by appleProvider instance
+  // GoogleAuthProvider, // Type is implicitly handled by googleProvider instance
+  // OAuthProvider, // Type is implicitly handled by appleProvider instance
 } from 'firebase/auth';
-import { auth, googleProvider, appleProvider } from '@/lib/firebase.ts'; // Added .ts
-import { useToast } from '@/hooks/use-toast.ts'; // Added .ts
+import { auth, googleProvider, appleProvider } from '@/lib/firebase.ts';
+import { useToast } from '@/hooks/use-toast.ts';
 
 interface AuthContextType {
   user: User | null;
@@ -116,7 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       // setIsLoading(false); // onAuthStateChanged handles loading state changes after auth state is known
     }
-  }, [handleAuthError, auth, googleProvider]);
+  }, [handleAuthError, handleAuthSuccess, router, toast]);
 
   const signInWithApple = useCallback(async () => {
     setIsLoading(true);
@@ -128,7 +128,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       // setIsLoading(false);
     }
-  }, [handleAuthError, auth, appleProvider]);
+  }, [handleAuthError, handleAuthSuccess, router, toast]);
 
   const signUpWithEmail = async (email: string, password: string): Promise<User | null> => {
     setIsLoading(true);
@@ -184,7 +184,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       // setIsLoading(false); // onAuthStateChanged handles this indirectly
     }
-  }, [toast, handleAuthError, auth]);
+  }, [toast, handleAuthError, router]);
 
   const authContextValue: AuthContextType = {
     user,
