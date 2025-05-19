@@ -1,3 +1,7 @@
+
+"use client";
+
+import { useState, useEffect } from 'react';
 import Link from "next/link";
 import { DynamicLogo } from "@/components/core/dynamic-logo";
 
@@ -10,6 +14,12 @@ const footerLinks = [
 ];
 
 export function Footer() {
+  const [currentYear, setCurrentYear] = useState<number | null>(null);
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
+
   return (
     <footer className="mt-auto border-t border-border/40 bg-background">
       <div className="container mx-auto max-w-screen-2xl px-4 py-8 sm:px-6 lg:px-8">
@@ -52,7 +62,7 @@ export function Footer() {
         </div>
         <div className="mt-8 border-t border-border/40 pt-8">
           <p className="text-center text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} CryptoDapper Demo. All rights reserved. For demonstration purposes only.
+            &copy; {currentYear || 'Loading...'} CryptoDapper Demo. All rights reserved. For demonstration purposes only.
           </p>
         </div>
       </div>

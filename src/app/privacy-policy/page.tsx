@@ -1,3 +1,7 @@
+
+"use client";
+
+import { useState, useEffect } from 'react';
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
@@ -5,6 +9,12 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export default function PrivacyPolicyPage() {
+  const [lastUpdated, setLastUpdated] = useState('');
+
+  useEffect(() => {
+    setLastUpdated(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -16,7 +26,7 @@ export default function PrivacyPolicyPage() {
         </Button>
         <h1 className="text-3xl font-bold text-foreground mb-6">Privacy Policy</h1>
         <div className="prose prose-invert max-w-none text-muted-foreground prose-headings:text-foreground">
-          <p><strong>Last Updated:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          <p><strong>Last Updated:</strong> {lastUpdated || 'Loading...'}</p>
           
           <p>Welcome to CryptoDapper Demo! This is a demonstration application, and this Privacy Policy is a placeholder to illustrate how such a page would look.</p>
 
