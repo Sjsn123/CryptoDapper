@@ -15,7 +15,7 @@ import {
   // OAuthProvider,    // Type is implicitly handled by appleProvider instance
 } from 'firebase/auth';
 import { auth, googleProvider, appleProvider } from '@/lib/firebase';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast'; // Corrected import path
 
 interface AuthContextType {
   user: User | null;
@@ -103,14 +103,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await signInWithPopup(auth, googleProvider);
       // Success is implicitly handled by onAuthStateChanged triggering a redirect and UI update.
-      // A success toast here might be redundant if onAuthStateChanged also triggers UI changes/navigation.
       // If a toast is desired here, uncomment: handleAuthSuccess("Google Sign-In");
     } catch (error) {
       handleAuthError(error, "Google Sign-In");
     } finally {
       // setIsLoading(false); // onAuthStateChanged handles final isLoading state
     }
-  }, [handleAuthError]);
+  }, [handleAuthError, handleAuthSuccess]); // Added handleAuthSuccess for consistency, though it might be redundant
 
   const signInWithApple = useCallback(async () => {
     setIsLoading(true);
@@ -122,7 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       // setIsLoading(false);
     }
-  }, [handleAuthError]);
+  }, [handleAuthError, handleAuthSuccess]); // Added handleAuthSuccess for consistency
 
   const signUpWithEmail = async (email: string, password: string): Promise<User | null> => {
     setIsLoading(true);
