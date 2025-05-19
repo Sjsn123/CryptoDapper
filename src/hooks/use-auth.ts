@@ -1,16 +1,18 @@
 
 "use client";
 
-import { useState, useEffect, useCallback, createContext, useContext, ReactNode } from 'react';
+import React, { useState, useEffect, useCallback, createContext, useContext, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  User, 
-  onAuthStateChanged, 
-  signOut as firebaseSignOut, 
+import {
+  User,
+  onAuthStateChanged,
+  signOut as firebaseSignOut,
   signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  GoogleAuthProvider, // Kept for clarity
+  OAuthProvider // Kept for clarity
 } from 'firebase/auth';
 import { auth, googleProvider, appleProvider } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
@@ -38,74 +40,82 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setIsLoading(false);
-      if (!currentUser && (window.location.pathname.startsWith('/dashboard') || window.location.pathname.startsWith('/education') || window.location.pathname.startsWith('/events')) ) {
+
+      const isAuthPage = typeof window !== 'undefined' && window.location.pathname.startsWith('/auth');
+      const isProtectedPage = typeof window !== 'undefined' &&
+        !isAuthPage &&
+        !['/', '/privacy-policy', '/terms-of-use', '/about', '/contact'].includes(window.location.pathname) &&
+        (window.location.pathname.startsWith('/dashboard') ||
+         window.location.pathname.startsWith('/education') ||
+         window.location.pathname.startsWith('/events'));
+
+      if (!currentUser && isProtectedPage) {
         router.replace('/auth/login');
-      } else if (currentUser && (window.location.pathname.startsWith('/auth'))) {
+      } else if (currentUser && isAuthPage) {
         router.replace('/dashboard');
       }
     });
     return () => unsubscribe();
-  }, [router]);
-
-  const handleAuthSuccess = useCallback((firebaseUser: User) => {
-    setUser(firebaseUser);
-    router.push('/dashboard');
-    toast({ title: "Success", description: "Successfully signed in." });
-  }, [router, toast]);
+  }, [router]); // router is a dependency
 
   const handleAuthError = useCallback((error: any, context: string) => {
     console.error(`${context} Error:`, error);
-    let description = error.message || `Failed to sign in with ${context}.`;
+    let description = error.message || `Failed to perform action with ${context}.`;
     if (error.code === 'auth/popup-closed-by-user') {
-        description = `You closed the ${context} sign-in window.`;
+      description = `You closed the ${context} sign-in window. Please try again.`;
     } else if (error.code === 'auth/account-exists-with-different-credential') {
-        description = "An account already exists with the same email address using a different sign-in method.";
+      description = "An account already exists with this email address using a different sign-in method. Try signing in with that method.";
+    } else if (error.code === 'auth/email-already-in-use') {
+      description = "This email address is already in use. Try logging in or use a different email.";
+    } else if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+      description = "Invalid email or password. Please check your credentials and try again.";
+    } else if (error.code === 'auth/network-request-failed') {
+      description = "A network error occurred. Check your internet connection and try again.";
     }
-    toast({ variant: "destructive", title: "Authentication Error", description });
+    toast({ variant: "destructive", title: `${context} Error`, description });
   }, [toast]);
+
+  const handleAuthSuccess = useCallback((context: string, message?: string) => {
+    toast({ title: `${context} Successful`, description: message || "Redirecting..." });
+    // Navigation is handled by onAuthStateChanged effect
+  }, [toast]);
+
 
   const signInWithGoogle = useCallback(async () => {
     setIsLoading(true);
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      if (result.user) {
-        handleAuthSuccess(result.user);
-      }
+      await signInWithPopup(auth, googleProvider);
+      // handleAuthSuccess("Google Sign-In"); // Success handled by onAuthStateChanged
     } catch (error) {
-      handleAuthError(error, "Google");
+      handleAuthError(error, "Google Sign-In");
     } finally {
-      setIsLoading(false);
+       // setIsLoading(false); // onAuthStateChanged will set this
     }
-  }, [handleAuthSuccess, handleAuthError]);
+  }, [handleAuthError]); // handleAuthSuccess removed as it's better handled by onAuthStateChanged
 
   const signInWithApple = useCallback(async () => {
     setIsLoading(true);
     try {
-      const result = await signInWithPopup(auth, appleProvider);
-      if (result.user) {
-        handleAuthSuccess(result.user);
-      }
+      await signInWithPopup(auth, appleProvider);
+      // handleAuthSuccess("Apple Sign-In");
     } catch (error: any) {
-        handleAuthError(error, "Apple");
+      handleAuthError(error, "Apple Sign-In");
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
-  }, [handleAuthSuccess, handleAuthError]);
-  
+  }, [handleAuthError]);
+
   const signUpWithEmail = async (email: string, password: string): Promise<User | null> => {
     setIsLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      // onAuthStateChanged will handle setting user, but we can provide immediate feedback.
-      toast({ title: "Registration Successful", description: "Welcome! Your account has been created." });
-      // handleAuthSuccess will redirect to dashboard.
-      handleAuthSuccess(userCredential.user); 
+      handleAuthSuccess("Registration", "Welcome! Your account has been created.");
       return userCredential.user;
     } catch (error) {
       handleAuthError(error, "Email Sign Up");
       return null;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
@@ -113,18 +123,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      handleAuthSuccess(userCredential.user);
+      handleAuthSuccess("Login");
       return userCredential.user;
     } catch (error) {
       handleAuthError(error, "Email Login");
       return null;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
-  
+
   const sendPasswordReset = async (email: string) => {
-    setIsLoading(true);
+    setIsLoading(true); // Keep this for distinct UI feedback
     try {
       await sendPasswordResetEmail(auth, email);
       toast({ title: "Password Reset Email Sent", description: "If an account exists for this email, a reset link has been sent." });
@@ -139,25 +149,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     try {
       await firebaseSignOut(auth);
-      setUser(null); 
-      router.push('/auth/login');
       toast({ title: "Logged Out", description: "You have been successfully logged out." });
+      // Navigation to /auth/login is handled by onAuthStateChanged
     } catch (error) {
       handleAuthError(error, "Logout");
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
-  }, [router, toast, handleAuthError]); 
+  }, [toast, handleAuthError]);
 
-  const authContextValue: AuthContextType = { 
-    user, 
-    isLoading, 
-    signInWithGoogle, 
-    signInWithApple, 
-    signUpWithEmail, 
-    logInWithEmail, 
-    sendPasswordReset, 
-    logout 
+  const authContextValue: AuthContextType = {
+    user,
+    isLoading,
+    signInWithGoogle,
+    signInWithApple,
+    signUpWithEmail,
+    logInWithEmail,
+    sendPasswordReset,
+    logout,
   };
 
   return (
