@@ -1,0 +1,129 @@
+"use client";
+
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
+import { Header } from '@/components/layout/header';
+import { Footer } from '@/components/layout/footer';
+import { DynamicLogo } from '@/components/core/dynamic-logo';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { NAV_LINKS_AUTHENTICATED } from '@/constants';
+import { LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+// Mock authentication
+const MOCK_AUTH_KEY = 'cryptoDapperMockAuth';
+
+interface AppShellProps {
+  children: React.ReactNode;
+}
+
+export function AppShell({ children }: AppShellProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(undefined);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    // Client-side check for mock authentication
+    const authStatus = localStorage.getItem(MOCK_AUTH_KEY) === 'true';
+    setIsAuthenticated(authStatus);
+    if (!authStatus) {
+      router.replace('/auth/login');
+    }
+  }, [router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem(MOCK_AUTH_KEY);
+    setIsAuthenticated(false);
+    router.replace('/auth/login');
+  };
+
+  if (isAuthenticated === undefined) {
+    // Optional: Add a loading spinner or skeleton screen here
+    return <div className="flex items-center justify-center min-h-screen bg-background text-foreground">Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return null; // Router will redirect
+  }
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header isAuthenticated={true} />
+      <div className="flex flex-1">
+        {/* Sidebar */}
+        <aside 
+          className={cn(
+            "bg-sidebar text-sidebar-foreground border-r border-sidebar-border transition-all duration-300 ease-in-out flex flex-col",
+            isSidebarOpen ? "w-64" : "w-20"
+          )}
+        >
+          <div className="p-4 border-b border-sidebar-border flex items-center justify-between">
+            {isSidebarOpen && (
+              <Link href="/dashboard" className="flex items-center gap-2">
+                <DynamicLogo size="sm" />
+                <span className="font-bold text-sm">CryptoDapper</span>
+              </Link>
+            )}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="text-sidebar-foreground hover:bg-sidebar-accent"
+              aria-label={isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+            >
+              {isSidebarOpen ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+            </Button>
+          </div>
+          <ScrollArea className="flex-1">
+            <nav className="py-4 px-2">
+              {NAV_LINKS_AUTHENTICATED.map((item) => {
+                const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors mb-1",
+                      isActive
+                        ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                        : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                      !isSidebarOpen && "justify-center"
+                    )}
+                    title={!isSidebarOpen ? item.label : undefined}
+                  >
+                    <item.icon className="h-5 w-5 shrink-0" />
+                    {isSidebarOpen && <span>{item.label}</span>}
+                  </Link>
+                );
+              })}
+            </nav>
+          </ScrollArea>
+          <div className="p-4 border-t border-sidebar-border">
+            <Button 
+              variant="ghost" 
+              className={cn(
+                "w-full flex items-center gap-3 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                !isSidebarOpen && "justify-center"
+                )} 
+              onClick={handleLogout}
+              title={!isSidebarOpen ? "Logout" : undefined}
+            >
+              <LogOut className="h-5 w-5 shrink-0" />
+              {isSidebarOpen && <span>Logout</span>}
+            </Button>
+          </div>
+        </aside>
+        
+        {/* Main Content */}
+        <main className="flex-1 p-6 bg-background overflow-auto">
+          {children}
+        </main>
+      </div>
+      {/* Footer is not typically part of an app shell like this, but can be added if needed */}
+      {/* <Footer /> */}
+    </div>
+  );
+}
