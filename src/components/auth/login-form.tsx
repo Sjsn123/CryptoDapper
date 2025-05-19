@@ -16,9 +16,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
-import { LogIn, Mail, KeyRound, ShieldAlert, Loader2 } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth"; // Updated import
+import { useToast } from "@/hooks/use-toast.ts";
+import { LogIn, Mail, KeyRound, ShieldAlert, Loader2, Phone } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth.tsx"; 
 
 // SVG Icon for Google
 const GoogleIcon = () => (
@@ -40,17 +40,17 @@ const AppleIcon = () => (
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
-  password: z.string().min(1, { message: "Password is required." }), // Min 1 for demo, usually 8-12
-  // OTP might be handled by Firebase multi-factor auth if implemented
+  password: z.string().min(1, { message: "Password is required." }), 
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const { toast } = useToast();
-  const { logInWithEmail, signInWithGoogle, signInWithApple, isLoading: authLoading } = useAuth(); // Updated to useAuth
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  // const [showOtp, setShowOtp] = useState(false); // 2FA to be handled by Firebase if needed
+  const { logInWithEmail, signInWithGoogle, signInWithApple, isLoading: authLoading } = useAuth(); 
+  const [isSubmittingEmail, setIsSubmittingEmail] = useState(false);
+  const [isSubmittingSocial, setIsSubmittingSocial] = useState(false);
+
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -61,24 +61,31 @@ export function LoginForm() {
   });
 
   async function onSubmit(data: LoginFormValues) {
-    setIsSubmitting(true);
+    setIsSubmittingEmail(true);
     await logInWithEmail(data.email, data.password);
-    setIsSubmitting(false);
+    setIsSubmittingEmail(false);
   }
 
   const handleGoogleLogin = async () => {
-    setIsSubmitting(true);
+    setIsSubmittingSocial(true);
     await signInWithGoogle();
-    setIsSubmitting(false);
+    setIsSubmittingSocial(false);
   };
 
   const handleAppleLogin = async () => {
-    setIsSubmitting(true);
+    setIsSubmittingSocial(true);
     await signInWithApple();
-    setIsSubmitting(false);
+    setIsSubmittingSocial(false);
+  };
+
+  const handlePhoneLogin = () => {
+    toast({
+      title: "Feature Coming Soon",
+      description: "Phone number sign-in is currently under development.",
+    });
   };
   
-  const currentIsLoading = authLoading || isSubmitting;
+  const currentIsLoading = authLoading || isSubmittingEmail || isSubmittingSocial;
 
   return (
     <Form {...form}>
@@ -117,7 +124,7 @@ export function LoginForm() {
         />
         
         <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading}>
-          {currentIsLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogIn className="mr-2 h-4 w-4" />}
+          {isSubmittingEmail ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogIn className="mr-2 h-4 w-4" />}
           Login
         </Button>
         
@@ -134,14 +141,18 @@ export function LoginForm() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Button variant="outline" className="w-full" onClick={handleGoogleLogin} disabled={currentIsLoading}>
-              {currentIsLoading && form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
+              {isSubmittingSocial ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
               <span className="ml-2">Google</span>
             </Button>
             <Button variant="outline" className="w-full" onClick={handleAppleLogin} disabled={currentIsLoading}>
-              {currentIsLoading && form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <AppleIcon />}
+              {isSubmittingSocial ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <AppleIcon />}
               <span className="ml-2">Apple</span>
             </Button>
           </div>
+          <Button variant="outline" className="w-full mt-3" onClick={handlePhoneLogin} disabled={currentIsLoading}>
+            {isSubmittingSocial ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Phone className="mr-2 h-4 w-4" />}
+             Sign in with Phone
+          </Button>
           <div className="text-sm text-center mt-4">
             <Link href="/auth/recover" className="font-medium text-gold-accent hover:underline">
               Forgot password?

@@ -16,18 +16,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox"; // Keep for UI, 2FA handled by Firebase
-import { useToast } from "@/hooks/use-toast";
-import { UserPlus, Mail, KeyRound, ShieldCheck, Smartphone, Loader2 } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth"; // Updated import
-import {
-  Dialog, // Keep for potential future 2FA UI, though Firebase handles it differently
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
+// import { Checkbox } from "@/components/ui/checkbox"; 
+import { useToast } from "@/hooks/use-toast.ts";
+import { UserPlus, Mail, KeyRound, ShieldCheck, Smartphone, Loader2, Phone } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth.tsx"; 
+// import {
+//   Dialog, 
+//   DialogContent,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogDescription,
+//   DialogFooter,
+// } from "@/components/ui/dialog";
 
 const registerSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -37,8 +37,6 @@ const registerSchema = z.object({
     .regex(/[0-9]/, "Must contain a number")
     .regex(/[^A-Za-z0-9]/, "Must contain a special character"),
   confirmPassword: z.string(),
-  // enable2FA: z.boolean().default(false).optional(), // 2FA setup is usually post-registration via Firebase
-  // phone: z.string().optional(), // For Firebase phone auth or 2FA SMS if used
 }).refine(data => data.password === data.confirmPassword, {
   message: "Passwords don't match.",
   path: ["confirmPassword"],
@@ -66,10 +64,9 @@ const AppleIcon = () => (
 
 export function RegisterForm() {
   const { toast } = useToast();
-  const { signUpWithEmail, signInWithGoogle, signInWithApple, isLoading: authLoading } = useAuth(); // Updated to useAuth
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  // const [show2FASetup, setShow2FASetup] = useState(false); // 2FA dialog might be removed or repurposed
-  // const [otp, setOtp] = useState("");
+  const { signUpWithEmail, signInWithGoogle, signInWithApple, isLoading: authLoading } = useAuth(); 
+  const [isSubmittingEmail, setIsSubmittingEmail] = useState(false);
+  const [isSubmittingSocial, setIsSubmittingSocial] = useState(false);
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -77,35 +74,35 @@ export function RegisterForm() {
       email: "",
       password: "",
       confirmPassword: "",
-      // enable2FA: false,
-      // phone: "",
     },
   });
 
   async function onSubmit(data: RegisterFormValues) {
-    setIsSubmitting(true);
+    setIsSubmittingEmail(true);
     await signUpWithEmail(data.email, data.password);
-    // If signUpWithEmail is successful, useAuth hook will redirect
-    setIsSubmitting(false);
+    setIsSubmittingEmail(false);
   }
 
-  // 2FA setup would typically be handled within Firebase user management settings
-  // after initial registration, or by enabling multi-factor auth in Firebase project.
-  // The existing dialog logic might be removed or simplified if Firebase handles UI.
-
   const handleGoogleRegister = async () => {
-    setIsSubmitting(true);
-    await signInWithGoogle(); // Firebase handles new user creation with social providers
-    setIsSubmitting(false);
+    setIsSubmittingSocial(true);
+    await signInWithGoogle(); 
+    setIsSubmittingSocial(false);
   };
 
   const handleAppleRegister = async () => {
-    setIsSubmitting(true);
+    setIsSubmittingSocial(true);
     await signInWithApple();
-    setIsSubmitting(false);
+    setIsSubmittingSocial(false);
+  };
+
+  const handlePhoneRegister = () => {
+    toast({
+      title: "Feature Coming Soon",
+      description: "Phone number sign-up is currently under development.",
+    });
   };
   
-  const currentIsLoading = authLoading || isSubmitting;
+  const currentIsLoading = authLoading || isSubmittingEmail || isSubmittingSocial;
 
   return (
     <>
@@ -159,11 +156,9 @@ export function RegisterForm() {
               </FormItem>
             )}
           />
-          {/* 2FA checkbox can be removed as Firebase MFA is typically managed post-signup */}
-          {/* Or it can be a user preference saved to their profile later */}
           
           <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading}>
-            {currentIsLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
+            {isSubmittingEmail ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
             Register
           </Button>
 
@@ -179,26 +174,20 @@ export function RegisterForm() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Button variant="outline" className="w-full" onClick={handleGoogleRegister} disabled={currentIsLoading}>
-             {currentIsLoading && form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
+             {isSubmittingSocial ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
               <span className="ml-2">Google</span>
             </Button>
             <Button variant="outline" className="w-full" onClick={handleAppleRegister} disabled={currentIsLoading}>
-              {currentIsLoading && form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <AppleIcon />}
+              {isSubmittingSocial ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <AppleIcon />}
               <span className="ml-2">Apple</span>
             </Button>
           </div>
-
+          <Button variant="outline" className="w-full mt-3" onClick={handlePhoneRegister} disabled={currentIsLoading}>
+            {isSubmittingSocial ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Phone className="mr-2 h-4 w-4" />}
+            Sign up with Phone
+          </Button>
         </form>
       </Form>
-
-      {/* The 2FA dialog may no longer be needed here if Firebase handles MFA setup flows */}
-      {/*
-      <Dialog open={show2FASetup} onOpenChange={setShow2FASetup}>
-        <DialogContent className="sm:max-w-[425px] bg-card border-border">
-         ... Dialog content for mock 2FA setup ...
-        </DialogContent>
-      </Dialog>
-      */}
     </>
   );
 }

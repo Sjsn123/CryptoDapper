@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -87,7 +88,7 @@ export default function HomePage() {
               </div>
               <div className="relative aspect-video rounded-lg overflow-hidden shadow-2xl">
                 <Image 
-                  src="https://placehold.co/600x400.png" 
+                  src="https://placehold.co/640x360.png" 
                   alt="Crypto Learning Platform" 
                   layout="fill"
                   objectFit="cover"
