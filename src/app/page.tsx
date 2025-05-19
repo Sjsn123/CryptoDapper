@@ -88,12 +88,11 @@ export default function HomePage() {
               </div>
               <div className="relative aspect-video rounded-lg overflow-hidden shadow-2xl">
                 <Image 
-                  src="https://placehold.co/640x360.png" 
-                  alt="Crypto Learning Platform" 
+                  src="https://sdmntprwestus2.oaiusercontent.com/files/00000000-8c38-61f8-b123-227517f3e36d/raw?se=2025-05-19T15%3A55%3A43Z&sp=r&sv=2024-08-04&sr=b&scid=00000000-0000-0000-0000-000000000000&skoid=24a7dec3-38fc-4904-b888-8abe0855c442&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-19T13%3A06%3A29Z&ske=2025-05-20T13%3A06%3A29Z&sks=b&skv=2024-08-04&sig=surTUW0PdsISkCBxipvKHB8YqvDaeIDI6HO1xpSD3Q4%3D" 
+                  alt="Cryptocurrency coins" 
                   layout="fill"
                   objectFit="cover"
                   className="transform transition-transform duration-500 hover:scale-105"
-                  data-ai-hint="digital currency"
                 />
               </div>
             </div>
