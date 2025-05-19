@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,6 +19,8 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast.ts";
 import { LogIn, Mail, KeyRound, Loader2, Phone } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth.tsx";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 
 // SVG Icon for Google
 const GoogleIcon = () => (
@@ -35,17 +37,25 @@ const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
   password: z.string().min(1, { message: "Password is required." }),
 });
-
 type LoginFormValues = z.infer<typeof loginSchema>;
+
+const phoneSchema = z.object({
+  phoneNumber: z.string().min(10, {message: "Phone number must be at least 10 digits."})
+    .regex(/^\+[1-9]\d{1,14}$/, { message: "Invalid phone number format. Include country code e.g. +12223334444"}),
+});
+type PhoneFormValues = z.infer<typeof phoneSchema>;
+
 
 export function LoginForm() {
   const { toast } = useToast();
-  const { logInWithEmail, signInWithGoogle, isLoading: authLoading } = useAuth();
+  const { logInWithEmail, signInWithGoogle, requestOtpForPhoneNumber, isLoading: authLoading } = useAuth();
   const [isSubmittingEmail, setIsSubmittingEmail] = useState(false);
   const [isSubmittingSocial, setIsSubmittingSocial] = useState(false);
+  const [isSubmittingPhone, setIsSubmittingPhone] = useState(false);
+  const [activeTab, setActiveTab] = useState("email");
 
 
-  const form = useForm<LoginFormValues>({
+  const emailForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -53,11 +63,40 @@ export function LoginForm() {
     },
   });
 
-  async function onSubmit(data: LoginFormValues) {
+  const phoneForm = useForm<PhoneFormValues>({
+    resolver: zodResolver(phoneSchema),
+    defaultValues: {
+      phoneNumber: "",
+    },
+  });
+
+
+  async function onEmailSubmit(data: LoginFormValues) {
     setIsSubmittingEmail(true);
     await logInWithEmail(data.email, data.password);
     setIsSubmittingEmail(false);
   }
+
+  async function onPhoneSubmit(data: PhoneFormValues) {
+    setIsSubmittingPhone(true);
+    // Ensure reCAPTCHA container is visible or handled correctly if invisible
+    const recaptchaContainerId = "sign-in-recaptcha-container"; 
+    // Ensure the div with this ID exists and is properly handled by RecaptchaVerifier
+    
+    // Check if the reCAPTCHA div exists, create if not (though ideally it's always there)
+    let recaptchaDiv = document.getElementById(recaptchaContainerId);
+    if (!recaptchaDiv) {
+        recaptchaDiv = document.createElement('div');
+        recaptchaDiv.id = recaptchaContainerId;
+        document.body.appendChild(recaptchaDiv); // Append somewhere, or ensure it's in your form
+    }
+
+    await requestOtpForPhoneNumber(data.phoneNumber, recaptchaContainerId);
+    // UI for OTP input will be handled in a subsequent step
+    // For now, useAuth shows a toast "OTP Sent (Simulated)"
+    setIsSubmittingPhone(false);
+  }
+
 
   const handleGoogleLogin = async () => {
     setIsSubmittingSocial(true);
@@ -65,84 +104,109 @@ export function LoginForm() {
     setIsSubmittingSocial(false);
   };
 
-  const handlePhoneLogin = () => {
-    toast({
-      title: "Feature Coming Soon",
-      description: "Phone number sign-in is currently under development.",
-    });
-  };
-
-  const currentIsLoading = authLoading || isSubmittingEmail || isSubmittingSocial;
+  const currentIsLoading = authLoading || isSubmittingEmail || isSubmittingSocial || isSubmittingPhone;
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-foreground">Email</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                  <Input placeholder="you@example.com" {...field} className="pl-10" />
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-foreground">Password</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                  <Input type="password" placeholder="••••••••" {...field} className="pl-10" />
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading}>
-          {isSubmittingEmail ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogIn className="mr-2 h-4 w-4" />}
-          Login
+    <div className="space-y-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="email">Email</TabsTrigger>
+          <TabsTrigger value="phone">Phone</TabsTrigger>
+        </TabsList>
+        <TabsContent value="email">
+          <Form {...emailForm}>
+            <form onSubmit={emailForm.handleSubmit(onEmailSubmit)} className="space-y-6 mt-4">
+              <FormField
+                control={emailForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-foreground">Email</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input placeholder="you@example.com" {...field} className="pl-10" />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={emailForm.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-foreground">Password</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input type="password" placeholder="••••••••" {...field} className="pl-10" />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading}>
+                {isSubmittingEmail ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogIn className="mr-2 h-4 w-4" />}
+                Login with Email
+              </Button>
+              <div className="text-sm text-center mt-4">
+                <Link href="/auth/recover" className="font-medium text-gold-accent hover:underline">
+                  Forgot password?
+                </Link>
+              </div>
+            </form>
+          </Form>
+        </TabsContent>
+        <TabsContent value="phone">
+          <Form {...phoneForm}>
+            <form onSubmit={phoneForm.handleSubmit(onPhoneSubmit)} className="space-y-6 mt-4">
+              <FormField
+                control={phoneForm.control}
+                name="phoneNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-foreground">Phone Number</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input placeholder="+12223334444" {...field} className="pl-10" />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* This div is used by Firebase RecaptchaVerifier. It can be styled to be invisible. */}
+              <div id="sign-in-recaptcha-container"></div>
+              <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading}>
+                {isSubmittingPhone ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogIn className="mr-2 h-4 w-4" />}
+                Send OTP
+              </Button>
+              {/* OTP input field will be added here in a future step */}
+            </form>
+          </Form>
+        </TabsContent>
+      </Tabs>
+      
+      <div className="relative my-4">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-border/50" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-card px-2 text-muted-foreground">
+            Or continue with
+          </span>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 gap-3">
+        <Button variant="outline" className="w-full" onClick={handleGoogleLogin} disabled={currentIsLoading}>
+          {isSubmittingSocial && activeTab !== "email" && activeTab !== "phone" ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
+          <span className="ml-2">Google</span>
         </Button>
-
-        <>
-          <div className="relative my-4">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-border/50" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">
-                Or sign in with
-              </span>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 gap-3">
-            <Button variant="outline" className="w-full" onClick={handleGoogleLogin} disabled={currentIsLoading}>
-              {isSubmittingSocial ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
-              <span className="ml-2">Google</span>
-            </Button>
-          </div>
-          <Button variant="outline" className="w-full mt-3" onClick={handlePhoneLogin} disabled={currentIsLoading}>
-            {isSubmittingSocial ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Phone className="mr-2 h-4 w-4" />}
-             Sign in with Phone
-          </Button>
-          <div className="text-sm text-center mt-4">
-            <Link href="/auth/recover" className="font-medium text-gold-accent hover:underline">
-              Forgot password?
-            </Link>
-          </div>
-        </>
-      </form>
-    </Form>
+      </div>
+    </div>
   );
 }

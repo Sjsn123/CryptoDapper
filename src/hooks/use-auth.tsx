@@ -11,6 +11,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  RecaptchaVerifier,
+  signInWithPhoneNumber as firebaseSignInWithPhoneNumber,
+  type ConfirmationResult,
 } from 'firebase/auth';
 import { auth, googleProvider } from '@/lib/firebase.ts';
 import { useToast } from '@/hooks/use-toast.ts';
@@ -22,10 +25,17 @@ interface AuthContextType {
   signUpWithEmail: (email: string, password: string) => Promise<User | null>;
   logInWithEmail: (email: string, password: string) => Promise<User | null>;
   sendPasswordReset: (email: string) => Promise<void>;
+  requestOtpForPhoneNumber: (phoneNumber: string, recaptchaContainerId: string) => Promise<ConfirmationResult | null>;
+  verifyOtpAndSignIn: (otpCode: string) => Promise<User | null>; // Placeholder for now
   logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Store confirmationResult outside the provider to persist across re-renders of the provider itself,
+// or consider using a ref if it needs to be tied to the component lifecycle more directly.
+// For simplicity here, a module-level variable. A more robust solution might use React context or a state management library.
+let phoneAuthConfirmationResult: ConfirmationResult | null = null;
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -55,45 +65,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [router]);
 
   const handleAuthError = useCallback((error: any, context: string) => {
-    console.error(`${context} Error:`, error);
-
-    let description = error.message || `Failed to perform action with ${context}.`;
-    if (error.code) {
-      switch (error.code) {
+    console.error(`${context} Error:`, error, error.code);
+    let description = error.message || `Failed to ${context}.`;
+    // Customize messages based on error.code
+    switch (error.code) {
         case 'auth/popup-closed-by-user':
-          description = `You closed the ${context} sign-in window. Please try again.`;
+          description = `You closed the ${context} window. Please try again.`;
           break;
         case 'auth/account-exists-with-different-credential':
-          description =
-            'An account already exists with this email using a different sign-in method. Try that method.';
+          description = 'An account already exists with this email using a different sign-in method. Try that method.';
           break;
         case 'auth/email-already-in-use':
-          description =
-            'This email address is already in use. Try logging in or use a different email.';
+          description = 'This email address is already in use. Try logging in or use a different email.';
           break;
         case 'auth/wrong-password':
         case 'auth/user-not-found':
         case 'auth/invalid-credential':
-          description = 'Invalid email or password. Please check your credentials and try again.';
+          description = 'Invalid credentials. Please check and try again.';
           break;
         case 'auth/network-request-failed':
           description = 'A network error occurred. Check your internet connection and try again.';
           break;
         case 'auth/requires-recent-login':
-          description =
-            'This action requires a recent login. Please log out and log back in to continue.';
+          description = 'This action requires a recent login. Please log out and log back in.';
           break;
-        case 'auth/identity-toolkit-api-has-not-been-used-before-or-it-is-disabled':
-          description =
-            'Authentication service is not enabled for this project. Please enable it in your Firebase console (Identity Toolkit API).';
+        case 'auth/invalid-phone-number':
+          description = 'The phone number is not valid. Please enter a valid number with country code (e.g., +1xxxxxxxxxx).';
           break;
-        case 'auth/requests-from-referer-are-blocked':
-           description = "Sign-in requests from this website's address (referer) are blocked. Check your API key's HTTP referrer restrictions in Google Cloud Console.";
+        case 'auth/missing-phone-number':
+          description = 'Please enter a phone number.';
           break;
+        case 'auth/captcha-check-failed':
+             description = 'reCAPTCHA verification failed. Please try again.';
+             break;
+        case 'auth/too-many-requests':
+            description = 'Too many requests. Please try again later.';
+            break;
         default:
+          // Use default description for other errors
           break;
       }
-    }
     toast({ variant: 'destructive', title: `${context} Error`, description });
   }, [toast]);
 
@@ -109,7 +120,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       handleAuthError(error, "Google Sign-In");
     }
-  }, [handleAuthError, router]);
+    // setIsLoading(false); // isLoading should be managed by onAuthStateChanged
+  }, [handleAuthError]);
 
   const signUpWithEmail = async (email: string, password: string): Promise<User | null> => {
     setIsLoading(true);
@@ -120,6 +132,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       handleAuthError(error, "Email Sign Up");
       return null;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -132,6 +146,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       handleAuthError(error, "Email Login");
       return null;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -150,15 +166,72 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const requestOtpForPhoneNumber = useCallback(async (phoneNumber: string, recaptchaContainerId: string): Promise<ConfirmationResult | null> => {
+    setIsLoading(true);
+    try {
+      // Ensure a fresh verifier for each attempt or manage existing one
+      const appVerifier = new RecaptchaVerifier(auth, recaptchaContainerId, {
+        'size': 'invisible',
+        'callback': (response: any) => {
+          // reCAPTCHA solved, Firebase can now send OTP.
+          // console.log("reCAPTCHA challenge successful:", response);
+        },
+        'expired-callback': () => {
+          toast({ variant: "destructive", title: "reCAPTCHA Expired", description: "Please try sending the OTP again." });
+        }
+      });
+      
+      const confirmation = await firebaseSignInWithPhoneNumber(auth, phoneNumber, appVerifier);
+      phoneAuthConfirmationResult = confirmation; // Store for later use
+      toast({ title: "OTP Sent", description: `Verification code sent to ${phoneNumber}. (OTP input UI is next step)` });
+      setIsLoading(false);
+      return confirmation;
+    } catch (error: any) {
+      // If there is an error with the reCAPTCHA verifier object itself.
+      if (window.grecaptcha && (window as any).grecaptcha.enterprise) {
+        (window as any).grecaptcha.enterprise.reset();
+      } else if (window.grecaptcha) {
+        (window as any).grecaptcha.reset();
+      }
+      
+      handleAuthError(error, "Send OTP");
+      setIsLoading(false);
+      return null;
+    }
+  }, [auth, handleAuthError, toast]);
+
+  const verifyOtpAndSignIn = useCallback(async (otpCode: string): Promise<User | null> => {
+    if (!phoneAuthConfirmationResult) {
+      toast({ variant: "destructive", title: "Error", description: "No OTP request found. Please request an OTP first." });
+      return null;
+    }
+    setIsLoading(true);
+    try {
+      const userCredential = await phoneAuthConfirmationResult.confirm(otpCode);
+      handleAuthSuccess('Phone Sign-In');
+      phoneAuthConfirmationResult = null; // Clear after use
+      return userCredential.user;
+    } catch (error) {
+      handleAuthError(error, "Verify OTP");
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [handleAuthError, handleAuthSuccess, toast]);
+
+
   const logout = useCallback(async () => {
     setIsLoading(true);
     try {
       await firebaseSignOut(auth);
       toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
+      phoneAuthConfirmationResult = null; // Clear on logout
     } catch (error) {
       handleAuthError(error, "Logout");
+    } finally {
+      setIsLoading(false); // Set to false even on error
     }
-  }, [toast, handleAuthError, router]);
+  }, [toast, handleAuthError]);
 
   const authContextValue: AuthContextType = {
     user,
@@ -167,6 +240,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signUpWithEmail,
     logInWithEmail,
     sendPasswordReset,
+    requestOtpForPhoneNumber,
+    verifyOtpAndSignIn,
     logout,
   };
 
