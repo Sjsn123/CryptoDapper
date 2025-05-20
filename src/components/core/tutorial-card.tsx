@@ -1,17 +1,28 @@
+
 import type { Tutorial } from "@/types";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PlayCircle, FileText, CheckSquare, Square } from "lucide-react";
-import Link from "next/link";
+import { PlayCircle, FileText } from "lucide-react"; // Removed CheckSquare, Square as they are not used
 import Image from "next/image";
+import React from 'react'; // Import React for React.memo
 
 interface TutorialCardProps {
   tutorial: Tutorial;
   onToggleComplete: (id: string, completed: boolean) => void;
 }
 
-export function TutorialCard({ tutorial, onToggleComplete }: TutorialCardProps) {
+// Wrap TutorialCard with React.memo for performance optimization and to help prevent re-render loops.
+export const TutorialCard = React.memo(function TutorialCard({ tutorial, onToggleComplete }: TutorialCardProps) {
+  // console.log(`Rendering TutorialCard: ${tutorial.title}, Completed: ${tutorial.isCompleted}`); // Uncomment for debugging
+
+  const handleCheckedChange = (checkedState: boolean | 'indeterminate') => {
+    // Radix Checkbox onCheckedChange can return 'indeterminate'.
+    // We ensure we only call onToggleComplete with a boolean value.
+    if (typeof checkedState === 'boolean') {
+      onToggleComplete(tutorial.id, checkedState);
+    }
+  };
+
   return (
     <Card className="flex flex-col h-full hover:shadow-xl transition-shadow duration-300 card-border-silver">
       <CardHeader>
@@ -43,8 +54,8 @@ export function TutorialCard({ tutorial, onToggleComplete }: TutorialCardProps) 
         <div className="flex items-center space-x-2">
           <Checkbox
             id={`complete-${tutorial.id}`}
-            checked={tutorial.isCompleted}
-            onCheckedChange={(checked) => onToggleComplete(tutorial.id, !!checked)}
+            checked={!!tutorial.isCompleted} // Explicitly ensure boolean
+            onCheckedChange={handleCheckedChange} // Use the refined handler
             className="border-accent data-[state=checked]:bg-gold-accent data-[state=checked]:text-primary"
           />
           <label
@@ -59,4 +70,5 @@ export function TutorialCard({ tutorial, onToggleComplete }: TutorialCardProps) 
       </CardFooter>
     </Card>
   );
-}
+});
+TutorialCard.displayName = 'TutorialCard'; // Set display name for memoized component for easier debugging
