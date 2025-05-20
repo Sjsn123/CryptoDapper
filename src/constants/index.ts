@@ -1,3 +1,4 @@
+
 import type { Feature, CryptoEvent, PromoCode, FAQ, Tutorial, BlogPost, PortfolioAsset } from "@/types";
 import { ShieldCheck, Gift, Newspaper, KeyRound, FileText, Video, Search, Rss, Settings, LayoutDashboard, BookOpen } from "lucide-react";
 
@@ -58,10 +59,17 @@ export const FAQS_DATA: FAQ[] = [
 ];
 
 export const TUTORIALS_DATA: Tutorial[] = [
-  { id: "1", title: "Setting up 2FA", description: "Learn how to enhance your account security by enabling Two-Factor Authentication.", videoUrl: "https://www.youtube.com/embed/example1", category: "Security" },
-  { id: "2", title: "Understanding Seed Phrases", description: "Discover what seed phrases are, why they are important, and how to manage them securely.", content: "A seed phrase, recovery phrase or backup phrase is a list of words which store all the information needed to recover a cryptocurrency wallet...", category: "Basics" },
-  { id: "3", title: "How to Use Promo Codes", description: "A quick guide on finding and applying promo codes on the CryptoDapper platform.", videoUrl: "https://www.youtube.com/embed/example2", category: "Platform Features" },
-  { id: "4", title: "Introduction to Blockchain", description: "Get a basic understanding of blockchain technology and its core concepts.", content: "Blockchain is a distributed ledger technology...", category: "Concepts" },
+  { id: "1", title: "Setting up 2FA", description: "Learn how to enhance your account security by enabling Two-Factor Authentication.", category: "Security" },
+  { 
+    id: "2", 
+    title: "Understanding Seed Phrases", 
+    description: "Watch this video to discover what seed phrases are, why they are important, and how to manage them securely.", 
+    videoUrl: "https://video.pictory.ai/v2/preview/49976340139528182917241747749055095", // Updated Video URL
+    content: undefined, // Remove old text content if it's now video-focused
+    category: "Basics" 
+  },
+  { id: "3", title: "How to Use Promo Codes", description: "A quick guide on finding and applying promo codes on the CryptoDapper platform.", category: "Platform Features" },
+  { id: "4", title: "Introduction to Blockchain", description: "Get a basic understanding of blockchain technology and its core concepts.", category: "Concepts" },
   { id: "5", title: "What are DD Coins?", description: "Learn about the mock currency used on the CryptoDapper Demo platform.", category: "Platform Features"},
 ];
 
