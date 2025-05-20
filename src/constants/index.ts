@@ -64,9 +64,8 @@ export const TUTORIALS_DATA: Tutorial[] = [
     id: "2", 
     title: "Understanding Seed Phrases", 
     description: "Watch this video to discover what seed phrases are, why they are important, and how to manage them securely.", 
-    videoUrl: "https://video.pictory.ai/v2/preview/49976340139528182917241747749055095", // Updated Video URL
-    imageUrl: "https://sdmntprwestcentralus.oaiusercontent.com/files/00000000-d12c-61fb-b9fe-69c40b29b6ee/raw?se=2025-05-20T17%3A45%3A21Z&sp=r&sv=2024-08-04&sr=b&scid=b6059c5b-6e17-50b6-96a6-68bddba05a04&skoid=31bc9c1a-c7e0-460a-8671-bf4a3c419305&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-20T04%3A55%3A17Z&ske=2025-05-21T04%3A55%3A17Z&sks=b&skv=2024-08-04&sig=qXyFiyCHHVR3x7kClfZvsJjZNNZs4PzQp%2BFP0DzWEZM%3D",
-    //content: undefined, // Remove old text content if it's now video-focused
+    videoUrl: "https://video.pictory.ai/v2/preview/49976340139528182917241747749055095",
+    imageUrl: "https://sdmntprwestus2.oaiusercontent.com/files/00000000-8c38-61f8-b123-227517f3e36d/raw?se=2025-05-19T15%3A55%3A43Z&sp=r&sv=2024-08-04&sr=b&scid=00000000-0000-0000-0000-000000000000&skoid=24a7dec3-38fc-4904-b888-8abe0855c442&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-19T13%3A06%3A29Z&ske=2025-05-20T13%3A06%3A29Z&sks=b&skv=2024-08-04&sig=surTUW0PdsISkCBxipvKHB8YqvDaeIDI6HO1xpSD3Q4%3D",
     category: "Basics" 
   },
   { id: "3", title: "How to Use Promo Codes", description: "A quick guide on finding and applying promo codes on the CryptoDapper platform.", category: "Platform Features" },
