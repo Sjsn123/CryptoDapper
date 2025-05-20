@@ -1,3 +1,4 @@
+
 export interface Feature {
   id: string;
   title: string;
@@ -9,7 +10,7 @@ export interface Feature {
 export interface CryptoEvent {
   id: string;
   title: string;
-  date: string;
+  date: string; // Keep as string for AI generation, can be YYYY-MM-DD
   description?: string;
   priority?: 'high' | 'regular';
   link?: string; // Optional link to a blog post or external source
@@ -65,4 +66,12 @@ export interface PortfolioAsset {
   iconUrl: string;
   dataAiHint?: string;
   change24h: number; // Percentage change
+}
+
+// Schema for AI-generated Crypto Events
+export interface AICryptoEvent {
+  title: string;
+  date: string; // Expecting YYYY-MM-DD from AI
+  description?: string;
+  priority?: 'high' | 'regular';
 }
