@@ -58,7 +58,7 @@ export default function HomePage() {
         {/* How it works / Value Proposition Section */}
         <section className="py-16 md:py-24 bg-primary/30">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="grid md:grid-cols-1 gap-12 items-center"> {/* Changed md:grid-cols-2 to md:grid-cols-1 */}
               <div>
                 <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">
                   Learn by Doing, Risk-Free
@@ -86,16 +86,7 @@ export default function HomePage() {
                     </Link>
                 </Button>
               </div>
-              <div className="relative aspect-video rounded-lg overflow-hidden shadow-2xl">
-                <Image 
-                  src="https://placehold.co/640x360.png" 
-                  alt="Abstract cryptocurrency or blockchain illustration" 
-                  layout="fill"
-                  objectFit="cover"
-                  className="transform transition-transform duration-500 hover:scale-105"
-                  data-ai-hint="crypto abstract"
-                />
-              </div>
+              {/* Image div removed */}
             </div>
           </div>
         </section>
