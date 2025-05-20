@@ -15,8 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast.ts";
-import { UserPlus, Mail, KeyRound, Loader2, Phone } from "lucide-react";
+import { UserPlus, Mail, KeyRound, Loader2, Phone, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth.tsx";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -38,6 +37,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 const phoneSchema = z.object({
   phoneNumber: z.string().min(10, {message: "Phone number must be at least 10 digits."})
   .regex(/^\+[1-9]\d{1,14}$/, { message: "Invalid phone number format. Include country code e.g. +12223334444"}),
+  otp: z.string().optional(),
 });
 type PhoneFormValues = z.infer<typeof phoneSchema>;
 
@@ -53,12 +53,14 @@ const GoogleIcon = () => (
 );
 
 export function RegisterForm() {
-  const { toast } = useToast();
-  const { signUpWithEmail, signInWithGoogle, requestOtpForPhoneNumber, isLoading: authLoading } = useAuth();
+  const { signUpWithEmail, signInWithGoogle, requestOtpForPhoneNumber, verifyOtpAndSignIn, isLoading: authLoading } = useAuth();
   const [isSubmittingEmail, setIsSubmittingEmail] = useState(false);
   const [isSubmittingSocial, setIsSubmittingSocial] = useState(false);
   const [isSubmittingPhone, setIsSubmittingPhone] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
   const [activeTab, setActiveTab] = useState("email");
+  const RECAPTCHA_CONTAINER_ID = "register-recaptcha-container";
+
 
   const emailForm = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -73,6 +75,7 @@ export function RegisterForm() {
     resolver: zodResolver(phoneSchema),
     defaultValues: {
       phoneNumber: "",
+      otp: ""
     },
   });
 
@@ -82,32 +85,35 @@ export function RegisterForm() {
     setIsSubmittingEmail(false);
   }
 
-  async function onPhoneSubmit(data: PhoneFormValues) {
+  async function onPhoneFormSubmit(data: PhoneFormValues) {
     setIsSubmittingPhone(true);
-    const recaptchaContainerId = "sign-up-recaptcha-container";
-    // Ensure the div with this ID exists and is properly handled by RecaptchaVerifier
-    let recaptchaDiv = document.getElementById(recaptchaContainerId);
-    if (!recaptchaDiv) {
-        recaptchaDiv = document.createElement('div');
-        recaptchaDiv.id = recaptchaContainerId;
-        // Append to a suitable place in your form or body if it's meant to be invisible
-        // For testing, ensure it's part of the DOM.
-        const formElement = document.querySelector('form'); // Or a more specific selector
-        if (formElement) formElement.appendChild(recaptchaDiv);
-        else document.body.appendChild(recaptchaDiv);
+    if (!otpSent) {
+      const confirmationResult = await requestOtpForPhoneNumber(data.phoneNumber, RECAPTCHA_CONTAINER_ID);
+      if (confirmationResult) {
+        setOtpSent(true);
+      }
+    } else {
+       if (data.otp) {
+        await verifyOtpAndSignIn(data.otp);
+        // On success, useAuth hook will redirect. If error, toast is shown.
+      }
     }
-    await requestOtpForPhoneNumber(data.phoneNumber, recaptchaContainerId);
-    // UI for OTP input will be handled in a subsequent step
     setIsSubmittingPhone(false);
   }
 
   const handleGoogleRegister = async () => {
     setIsSubmittingSocial(true);
-    await signInWithGoogle();
+    await signInWithGoogle(); // Firebase handles new user creation with Google sign-in
     setIsSubmittingSocial(false);
   };
 
   const currentIsLoading = authLoading || isSubmittingEmail || isSubmittingSocial || isSubmittingPhone;
+
+  useEffect(() => {
+    // Reset OTP state if tab changes
+    setOtpSent(false);
+    phoneForm.resetField("otp");
+  }, [activeTab, phoneForm]);
 
   return (
     <div className="space-y-6">
@@ -176,7 +182,7 @@ export function RegisterForm() {
         </TabsContent>
         <TabsContent value="phone">
           <Form {...phoneForm}>
-            <form onSubmit={phoneForm.handleSubmit(onPhoneSubmit)} className="space-y-6 mt-4">
+            <form onSubmit={phoneForm.handleSubmit(onPhoneFormSubmit)} className="space-y-6 mt-4">
               <FormField
                 control={phoneForm.control}
                 name="phoneNumber"
@@ -186,20 +192,43 @@ export function RegisterForm() {
                     <FormControl>
                       <div className="relative">
                         <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <Input placeholder="+12223334444" {...field} className="pl-10" />
+                        <Input placeholder="+12223334444" {...field} className="pl-10" disabled={otpSent && !currentIsLoading} />
                       </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-               {/* This div is used by Firebase RecaptchaVerifier. */}
-              <div id="sign-up-recaptcha-container"></div>
-              <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading}>
-                {isSubmittingPhone ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
-                Send OTP
+              {/* This div is used by Firebase RecaptchaVerifier. Must be in the DOM. */}
+              {!otpSent && <div id={RECAPTCHA_CONTAINER_ID}></div>}
+              
+              {otpSent && (
+                <FormField
+                  control={phoneForm.control}
+                  name="otp"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-foreground">OTP Code</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                           <ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                          <Input type="text" placeholder="Enter OTP" {...field} className="pl-10" maxLength={6} />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading || (otpSent && !phoneForm.watch("otp")?.trim())}>
+                {isSubmittingPhone ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (otpSent ? <UserPlus className="mr-2 h-4 w-4"/> : <Phone className="mr-2 h-4 w-4"/>) }
+                {otpSent ? "Verify OTP & Register" : "Send OTP"}
               </Button>
-              {/* OTP input field will be added here in a future step */}
+              {otpSent && (
+                <Button variant="link" onClick={() => { setOtpSent(false); phoneForm.resetField("otp"); }} disabled={currentIsLoading} className="text-xs text-muted-foreground">
+                  Change phone number or resend OTP?
+                </Button>
+              )}
             </form>
           </Form>
         </TabsContent>
@@ -217,10 +246,12 @@ export function RegisterForm() {
       </div>
       <div className="grid grid-cols-1 gap-3">
         <Button variant="outline" className="w-full" onClick={handleGoogleRegister} disabled={currentIsLoading}>
-         {isSubmittingSocial && activeTab !== "email" && activeTab !== "phone" ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
+         {isSubmittingSocial ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
           <span className="ml-2">Google</span>
         </Button>
       </div>
     </div>
   );
 }
+
+    
