@@ -34,12 +34,6 @@ export default function TutorialsPage() {
 
   return (
     <div className="space-y-8">
-      <header className="space-y-2">
-        <h1 className="text-3xl font-bold text-foreground">Tutorials</h1>
-        <p className="text-muted-foreground">
-          Learn about crypto concepts and platform features through our guided tutorials.
-        </p>
-      </header>
 
       <div>
         <div className="flex justify-between items-center mb-2">

@@ -49,21 +49,27 @@ export const TutorialCard = React.memo(function TutorialCard({ tutorial, onToggl
               <PlayCircle className="h-16 w-16 text-white/80 group-hover:text-white transition-colors group-hover:scale-110 transform" />
             </div>
           </button>
+        ) : tutorial.imageUrl ? ( 
+          // If NO video, but there IS a specific imageUrl (e.g., for an article-style tutorial)
+          <div className="relative aspect-video mb-4 rounded-md overflow-hidden">
+            <Image 
+              src={tutorial.imageUrl}
+              alt={tutorial.title}
+              layout="fill"
+              objectFit="cover"
+              // No data-ai-hint needed as it's a specific image for this tutorial
+            />
+          </div>
         ) : tutorial.content ? ( 
+          // If NO video, NO specific imageUrl, but there IS text content
           <div className="flex items-center justify-center h-48 bg-muted rounded-md mb-4">
             <FileText className="h-16 w-16 text-muted-foreground" />
           </div>
         ) : ( 
+           // Fallback: NO video, NO specific imageUrl, NO text content
+           // Only show "Content coming soon" message
            <div className="flex items-center justify-center h-48 bg-muted rounded-md mb-4">
-            <Image 
-              src={tutorial.imageUrl || `https://placehold.co/640x360.png`}
-              alt={tutorial.title}
-              layout="fill"
-              objectFit="cover"
-              data-ai-hint={tutorial.imageUrl ? undefined : "tutorial content placeholder"}
-              className="opacity-80"
-            />
-             {!tutorial.imageUrl && <p className="absolute text-xs text-muted-foreground bg-background/70 px-2 py-1 rounded">Content coming soon</p>}
+            <p className="text-xs text-muted-foreground bg-background/70 px-2 py-1 rounded">Content coming soon</p>
           </div>
         )}
         <CardTitle className="text-xl text-foreground">{tutorial.title}</CardTitle>
