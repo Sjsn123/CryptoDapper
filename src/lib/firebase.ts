@@ -5,16 +5,16 @@ import { getAuth, GoogleAuthProvider, OAuthProvider } from 'firebase/auth';
 import { getAnalytics, type Analytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
-// IMPORTANT: This hardcoded configuration is for debugging purposes.
-// For production, you should use environment variables.
+// IMPORTANT: This configuration uses a hardcoded API key based on user input.
+// For a real production app, you should use environment variables.
 const firebaseConfig = {
-  apiKey: "AIzaSyB99GzLRk1CslPNxwnCpWmBQWGEmgiU930", // Using the API key you specified
-  authDomain: "cryptodapper-demo.firebaseapp.com", // Derived from new projectId
-  projectId: "cryptodapper-demo", // New projectId
-  storageBucket: "cryptodapper-demo.appspot.com", // Derived from new projectId
-  messagingSenderId: "643322336591", // Assuming this remains the same, or update if it changes with the project
-  appId: "1:643322336591:web:a45c0d59d7511f1ca9613a", // Assuming this remains the same, or update if it changes
-  measurementId: "G-63YS5VNJCV" // Assuming this remains the same, or update if it changes
+  apiKey: "AIzaSyAhB3Wyl2hD0pfKayFo9y7GqqsT1K3Q5Co", // Updated API key
+  authDomain: "cryptodapper-demo.firebaseapp.com",   // Based on projectId
+  projectId: "cryptodapper-demo",                     // As per user request
+  storageBucket: "cryptodapper-demo.appspot.com",   // Based on projectId
+  messagingSenderId: "643322336591",                // Original value, assumed to be project-specific
+  appId: "1:643322336591:web:a45c0d59d7511f1ca9613a", // Original value, assumed to be project-specific. Verify this if issues persist.
+  measurementId: "G-63YS5VNJCV"                     // Original value, assumed to be project-specific
 };
 
 // Initialize Firebase
@@ -38,7 +38,7 @@ if (typeof window !== 'undefined') {
     if (firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.appId) {
         analytics = getAnalytics(app);
     } else {
-        console.warn("Firebase Analytics not initialized due to missing essential Firebase config.");
+        console.warn("Firebase Analytics not initialized due to missing essential Firebase config, or running on server.");
     }
   } catch (error) {
     console.error("Error initializing Firebase Analytics:", error);
