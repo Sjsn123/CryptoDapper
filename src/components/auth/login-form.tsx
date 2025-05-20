@@ -16,9 +16,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast.ts";
+import { useToast } from "@/hooks/use-toast";
 import { LogIn, Mail, KeyRound, Loader2, Phone } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth.tsx";
+import { useAuth } from "@/hooks/use-auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 

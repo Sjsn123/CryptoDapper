@@ -9,9 +9,10 @@ import React from 'react';
 interface TutorialCardProps {
   tutorial: Tutorial;
   onToggleComplete: (id: string, completed: boolean) => void;
+  isCompleted: boolean;
 }
 
-export const TutorialCard = React.memo(function TutorialCard({ tutorial, onToggleComplete }: TutorialCardProps) {
+export const TutorialCard = React.memo(function TutorialCard({ tutorial, onToggleComplete, isCompleted }: TutorialCardProps) {
   const handleCheckedChange = (checkedState: boolean | 'indeterminate') => {
     if (typeof checkedState === 'boolean') {
       onToggleComplete(tutorial.id, checkedState);
@@ -21,7 +22,7 @@ export const TutorialCard = React.memo(function TutorialCard({ tutorial, onToggl
   const handleVideoAreaClick = () => {
     if (tutorial.videoUrl) {
       window.open(tutorial.videoUrl, '_blank', 'noopener,noreferrer');
-      if (!tutorial.isCompleted) {
+      if (!isCompleted) {
         onToggleComplete(tutorial.id, true);
       }
     }
@@ -37,25 +38,32 @@ export const TutorialCard = React.memo(function TutorialCard({ tutorial, onToggl
             aria-label={`Watch tutorial: ${tutorial.title}`}
            >
              <Image 
-                src={`https://placehold.co/400x225.png`} // Placeholder for actual video thumbnail
+                src={tutorial.imageUrl || `https://placehold.co/640x360.png`} 
                 alt={`Thumbnail for ${tutorial.title}`} 
                 layout="fill" 
                 objectFit="cover"
-                data-ai-hint="video tutorial"
+                data-ai-hint={tutorial.imageUrl ? undefined : "video tutorial placeholder"}
                 className="transition-transform duration-300 group-hover:scale-105"
               />
             <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition-colors">
               <PlayCircle className="h-16 w-16 text-white/80 group-hover:text-white transition-colors group-hover:scale-110 transform" />
             </div>
           </button>
-        ) : tutorial.content ? ( // If no videoUrl, but content exists, show FileText
+        ) : tutorial.content ? ( 
           <div className="flex items-center justify-center h-48 bg-muted rounded-md mb-4">
             <FileText className="h-16 w-16 text-muted-foreground" />
           </div>
-        ) : ( // Fallback if neither videoUrl nor content
+        ) : ( 
            <div className="flex items-center justify-center h-48 bg-muted rounded-md mb-4">
-            <FileText className="h-16 w-16 text-muted-foreground opacity-50" />
-             <p className="absolute text-xs text-muted-foreground">Content coming soon</p>
+            <Image 
+              src={tutorial.imageUrl || `https://placehold.co/640x360.png`}
+              alt={tutorial.title}
+              layout="fill"
+              objectFit="cover"
+              data-ai-hint={tutorial.imageUrl ? undefined : "tutorial content placeholder"}
+              className="opacity-80"
+            />
+             {!tutorial.imageUrl && <p className="absolute text-xs text-muted-foreground bg-background/70 px-2 py-1 rounded">Content coming soon</p>}
           </div>
         )}
         <CardTitle className="text-xl text-foreground">{tutorial.title}</CardTitle>
@@ -68,7 +76,7 @@ export const TutorialCard = React.memo(function TutorialCard({ tutorial, onToggl
         <div className="flex items-center space-x-2">
           <Checkbox
             id={`complete-${tutorial.id}`}
-            checked={!!tutorial.isCompleted}
+            checked={isCompleted}
             onCheckedChange={handleCheckedChange}
             className="border-accent data-[state=checked]:bg-gold-accent data-[state=checked]:text-primary"
           />
@@ -76,7 +84,7 @@ export const TutorialCard = React.memo(function TutorialCard({ tutorial, onToggl
             htmlFor={`complete-${tutorial.id}`}
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground"
           >
-            {tutorial.isCompleted ? "Completed" : "Mark as complete"}
+            {isCompleted ? "Completed" : "Mark as complete"}
           </label>
         </div>
       </CardFooter>

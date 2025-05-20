@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { DynamicLogo } from "@/components/core/dynamic-logo";
 import { Button } from "@/components/ui/button";
@@ -47,8 +48,10 @@ export function Header({ isAuthenticated = false }: HeaderProps) {
 
         <div className="flex items-center gap-2">
           {isAuthenticated ? (
-            <Button variant="ghost" size="icon" aria-label="User Account">
-              <UserCircle className="h-6 w-6 text-accent" />
+            <Button variant="ghost" size="icon" asChild aria-label="User Account">
+              <Link href="/profile">
+                <UserCircle className="h-6 w-6 text-accent" />
+              </Link>
             </Button>
           ) : (
             <div className="hidden md:flex gap-2">

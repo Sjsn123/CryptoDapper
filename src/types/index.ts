@@ -35,6 +35,7 @@ export interface Tutorial {
   videoUrl?: string; // Placeholder or actual YouTube embed URL
   content?: string; // Text content if no video
   category: string;
+  imageUrl?: string; // Optional image URL for the tutorial card
   isCompleted?: boolean; // For localStorage tracking
 }
 

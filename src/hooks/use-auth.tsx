@@ -15,8 +15,8 @@ import {
   signInWithPhoneNumber as firebaseSignInWithPhoneNumber,
   type ConfirmationResult,
 } from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/firebase.ts';
-import { useToast } from '@/hooks/use-toast.ts';
+import { auth, googleProvider } from '@/lib/firebase';
+import { useToast } from '@/hooks/use-toast';
 
 interface AuthContextType {
   user: User | null;
@@ -259,3 +259,5 @@ export const useAuth = (): AuthContextType => {
   }
   return context;
 };
+
+export{};
