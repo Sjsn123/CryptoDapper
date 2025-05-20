@@ -1,14 +1,14 @@
 
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, OAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, OAuthProvider, type AuthProvider as FirebaseAuthProvider } from 'firebase/auth'; // Ensure OAuthProvider is imported if used
 import { getAnalytics, type Analytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 // IMPORTANT: This configuration uses a hardcoded API key based on user input.
 // For a real production app, you should use environment variables.
 const firebaseConfig = {
-  apiKey: "AIzaSyAhB3Wyl2hD0pfKayFo9y7GqqsT1K3Q5Co", // Updated API key
+  apiKey: "AIzaSyB6niuaoLLfhEAUpD7xeznclSh1zN9yuEw", // Updated API key
   authDomain: "cryptodapper-demo.firebaseapp.com",   // Based on projectId
   projectId: "cryptodapper-demo",                     // As per user request
   storageBucket: "cryptodapper-demo.appspot.com",   // Based on projectId
@@ -27,7 +27,7 @@ if (!getApps().length) {
 
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
-// Apple sign-in was removed, so appleProvider is no longer needed here.
+// appleProvider was removed as Apple Sign-In is not being used.
 
 let analytics: Analytics | null = null;
 
