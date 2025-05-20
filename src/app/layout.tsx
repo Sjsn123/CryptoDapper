@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Inter, Roboto_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
-import { AuthProvider } from '@/hooks/use-auth'; // Import AuthProvider
+import { AuthProvider } from '@/hooks/use-auth.tsx'; // Import AuthProvider
 
 const inter = Inter({
   subsets: ['latin'],
@@ -28,8 +28,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.variable} ${robotoMono.variable} font-sans antialiased`}>
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body 
+        className={`${inter.variable} ${robotoMono.variable} font-sans antialiased`} 
+        suppressHydrationWarning
+      >
         <AuthProvider> {/* Wrap children with AuthProvider */}
           {children}
           <Toaster />
