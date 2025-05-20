@@ -3,7 +3,7 @@
 /**
  * @fileOverview A Genkit flow to generate mock cryptocurrency events.
  *
- * - generateCryptoEvents - A function that generates a list of mock crypto events.
+ * - getAICryptoEvents - A function that generates a list of mock crypto events.
  * - CryptoEventOutput - The Zod schema for a single generated crypto event.
  * - GeneratedCryptoEventsOutput - The Zod schema for the list of generated events.
  */
@@ -90,6 +90,5 @@ export async function getAICryptoEvents(): Promise<CryptoEventOutput[]> {
   return generateCryptoEventsFlow();
 }
 
-// Also re-exporting MOCK_CRYPTO_EVENTS from constants for the homepage ticker for now.
-// This avoids breaking the homepage immediately.
-export { MOCK_CRYPTO_EVENTS } from '@/constants';
+// The MOCK_CRYPTO_EVENTS export was removed.
+// The homepage (/src/app/page.tsx) imports MOCK_CRYPTO_EVENTS directly from '@/constants'.

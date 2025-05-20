@@ -6,7 +6,7 @@ import { DynamicLogo } from "@/components/core/dynamic-logo";
 import { Button } from "@/components/ui/button";
 import { FeatureCard } from "@/components/core/feature-card";
 import { EventTicker } from "@/components/core/event-ticker";
-import { FEATURES_DATA, MOCK_CRYPTO_EVENTS, APP_NAME, APP_TAGLINE } from "@/constants";
+import { FEATURES_DATA, MOCK_CRYPTO_EVENTS, APP_NAME, APP_TAGLINE } from "@/constants"; // Updated import path
 import { ArrowRight, CheckCircle } from "lucide-react";
 import Image from "next/image";
 
