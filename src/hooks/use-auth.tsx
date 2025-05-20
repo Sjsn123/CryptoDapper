@@ -13,10 +13,12 @@ import {
   sendPasswordResetEmail,
   RecaptchaVerifier,
   signInWithPhoneNumber as firebaseSignInWithPhoneNumber,
+  sendEmailVerification, // Import sendEmailVerification
   type ConfirmationResult,
+  type AuthProvider as FirebaseAuthProvider, // Renamed to avoid conflict with our AuthProvider
 } from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/firebase';
-import { useToast } from '@/hooks/use-toast';
+import { auth, googleProvider } from '@/lib/firebase.ts';
+import { useToast } from '@/hooks/use-toast.ts';
 
 interface AuthContextType {
   user: User | null;
@@ -25,16 +27,14 @@ interface AuthContextType {
   signUpWithEmail: (email: string, password: string) => Promise<User | null>;
   logInWithEmail: (email: string, password: string) => Promise<User | null>;
   sendPasswordReset: (email: string) => Promise<void>;
+  sendVerificationEmail: () => Promise<void>; // Added this
   requestOtpForPhoneNumber: (phoneNumber: string, recaptchaContainerId: string) => Promise<ConfirmationResult | null>;
-  verifyOtpAndSignIn: (otpCode: string) => Promise<User | null>; // Placeholder for now
+  verifyOtpAndSignIn: (otpCode: string) => Promise<User | null>;
   logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Store confirmationResult outside the provider to persist across re-renders of the provider itself,
-// or consider using a ref if it needs to be tied to the component lifecycle more directly.
-// For simplicity here, a module-level variable. A more robust solution might use React context or a state management library.
 let phoneAuthConfirmationResult: ConfirmationResult | null = null;
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -49,8 +49,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
 
       const isAuthPage =
-        typeof window !== 'undefined' && window.location.pathname.startsWith('/auth');
-      const protectedPaths = ['/dashboard', '/education', '/events'];
+        typeof window !== 'undefined' && (window.location.pathname.startsWith('/auth/login') || window.location.pathname.startsWith('/auth/register') || window.location.pathname.startsWith('/auth/recover'));
+      const protectedPaths = ['/dashboard', '/education', '/events', '/profile'];
       const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
       
       const isProtectedPage = protectedPaths.some(path => currentPath.startsWith(path));
@@ -65,9 +65,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [router]);
 
   const handleAuthError = useCallback((error: any, context: string) => {
-    console.error(`${context} Error:`, error, error.code);
-    let description = error.message || `Failed to ${context}.`;
-    // Customize messages based on error.code
+    console.error(`${context} Error:`, error, error.code, error.message);
+    let description = `Failed to ${context}. ${error.message || ''}`;
     switch (error.code) {
         case 'auth/popup-closed-by-user':
           description = `You closed the ${context} window. Please try again.`;
@@ -101,6 +100,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         case 'auth/too-many-requests':
             description = 'Too many requests. Please try again later.';
             break;
+        case 'auth/unauthorized-domain':
+            description = 'This domain is not authorized for OAuth operations for your Firebase project. Check the Firebase console.';
+            break;
+        case 'auth/operation-not-allowed':
+            description = `The ${context} method is not enabled. Please enable it in your Firebase console under Authentication -> Sign-in method.`;
+            break;
         default:
           // Use default description for other errors
           break;
@@ -113,46 +118,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [toast]);
 
   const signInWithGoogle = useCallback(async () => {
-    setIsLoading(true);
     try {
-      await signInWithPopup(auth, googleProvider);
-      // Success handled by onAuthStateChanged
+      await signInWithPopup(auth, googleProvider as FirebaseAuthProvider);
+      handleAuthSuccess('Google Sign-In');
+      router.replace('/dashboard');
     } catch (error) {
       handleAuthError(error, "Google Sign-In");
     }
-    // setIsLoading(false); // isLoading should be managed by onAuthStateChanged
-  }, [handleAuthError]);
+  }, [handleAuthError, handleAuthSuccess, router]);
 
   const signUpWithEmail = async (email: string, password: string): Promise<User | null> => {
-    setIsLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      handleAuthSuccess('Registration', 'Welcome! Your account has been created.');
+      await sendEmailVerification(userCredential.user);
+      toast({ title: 'Registration Successful', description: 'Account created! A verification email has been sent to your email address.' });
+      router.replace('/dashboard');
       return userCredential.user;
     } catch (error) {
       handleAuthError(error, "Email Sign Up");
       return null;
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const logInWithEmail = async (email: string, password: string): Promise<User | null> => {
-    setIsLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       handleAuthSuccess('Login');
+      router.replace('/dashboard');
       return userCredential.user;
     } catch (error) {
       handleAuthError(error, "Email Login");
       return null;
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const sendPasswordReset = async (email: string) => {
-    setIsLoading(true);
     try {
       await sendPasswordResetEmail(auth, email);
       toast({
@@ -161,41 +161,50 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
     } catch (error) {
       handleAuthError(error, "Password Reset");
-    } finally {
-      setIsLoading(false);
     }
   };
+  
+  const sendVerificationEmail = useCallback(async () => {
+    if (auth.currentUser) {
+      try {
+        await sendEmailVerification(auth.currentUser);
+        toast({
+          title: 'Verification Email Sent',
+          description: 'Please check your inbox to verify your email address.',
+        });
+      } catch (error) {
+        handleAuthError(error, "Send Verification Email");
+      }
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'No user is currently signed in.',
+      });
+    }
+  }, [auth, handleAuthError, toast]);
 
   const requestOtpForPhoneNumber = useCallback(async (phoneNumber: string, recaptchaContainerId: string): Promise<ConfirmationResult | null> => {
-    setIsLoading(true);
     try {
-      // Ensure a fresh verifier for each attempt or manage existing one
       const appVerifier = new RecaptchaVerifier(auth, recaptchaContainerId, {
         'size': 'invisible',
-        'callback': (response: any) => {
-          // reCAPTCHA solved, Firebase can now send OTP.
-          // console.log("reCAPTCHA challenge successful:", response);
-        },
+        'callback': (response: any) => {},
         'expired-callback': () => {
           toast({ variant: "destructive", title: "reCAPTCHA Expired", description: "Please try sending the OTP again." });
         }
       });
       
       const confirmation = await firebaseSignInWithPhoneNumber(auth, phoneNumber, appVerifier);
-      phoneAuthConfirmationResult = confirmation; // Store for later use
+      phoneAuthConfirmationResult = confirmation;
       toast({ title: "OTP Sent", description: `Verification code sent to ${phoneNumber}. (OTP input UI is next step)` });
-      setIsLoading(false);
       return confirmation;
     } catch (error: any) {
-      // If there is an error with the reCAPTCHA verifier object itself.
       if (window.grecaptcha && (window as any).grecaptcha.enterprise) {
         (window as any).grecaptcha.enterprise.reset();
       } else if (window.grecaptcha) {
         (window as any).grecaptcha.reset();
       }
-      
       handleAuthError(error, "Send OTP");
-      setIsLoading(false);
       return null;
     }
   }, [auth, handleAuthError, toast]);
@@ -205,33 +214,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       toast({ variant: "destructive", title: "Error", description: "No OTP request found. Please request an OTP first." });
       return null;
     }
-    setIsLoading(true);
     try {
       const userCredential = await phoneAuthConfirmationResult.confirm(otpCode);
       handleAuthSuccess('Phone Sign-In');
-      phoneAuthConfirmationResult = null; // Clear after use
+      router.replace('/dashboard');
+      phoneAuthConfirmationResult = null;
       return userCredential.user;
     } catch (error) {
       handleAuthError(error, "Verify OTP");
       return null;
-    } finally {
-      setIsLoading(false);
     }
-  }, [handleAuthError, handleAuthSuccess, toast]);
+  }, [handleAuthError, handleAuthSuccess, toast, router]);
 
 
   const logout = useCallback(async () => {
-    setIsLoading(true);
     try {
       await firebaseSignOut(auth);
       toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
-      phoneAuthConfirmationResult = null; // Clear on logout
+      phoneAuthConfirmationResult = null;
+      router.replace('/auth/login'); // Ensure redirect to login after logout
     } catch (error) {
       handleAuthError(error, "Logout");
-    } finally {
-      setIsLoading(false); // Set to false even on error
     }
-  }, [toast, handleAuthError]);
+  }, [toast, handleAuthError, router]);
 
   const authContextValue: AuthContextType = {
     user,
@@ -240,6 +245,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signUpWithEmail,
     logInWithEmail,
     sendPasswordReset,
+    sendVerificationEmail, // Export new function
     requestOtpForPhoneNumber,
     verifyOtpAndSignIn,
     logout,
@@ -259,5 +265,3 @@ export const useAuth = (): AuthContextType => {
   }
   return context;
 };
-
-export{};
