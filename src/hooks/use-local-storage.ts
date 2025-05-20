@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 function getValueFromLocalStorage<T>(key: string, initialValue: T): T {
   if (typeof window === 'undefined') {
@@ -15,28 +16,39 @@ function getValueFromLocalStorage<T>(key: string, initialValue: T): T {
   }
 }
 
-export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((val: T) => T)) => void] {
+export function useLocalStorage<T>(
+  key: string,
+  initialValue: T
+): [T, (value: T | ((val: T) => T)) => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
     return getValueFromLocalStorage(key, initialValue);
   });
 
+  // This effect ensures that the state is updated if localStorage changes from another tab/window,
+  // and initializes from localStorage on first client-side render.
   useEffect(() => {
-    // This effect ensures that the state is updated if localStorage changes from another tab/window.
-    // It also ensures that initialValue from server render matches client if localStorage is empty.
     setStoredValue(getValueFromLocalStorage(key, initialValue));
-  }, [key, initialValue]);
+  }, [key, initialValue]); // initialValue should be stable for this effect not to cause issues.
 
-  const setValue = (value: T | ((val: T) => T)) => {
-    try {
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      setStoredValue(valueToStore);
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+  const setValue = useCallback(
+    (value: T | ((val: T) => T)) => {
+      try {
+        // Allow value to be a function so we have the same API as useState
+        setStoredValue(currentStoredValue => {
+          const valueToStore =
+            value instanceof Function ? value(currentStoredValue) : value;
+          
+          if (typeof window !== 'undefined') {
+            window.localStorage.setItem(key, JSON.stringify(valueToStore));
+          }
+          return valueToStore;
+        });
+      } catch (error) {
+        console.error(`Error setting localStorage key "${key}":`, error);
       }
-    } catch (error) {
-      console.error(`Error setting localStorage key "${key}":`, error);
-    }
-  };
+    },
+    [key] // Now setValue only depends on `key`. `setStoredValue` is stable.
+  );
 
   return [storedValue, setValue];
 }

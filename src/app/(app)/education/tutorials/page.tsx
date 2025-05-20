@@ -1,11 +1,12 @@
+
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react"; // Added useCallback
 import { TutorialCard } from "@/components/core/tutorial-card";
 import { TutorialRecommendationEngine } from "@/components/core/tutorial-recommendation-engine";
 import { TUTORIALS_DATA } from "@/constants";
 import type { Tutorial } from "@/types";
-import { useLocalStorage } from "@/hooks/use-local-storage";
+import { useLocalStorage } from "@/hooks/use-local-storage.ts";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 
@@ -15,20 +16,34 @@ export default function TutorialsPage() {
   const [allTutorials, setAllTutorials] = useState<Tutorial[]>(TUTORIALS_DATA);
   const [completedTutorials, setCompletedTutorials] = useLocalStorage<string[]>(TUTORIAL_PROGRESS_KEY, []);
 
+  const handleToggleComplete = useCallback((id: string, completed: boolean) => {
+    setCompletedTutorials(prevCompletedIds => {
+      const newSet = new Set(prevCompletedIds);
+      if (completed) {
+        newSet.add(id);
+      } else {
+        newSet.delete(id);
+      }
+      return Array.from(newSet);
+    });
+  }, [setCompletedTutorials]); // setCompletedTutorials is now stable from the updated useLocalStorage
+
   useEffect(() => {
-    setAllTutorials(prevTutorials =>
-      prevTutorials.map(t => ({ ...t, isCompleted: completedTutorials.includes(t.id) }))
+    setAllTutorials(currentAllTutorials =>
+      currentAllTutorials.map(t => {
+        const isNowCompleted = completedTutorials.includes(t.id);
+        // Only create a new tutorial object if its completion status has actually changed.
+        // This can sometimes help prevent unnecessary re-renders of child components if they are memoized.
+        if (t.isCompleted !== isNowCompleted) {
+          return { ...t, isCompleted: isNowCompleted };
+        }
+        return t;
+      })
     );
   }, [completedTutorials]);
 
-  const handleToggleComplete = (id: string, completed: boolean) => {
-    setCompletedTutorials(prev =>
-      completed ? [...new Set([...prev, id])] : prev.filter(tutId => tutId !== id)
-    );
-  };
-
   const categories = Array.from(new Set(allTutorials.map(t => t.category)));
-  const progressPercentage = (completedTutorials.length / allTutorials.length) * 100;
+  const progressPercentage = allTutorials.length > 0 ? (completedTutorials.length / allTutorials.length) * 100 : 0;
 
   return (
     <div className="space-y-8">
