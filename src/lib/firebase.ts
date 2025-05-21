@@ -1,20 +1,19 @@
 
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, OAuthProvider, type AuthProvider as FirebaseAuthProvider } from 'firebase/auth'; // Ensure OAuthProvider is imported if used
+import { getAuth, GoogleAuthProvider, OAuthProvider, type AuthProvider as FirebaseAuthProvider } from 'firebase/auth';
 import { getAnalytics, type Analytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
-// IMPORTANT: This configuration uses a hardcoded API key based on user input.
-// For a real production app, you should use environment variables.
+// IMPORTANT: This configuration now uses values directly provided by the user.
 const firebaseConfig = {
-  apiKey: "AIzaSyB6niuaoLLfhEAUpD7xeznclSh1zN9yuEw", // Updated API key
-  authDomain: "cryptodapper-demo.firebaseapp.com",   // Based on projectId
-  projectId: "cryptodapper-demo",                     // As per user request
-  storageBucket: "cryptodapper-demo.appspot.com",   // Based on projectId
-  messagingSenderId: "643322336591",                // Original value, assumed to be project-specific
-  appId: "1:643322336591:web:a45c0d59d7511f1ca9613a", // Original value, assumed to be project-specific. Verify this if issues persist.
-  measurementId: "G-63YS5VNJCV"                     // Original value, assumed to be project-specific
+  apiKey: "AIzaSyB6niuaoLLfhEAUpD7xeznclSh1zN9yuEw", // User confirmed this key
+  authDomain: "cryptodapper-demo.firebaseapp.com",
+  projectId: "cryptodapper-demo",
+  storageBucket: "cryptodapper-demo.appspot.com", // Corrected format
+  messagingSenderId: "977690515468", // From user
+  appId: "1:977690515468:web:350e0ff093ff3ab8137629", // From user
+  measurementId: "G-63YS5VNJCV" // Retained from previous, user should verify if needed
 };
 
 // Initialize Firebase
@@ -27,7 +26,7 @@ if (!getApps().length) {
 
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
-// appleProvider was removed as Apple Sign-In is not being used.
+// appleProvider was removed previously.
 
 let analytics: Analytics | null = null;
 
