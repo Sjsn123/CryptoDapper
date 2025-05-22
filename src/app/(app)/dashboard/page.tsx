@@ -18,7 +18,6 @@ import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { WithdrawForm } from "@/components/dashboard/withdraw-form";
 import { DepositForm } from "@/components/dashboard/deposit-form";
-// ScrollArea import removed as it's no longer used here for WithdrawForm
 
 const MOCK_ACCOUNT_BALANCE_KEY = 'cryptoDapperMockBalance';
 const INITIAL_BALANCE = 10000; // DD Coins
@@ -47,7 +46,12 @@ export default function DashboardPage() {
 
     const foundCode = PROMO_CODES_DATA.find(p => p.code.toUpperCase() === promoCode.toUpperCase());
     if (foundCode) {
-      const newBalance = accountBalance * foundCode.value;
+      let newBalance = accountBalance;
+      if (foundCode.fixedBonusAmount !== undefined) {
+        newBalance += foundCode.fixedBonusAmount;
+      } else if (foundCode.value !== undefined) {
+        newBalance *= foundCode.value;
+      }
       setAccountBalance(newBalance);
       localStorage.setItem(MOCK_ACCOUNT_BALANCE_KEY, String(newBalance));
       toast({
@@ -124,7 +128,7 @@ export default function DashboardPage() {
                 <div className="flex space-x-2">
                   <Input
                     id="promoCode"
-                    placeholder="Enter promo code (e.g., DAPPER10)"
+                    placeholder="Enter promo code (e.g., DAPPER10, BTCBONUS)"
                     value={promoCode}
                     onChange={(e) => setPromoCode(e.target.value)}
                     className="font-mono"
@@ -134,7 +138,7 @@ export default function DashboardPage() {
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Available demo codes: DAPPER10, CRYPTOFUN, WELCOME24
+                  Available demo codes: DAPPER10, CRYPTOFUN, WELCOME24, BTCBONUS
                 </p>
               </CardContent>
             </Card>
@@ -247,7 +251,6 @@ export default function DashboardPage() {
         </TabsContent>
 
         <TabsContent value="withdraw">
-          {/* ScrollArea removed from here */}
           <WithdrawForm />
         </TabsContent>
 
@@ -255,5 +258,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    

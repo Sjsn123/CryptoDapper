@@ -18,7 +18,8 @@ export interface CryptoEvent {
 
 export interface PromoCode {
   code: string;
-  value: number; // e.g., 1.1 for 10% increase
+  value?: number; // Multiplier, e.g., 1.1 for 10% increase. Optional now.
+  fixedBonusAmount?: number; // Fixed amount to add.
   message: string;
 }
 
@@ -50,7 +51,7 @@ export interface BlogPost {
   tags: string[];
   content?: string; // Full content for individual post page
   author?: string;
-  externalLink?: string; // Added external link
+  externalLink?: string;
 }
 
 export interface TutorialRecommendation {
@@ -77,4 +78,3 @@ export interface AICryptoEvent {
   description?: string;
   priority?: 'high' | 'regular';
 }
-
