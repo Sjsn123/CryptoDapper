@@ -1,3 +1,4 @@
+
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { DynamicLogo } from "@/components/core/dynamic-logo";
 import Link from "next/link";
@@ -32,3 +33,5 @@ export function AuthFormWrapper({ title, description, children, footerContent }:
     </div>
   );
 }
+
+    

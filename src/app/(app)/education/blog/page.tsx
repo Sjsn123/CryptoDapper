@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -27,9 +28,9 @@ export default function BlogPage() {
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-3xl font-bold text-foreground">CryptoDapper Blog</h1>
+        <h1 className="text-3xl font-bold text-foreground">Digital Dapper Blog</h1>
         <p className="text-muted-foreground">
-          Insights and articles on crypto concepts, security, and platform updates.
+          Insights and articles on digital asset concepts, security, and platform updates.
         </p>
       </header>
 
@@ -90,3 +91,5 @@ export default function BlogPage() {
     </div>
   );
 }
+
+    

@@ -52,13 +52,13 @@ export function LoginForm() {
   async function onEmailSubmit(data: LoginFormValues) {
     setIsSubmittingEmail(true);
     await logInWithEmail(data.email, data.password);
-    setIsSubmittingEmail(false); // Will likely not be reached if redirect happens
+    // setIsSubmittingEmail(false); // Handled by navigation or error in useAuth
   }
 
   const handleGoogleLogin = async () => {
     setIsSubmittingSocial(true);
     await signInWithGoogle();
-    setIsSubmittingSocial(false); // Will likely not be reached if redirect happens
+    // setIsSubmittingSocial(false); // Handled by navigation or error in useAuth
   };
 
   const currentIsLoading = authLoading || isSubmittingEmail || isSubmittingSocial;
@@ -130,3 +130,5 @@ export function LoginForm() {
     </div>
   );
 }
+
+    

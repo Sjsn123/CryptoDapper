@@ -18,8 +18,8 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'CryptoDapper Demo',
-  description: 'Discover Crypto, Safely. A demo platform for exploring crypto concepts.',
+  title: 'Digital Dapper Demo',
+  description: 'Discover Digital Assets, Safely. A demo platform for exploring digital asset concepts.',
 };
 
 export default function RootLayout({
@@ -41,3 +41,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+    

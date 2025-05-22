@@ -1,10 +1,11 @@
+
 "use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast.ts";
 import { getTutorialRecommendations, type TutorialRecommendationsInput } from "@/ai/flows/tutorial-recommendations";
 import type { TutorialRecommendation } from "@/types";
 import { Wand2, Loader2, Lightbulb } from "lucide-react";
@@ -62,8 +63,7 @@ export function TutorialRecommendationEngine() {
           Personalized Tutorial Recommendations
         </CardTitle>
         <CardDescription>
-          Tell us what you&apos;re doing or interested in, and our AI will suggest relevant tutorials.
-          (e.g., &quot;I&apos;m trying to understand how wallets work&quot; or &quot;Learning about DeFi security&quot;)
+          Tell us what you&apos;re doing or interested in (e.g., &quot;how wallets work&quot; or &quot;DeFi security&quot;), and our AI will suggest relevant tutorials from the Digital Dapper Demo platform.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -99,3 +99,5 @@ export function TutorialRecommendationEngine() {
     </Card>
   );
 }
+
+    

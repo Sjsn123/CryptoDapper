@@ -20,7 +20,7 @@ const navItems: NavItem[] = [
 ];
 
 interface HeaderProps {
-  isAuthenticated?: boolean; // Mock authentication status
+  isAuthenticated?: boolean; 
 }
 
 export function Header({ isAuthenticated = false }: HeaderProps) {
@@ -29,9 +29,9 @@ export function Header({ isAuthenticated = false }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2" aria-label="CryptoDapper Demo Home">
+        <Link href="/" className="flex items-center gap-2" aria-label="Digital Dapper Demo Home">
           <DynamicLogo size="sm" />
-          <span className="hidden font-bold sm:inline-block text-foreground">CryptoDapper</span>
+          <span className="hidden font-bold sm:inline-block text-foreground">Digital Dapper</span>
         </Link>
 
         <nav className="hidden md:flex gap-6">
@@ -107,3 +107,5 @@ export function Header({ isAuthenticated = false }: HeaderProps) {
     </header>
   );
 }
+
+    

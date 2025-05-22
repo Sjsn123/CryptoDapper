@@ -3,16 +3,15 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation'; // useRouter removed as redirect is in useAuth
+import { usePathname } from 'next/navigation'; 
 import { Header } from '@/components/layout/header';
-// import { Footer } from '@/components/layout/footer'; // Footer not typically in app shells
 import { DynamicLogo } from '@/components/core/dynamic-logo';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { NAV_LINKS_AUTHENTICATED } from '@/constants';
 import { LogOut, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/hooks/use-auth'; // Updated import
+import { useAuth } from '@/hooks/use-auth.tsx'; 
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -23,8 +22,6 @@ export function AppShell({ children }: AppShellProps) {
   const { user, isLoading: authIsLoading, logout } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  // useAuth hook now handles redirection if user is not authenticated.
-  // The loading state from useAuth indicates if Firebase auth state is being determined.
 
   if (authIsLoading) {
     return (
@@ -36,9 +33,6 @@ export function AppShell({ children }: AppShellProps) {
   }
 
   if (!user) {
-    // This case should ideally be handled by redirection in useAuth,
-    // but as a fallback or if redirection hasn't completed yet.
-    // Depending on how useAuth is structured, this might not even be hit if redirection is synchronous enough.
     return (
        <div className="flex items-center justify-center min-h-screen bg-background text-foreground">
         <Loader2 className="h-8 w-8 animate-spin text-gold-accent" />
@@ -67,7 +61,7 @@ export function AppShell({ children }: AppShellProps) {
             {isSidebarOpen && (
               <Link href="/dashboard" className="flex items-center gap-2">
                 <DynamicLogo size="sm" />
-                <span className="font-bold text-sm">CryptoDapper</span>
+                <span className="font-bold text-sm">Digital Dapper</span>
               </Link>
             )}
             <Button 
@@ -129,3 +123,5 @@ export function AppShell({ children }: AppShellProps) {
     </div>
   );
 }
+
+    

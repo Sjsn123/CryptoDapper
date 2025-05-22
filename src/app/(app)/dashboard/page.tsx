@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast.ts";
 import { PROMO_CODES_DATA, MOCK_PORTFOLIO_ASSETS_DATA } from "@/constants";
 import type { PromoCode, PortfolioAsset } from "@/types";
 import { DollarSign, Gift, Bell, CheckCircle, XCircle, ExternalLink, Loader2, Briefcase, ArrowUpRight, ArrowDownRight, ArrowDownToLine, ArrowUpFromLine } from "lucide-react";
@@ -19,7 +19,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { WithdrawForm } from "@/components/dashboard/withdraw-form";
 import { DepositForm } from "@/components/dashboard/deposit-form";
 
-const MOCK_ACCOUNT_BALANCE_KEY = 'cryptoDapperMockBalance';
+const MOCK_ACCOUNT_BALANCE_KEY = 'digitalDapperMockBalance';
+const APPLIED_PROMO_CODES_KEY = 'digitalDapperAppliedPromos';
 const INITIAL_BALANCE = 10000; // DD Coins
 
 export default function DashboardPage() {
@@ -29,6 +30,7 @@ export default function DashboardPage() {
   const { toast } = useToast();
   const [isApplyingPromo, setIsApplyingPromo] = useState(false);
   const [portfolioAssets, setPortfolioAssets] = useState<PortfolioAsset[]>([]);
+  const [appliedPromoCodes, setAppliedPromoCodes] = useState<string[]>([]);
 
   useEffect(() => {
     const storedBalance = localStorage.getItem(MOCK_ACCOUNT_BALANCE_KEY);
@@ -37,6 +39,12 @@ export default function DashboardPage() {
     } else {
       localStorage.setItem(MOCK_ACCOUNT_BALANCE_KEY, String(INITIAL_BALANCE));
     }
+
+    const storedAppliedCodes = localStorage.getItem(APPLIED_PROMO_CODES_KEY);
+    if (storedAppliedCodes) {
+      setAppliedPromoCodes(JSON.parse(storedAppliedCodes));
+    }
+
     setPortfolioAssets(MOCK_PORTFOLIO_ASSETS_DATA);
   }, []);
 
@@ -44,7 +52,21 @@ export default function DashboardPage() {
     setIsApplyingPromo(true);
     await new Promise(resolve => setTimeout(resolve, 700)); 
 
-    const foundCode = PROMO_CODES_DATA.find(p => p.code.toUpperCase() === promoCode.toUpperCase());
+    const upperCasePromoCode = promoCode.toUpperCase();
+
+    if (appliedPromoCodes.map(c => c.toUpperCase()).includes(upperCasePromoCode)) {
+      toast({
+        variant: "destructive",
+        title: "Promo Code Already Used",
+        description: "You have already redeemed this promo code.",
+        action: <XCircle className="text-red-500" />,
+      });
+      setIsApplyingPromo(false);
+      setPromoCode("");
+      return;
+    }
+
+    const foundCode = PROMO_CODES_DATA.find(p => p.code.toUpperCase() === upperCasePromoCode);
     if (foundCode) {
       let newBalance = accountBalance;
       if (foundCode.fixedBonusAmount !== undefined) {
@@ -54,6 +76,11 @@ export default function DashboardPage() {
       }
       setAccountBalance(newBalance);
       localStorage.setItem(MOCK_ACCOUNT_BALANCE_KEY, String(newBalance));
+      
+      const newAppliedCodes = [...appliedPromoCodes, foundCode.code.toUpperCase()];
+      setAppliedPromoCodes(newAppliedCodes);
+      localStorage.setItem(APPLIED_PROMO_CODES_KEY, JSON.stringify(newAppliedCodes));
+      
       toast({
         title: "Promo Code Applied!",
         description: foundCode.message,
@@ -138,7 +165,7 @@ export default function DashboardPage() {
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Available demo codes: DAPPER10, CRYPTOFUN, WELCOME24, BTCBONUS
+                  Available demo codes: DAPPER10, DIGITALFUN, WELCOME24, BTCBONUS
                 </p>
               </CardContent>
             </Card>
@@ -258,3 +285,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+    

@@ -1,20 +1,21 @@
 
 "use client";
 
-import { useState, useEffect, useCallback } from "react"; // Added useCallback
+import { useState, useEffect, useCallback, useMemo } from "react"; 
 import { TutorialCard } from "@/components/core/tutorial-card";
 import { TutorialRecommendationEngine } from "@/components/core/tutorial-recommendation-engine";
 import { TUTORIALS_DATA } from "@/constants";
 import type { Tutorial } from "@/types";
-import { useLocalStorage } from "@/hooks/use-local-storage";
+import { useLocalStorage } from "@/hooks/use-local-storage.ts";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 
-const TUTORIAL_PROGRESS_KEY = "cryptoDapperTutorialProgress";
-// Removed isCompleted from Tutorial type in allTutorials useState initialization
+const TUTORIAL_PROGRESS_KEY = "digitalDapperTutorialProgress";
+
 export default function TutorialsPage() {
   const [allTutorials, setAllTutorials] = useState<Tutorial[]>(TUTORIALS_DATA);
-  const [completedTutorials, setCompletedTutorials] = useLocalStorage<string[]>(TUTORIAL_PROGRESS_KEY, []);
+  const initialCompletedTutorials = useMemo(() => [], []); // Stable initial value
+  const [completedTutorials, setCompletedTutorials] = useLocalStorage<string[]>(TUTORIAL_PROGRESS_KEY, initialCompletedTutorials);
 
   const handleToggleComplete = useCallback((id: string, completed: boolean) => {
     setCompletedTutorials(prevCompletedIds => {
@@ -26,9 +27,8 @@ export default function TutorialsPage() {
       }
       return Array.from(newSet);
     });
-  }, [setCompletedTutorials]); // setCompletedTutorials is now stable from the updated useLocalStorage
+  }, [setCompletedTutorials]); 
 
-  // Removed the useEffect that updated allTutorials based on completedTutorials
   const categories = Array.from(new Set(allTutorials.map(t => t.category)));
   const progressPercentage = allTutorials.length > 0 ? (completedTutorials.length / allTutorials.length) * 100 : 0;
 
@@ -60,7 +60,7 @@ export default function TutorialsPage() {
               key={tutorial.id} 
               tutorial={tutorial} 
               onToggleComplete={handleToggleComplete} 
-              isCompleted={completedTutorials.includes(tutorial.id)} // Check if tutorial is completed
+              isCompleted={completedTutorials.includes(tutorial.id)} 
               />
             ))}
           </div>
@@ -86,3 +86,5 @@ export default function TutorialsPage() {
     </div>
   );
 }
+
+    

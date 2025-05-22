@@ -11,20 +11,19 @@ import { EventTicker } from "@/components/core/event-ticker";
 import { FEATURES_DATA, MOCK_CRYPTO_EVENTS, APP_NAME, APP_TAGLINE } from "@/constants";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import Image from "next/image";
-import { useAuth } from "@/hooks/use-auth.tsx"; // Import useAuth
+import { useAuth } from "@/hooks/use-auth.tsx"; 
 
 export default function HomePage() {
-  const { user, isLoading } = useAuth(); // Get auth state
+  const { user, isLoading } = useAuth(); 
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Pass the correct authentication state to the Header */}
       <Header isAuthenticated={!!user && !isLoading} />
       
       <main className="flex-grow">
         {/* Hero Section */}
         <section className="relative py-20 md:py-32 bg-gradient-to-b from-primary to-background text-center overflow-hidden">
-          <div className="absolute inset-0 opacity-10 bg-[url('https://placehold.co/1920x1080/222D3B/1A2533/png?text=Crypto+Nodes&font=roboto')] bg-cover bg-center" data-ai-hint="abstract blockchain"></div>
+          <div className="absolute inset-0 opacity-10 bg-[url('https://placehold.co/1920x1080/222D3B/1A2533/png?text=Digital+Nodes&font=roboto')] bg-cover bg-center" data-ai-hint="abstract blockchain"></div>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <DynamicLogo size="lg" className="mx-auto mb-8 animate-pulse-glow" />
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground">
@@ -47,7 +46,7 @@ export default function HomePage() {
         <section className="py-16 md:py-24 bg-background">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-foreground">Explore Crypto Concepts</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground">Explore Digital Asset Concepts</h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 Hands-on simulations of key cryptocurrency features.
               </p>
@@ -63,13 +62,13 @@ export default function HomePage() {
         {/* How it works / Value Proposition Section */}
         <section className="py-16 md:py-24 bg-primary/30">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-1 gap-12 items-center"> {/* Changed md:grid-cols-2 to md:grid-cols-1 */}
+            <div className="grid md:grid-cols-1 gap-12 items-center"> 
               <div>
                 <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">
                   Learn by Doing, Risk-Free
                 </h2>
                 <p className="text-lg text-muted-foreground mb-6">
-                  CryptoDapper Demo provides a safe sandbox environment to understand complex crypto interactions without using real assets. Perfect for beginners and those curious about blockchain technology.
+                  Digital Dapper Demo provides a safe sandbox environment to understand complex crypto interactions without using real assets. Perfect for beginners and those curious about blockchain technology.
                 </p>
                 <ul className="space-y-3 text-muted-foreground">
                   <li className="flex items-start">
@@ -91,7 +90,6 @@ export default function HomePage() {
                     </Link>
                 </Button>
               </div>
-              {/* Image div removed */}
             </div>
           </div>
         </section>
@@ -104,3 +102,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+    

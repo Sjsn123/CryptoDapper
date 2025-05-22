@@ -60,13 +60,13 @@ export function RegisterForm() {
   async function onEmailSubmit(data: RegisterFormValues) {
     setIsSubmittingEmail(true);
     await signUpWithEmail(data.email, data.password);
-    setIsSubmittingEmail(false); // Will likely not be reached if redirect happens
+    // setIsSubmittingEmail(false); // Handled by navigation or error in useAuth
   }
 
   const handleGoogleRegister = async () => {
     setIsSubmittingSocial(true);
     await signInWithGoogle(); // Firebase handles new user creation with Google sign-in
-    setIsSubmittingSocial(false); // Will likely not be reached if redirect happens
+    // setIsSubmittingSocial(false); // Handled by navigation or error in useAuth
   };
 
   const currentIsLoading = authLoading || isSubmittingEmail || isSubmittingSocial;
@@ -149,3 +149,5 @@ export function RegisterForm() {
     </div>
   );
 }
+
+    
