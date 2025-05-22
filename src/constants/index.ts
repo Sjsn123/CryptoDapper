@@ -37,12 +37,13 @@ export const FEATURES_DATA: Feature[] = [
 ];
 
 export const MOCK_CRYPTO_EVENTS: CryptoEvent[] = [
-  { id: "1", title: "Bitcoin Halving Event Announced for 2026", date: "2024-07-20", priority: "high", description: "The next Bitcoin halving is anticipated to occur in early 2026, further reducing block rewards." },
-  { id: "2", title: "Ethereum Completes 'Dencun' Upgrade", date: "2024-07-18", description: "The Dencun upgrade successfully reduces Layer 2 transaction fees on Ethereum." },
-  { id: "3", title: "Solana Network Upgrade v1.18 Deployed", date: "2024-07-15", priority: "regular", description: "Solana rolls out network upgrade v1.18, focusing on performance and stability improvements." },
-  { id: "4", title: "New DeFi Protocol Launches on Avalanche", date: "2024-07-12", description: "A promising new DeFi protocol offering innovative yield farming strategies has launched on the Avalanche C-Chain." },
-  { id: "5", title: "Cardano Summit 2024 Dates Revealed", date: "2024-07-10", priority: "regular", description: "The annual Cardano Summit dates and location have been announced, promising exciting updates for the ecosystem." },
+  { id: "1", title: "Quantum Ledger Initiative Halving Event Announced for 2026", date: "2024-07-20", priority: "high", description: "The next Quantum Ledger halving is anticipated to occur in early 2026, further reducing block rewards for its native QLT token." },
+  { id: "2", title: "NovaNet Completes 'Cygnus' Upgrade to Enhance Scalability", date: "2024-07-18", description: "The Cygnus upgrade successfully reduces Layer 2 transaction fees on the NovaNet ecosystem by implementing proto-danksharding." },
+  { id: "3", title: "Zenith Chain Network Upgrade v2.1 Deployed Smoothly", date: "2024-07-15", priority: "regular", description: "Zenith Chain rolls out network upgrade v2.1, focusing on validator performance and cross-chain communication improvements." },
+  { id: "4", title: "New Yield Aggregator 'DeFiPulse Protocol' Launches on Aurora Mainnet", date: "2024-07-12", description: "A promising new DeFi protocol, DeFiPulse, offering innovative yield farming strategies has launched on the Aurora mainnet." },
+  { id: "5", title: "Aetheria Blockchain Global Summit 2024 Dates Revealed", date: "2024-07-10", priority: "regular", description: "The annual Aetheria Global Summit dates and location have been announced, promising exciting updates for the AETH ecosystem." },
 ];
+
 
 export const PROMO_CODES_DATA: PromoCode[] = [
   { code: "DAPPER10", value: 1.1, message: "Success! 10% bonus applied to your DD Coins." },
@@ -50,7 +51,7 @@ export const PROMO_CODES_DATA: PromoCode[] = [
   { code: "WELCOME24", value: 1.15, message: "Welcome aboard! Enjoy a 15% bonus." },
   {
     code: "BTCBONUS",
-    fixedBonusAmount: 15000,
+    fixedBonusAmount: 15000, // Mock 0.25 BTC equivalent (0.25 * 60000 = 15000)
     message: "0.25 BTC Bonus (15,000 DD Coins) applied! To withdraw this bonus, you would need to (mock) deposit $100 and refer 2-3 people. (Withdrawal conditions are for demo purposes only)."
   },
 ];
@@ -167,7 +168,7 @@ export const MOCK_PORTFOLIO_ASSETS_DATA: PortfolioAsset[] = [
     name: "Bitcoin",
     symbol: "BTC",
     amount: 0.5,
-    currentPriceUsd: 60000,
+    currentPriceUsd: 60000, // Keeping this as a recognizable mock USD value
     valueUsd: 30000,
     iconUrl: "https://placehold.co/32x32.png",
     dataAiHint: "bitcoin logo",
@@ -185,6 +186,28 @@ export const MOCK_PORTFOLIO_ASSETS_DATA: PortfolioAsset[] = [
     change24h: -1.2,
   },
   {
+    id: "sol",
+    name: "Solana",
+    symbol: "SOL",
+    amount: 50,
+    currentPriceUsd: 150,
+    valueUsd: 7500,
+    iconUrl: "https://placehold.co/32x32.png",
+    dataAiHint: "solana logo",
+    change24h: 1.8,
+  },
+  {
+    id: "usdt",
+    name: "Tether",
+    symbol: "USDT",
+    amount: 5000,
+    currentPriceUsd: 1.00,
+    valueUsd: 5000,
+    iconUrl: "https://placehold.co/32x32.png",
+    dataAiHint: "tether logo",
+    change24h: 0.01,
+  },
+  {
     id: "doge",
     name: "Dogecoin",
     symbol: "DOGE",
@@ -195,6 +218,17 @@ export const MOCK_PORTFOLIO_ASSETS_DATA: PortfolioAsset[] = [
     dataAiHint: "dogecoin logo",
     change24h: 5.7,
   },
+  {
+    id: "shib",
+    name: "Shiba Inu",
+    symbol: "SHIB",
+    amount: 500000000, // 500 Million
+    currentPriceUsd: 0.000025,
+    valueUsd: 12500,
+    iconUrl: "https://placehold.co/32x32.png",
+    dataAiHint: "shiba inu logo",
+    change24h: -0.5,
+  },
 ];
 
 // Schema for AI-generated Crypto Events
@@ -204,5 +238,3 @@ export interface AICryptoEvent {
   description?: string;
   priority?: 'high' | 'regular';
 }
-
-    
