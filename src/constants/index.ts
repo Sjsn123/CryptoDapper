@@ -59,7 +59,14 @@ export const FAQS_DATA: FAQ[] = [
 ];
 
 export const TUTORIALS_DATA: Tutorial[] = [
-  { id: "1", title: "Setting up 2FA", description: "Learn how to enhance your account security by enabling Two-Factor Authentication.", category: "Security" },
+  { 
+    id: "1", 
+    title: "Setting up 2FA", 
+    description: "Learn how to enhance your account security by enabling Two-Factor Authentication. Watch this video for a step-by-step guide.", 
+    category: "Security",
+    videoUrl: "https://youtu.be/CCB89tKDlPE?si=YRklk7h-uEnwkJY-",
+    imageUrl: "https://www.debutinfotech.com/_next/image?url=https%3A%2F%2Fblogs.debutinfotech.com%2Fwp-content%2Fuploads%2F2024%2F11%2FTwo-Factor-Authentication.jpg&w=1920&q=85"
+  },
   {
     id: "2",
     title: "Understanding Seed Phrases",
@@ -89,7 +96,7 @@ export const BLOG_POSTS_DATA: BlogPost[] = [
     id: "2",
     title: "Why 2FA Matters for Your Crypto Security",
     summary: "Understand the importance of Two-Factor Authentication in protecting your digital assets.",
-    imageUrl: "https://www.trisearch.com.au/wp-content/uploads/2024/12/Blog-Why-2FA-matters-in-2025.png",
+    imageUrl: "https://www.trisearch.com.au/wp-content/uploads/2024/12/Blog-Why-2FA-matters-in-2025.png", // Using the specific image
     date: "2024-06-25",
     category: "Security",
     tags: ["2fa", "security", "best practices"],

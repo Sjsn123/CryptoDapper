@@ -43,7 +43,13 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '101blockchains.com', // Added new domain
+        hostname: '101blockchains.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.debutinfotech.com', // Added new domain
         port: '',
         pathname: '/**',
       }
