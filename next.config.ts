@@ -49,7 +49,13 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'www.debutinfotech.com', // Added new domain
+        hostname: 'www.debutinfotech.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'encrypted-tbn0.gstatic.com', // Added new domain
         port: '',
         pathname: '/**',
       }
