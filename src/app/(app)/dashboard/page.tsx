@@ -12,7 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { PROMO_CODES_DATA, MOCK_PORTFOLIO_ASSETS_DATA } from "@/constants";
 import type { PromoCode, PortfolioAsset } from "@/types";
-import { DollarSign, Gift, Bell, CheckCircle, XCircle, ExternalLink, Loader2, Briefcase, ArrowUpRight, ArrowDownRight, ArrowDownToLine, ArrowUpFromLine, Phone } from "lucide-react";
+import { DollarSign, Gift, Bell, CheckCircle, XCircle, ExternalLink, Loader2, Briefcase, ArrowUpRight, ArrowDownRight, ArrowDownToLine, ArrowUpFromLine } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -260,7 +260,7 @@ export default function DashboardPage() {
                 </div>
               </div>
               <CardDescription>
-                Overview of your simulated cryptocurrency holdings. Data updates every {PORTFOLIO_UPDATE_INTERVAL / 1000} seconds.
+                Overview of your simulated cryptocurrency holdings (mock USD values). Data updates every {PORTFOLIO_UPDATE_INTERVAL / 1000} seconds.
               </CardDescription>
             </CardHeader>
             <CardContent>
