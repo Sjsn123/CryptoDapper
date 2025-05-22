@@ -74,7 +74,7 @@ export function DepositForm() {
 
   const handleBuyWithCard = () => {
     toast({
-      title: "Action Triggered (Mock)",
+      title: "Action Triggered",
       description: "Buy BTC with card functionality would be initiated here.",
     });
   };
@@ -169,7 +169,7 @@ export function DepositForm() {
       <CardFooter className="flex flex-col gap-4 border-t pt-6">
         <Button className="w-full btn-gold" onClick={handleBuyWithCard}>
           <CreditCard className="mr-2 h-5 w-5" />
-          Buy {currentAsset.symbol} with card (Mock)
+          Buy {currentAsset.symbol} with card
         </Button>
          <Button variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground relative">
           <MessageCircle className="mr-2 h-5 w-5" />
