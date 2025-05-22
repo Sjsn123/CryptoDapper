@@ -65,7 +65,7 @@ export const TUTORIALS_DATA: Tutorial[] = [
     title: "Understanding Seed Phrases",
     description: "Watch this video to discover what seed phrases are, why they are important, and how to manage them securely.",
     videoUrl: "https://video.pictory.ai/v2/preview/49976340139528182917241747749055095",
-    imageUrl: "https://sdmntprwestus2.oaiusercontent.com/files/00000000-8c38-61f8-b123-227517f3e36d/raw?se=2025-05-19T15%3A55%3A43Z&sp=r&sv=2024-08-04&sr=b&scid=00000000-0000-0000-0000-000000000000&skoid=24a7dec3-38fc-4904-b888-8abe0855c442&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-19T13%3A06%3A29Z&ske=2025-05-20T13%3A06%3A29Z&sks=b&skv=2024-08-04&sig=surTUW0PdsISkCBxipvKHB8YqvDaeIDI6HO1xpSD3Q4%3D",
+    imageUrl: "https://sdmntprwestus2.oaiusercontent.com/files/00000000-8c38-61f8-b123-227517f3e36d/raw?se=2025-05-19T15%3A55%3A43Z&sp=r&sv=2024-08-04&sr=b&scid=00000000-0000-0000-0000-000000000000&skoid=24a7dec3-38fc-4904-b888-8abe0855c442&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-19T13%3A06%3A29Z&ske=2025-05-20T13%3A06%3A29Z&sks=b&skv=2024-08-04&sig=surTUW0PdsISkCBxipvKHB8YqvDaeIDI6HO1xpSD3Q4%3D", // Previous specific image
     category: "Basics"
   },
   { id: "3", title: "How to Use Promo Codes", description: "A quick guide on finding and applying promo codes on the CryptoDapper platform.", category: "Platform Features" },
@@ -83,7 +83,7 @@ export const BLOG_POSTS_DATA: BlogPost[] = [
     category: "Basics",
     tags: ["blockchain", "crypto", "technology"],
     externalLink: "https://www.geeksforgeeks.org/blockchain-technology-introduction/",
-    content: "An introductory guide to the revolutionary technology powering cryptocurrencies. Blockchain is a distributed ledger technology that allows for secure, transparent, and tamper-proof recording of transactions. It consists of a chain of blocks, where each block contains a batch of transactions and is cryptographically linked to the previous one, ensuring data integrity and security. This decentralized nature removes the need for a central authority, making it a groundbreaking innovation for various industries beyond just finance."
+    content: "An introductory guide to the revolutionary technology powering cryptocurrencies. Blockchain is a distributed ledger technology (DLT) that allows for secure, transparent, and tamper-proof recording of transactions. It consists of a growing chain of blocks, where each block contains a batch of transactions and is cryptographically linked to the previous one using a hash. This ensures data integrity and security, as altering any block would invalidate all subsequent blocks. The decentralized nature of most blockchains means no single entity, like a bank or government, controls the currency or transaction ledger. This can lead to increased transparency, censorship resistance, and reduced reliance on intermediaries, forming a core tenet of Web3 and Decentralized Autonomous Organizations (DAOs). Its applications extend far beyond finance, into areas like supply chain management, voting systems, and digital identity."
   },
   {
     id: "2",
@@ -94,13 +94,7 @@ export const BLOG_POSTS_DATA: BlogPost[] = [
     category: "Security",
     tags: ["2fa", "security", "best practices"],
     externalLink: "https://sinch.com/blog/security-now-why-two-factor-authentication-must-have/",
-    content: `Understand the importance of Two-Factor Authentication in protecting your digital assets.
-In the world of cryptocurrency, where you are often your own bank, security is paramount. One of the most effective layers of protection you can add to your accounts is Two-Factor Authentication, commonly known as 2FA.
-Simply put, 2FA adds a second step to your login process. Beyond just your username and password (something you know), it requires a second piece of information – something you have (like a code from an authenticator app on your phone) or something you are (like a fingerprint).
-Why is this crucial? If a hacker manages to steal or guess your password, they still won't be able to access your account without also having access to your second factor. This significantly reduces the risk of unauthorized access and potential theft of your valuable crypto assets.
-Common methods for 2FA include authenticator apps (like Google Authenticator or Authy), SMS codes (though less secure), or hardware security keys. For crypto accounts, authenticator apps or hardware keys are generally recommended over SMS due to the risk of SIM-swapping attacks.
-Enabling 2FA is a simple step that dramatically enhances your security posture. Don't overlook it – your digital assets will thank you! For a deeper dive into 2FA mechanisms, check out the [external article on Sinch.com](https://sinch.com/blog/security-now-why-two-factor-authentication-must-have/).
-`
+    content: `In the world of cryptocurrency, where you are often your own bank, security is paramount. One of the most effective layers of protection you can add to your accounts is Two-Factor Authentication, commonly known as 2FA. Simply put, 2FA adds a second step to your login process. Beyond just your username and password (something you know), it requires a second piece of information – typically something you have (like a code from an authenticator app on your phone) or something you are (like a fingerprint scan). Why is this crucial? If a hacker manages to steal or guess your password, they still won't be able to access your account without also having access to your second factor. This significantly reduces the risk of unauthorized access and potential theft of your valuable crypto assets. Common methods for 2FA include authenticator apps (like Google Authenticator or Authy), SMS codes (though generally considered less secure due to SIM-swapping risks), or hardware security keys (like YubiKey). For crypto accounts, authenticator apps or hardware keys are generally recommended over SMS. Enabling 2FA is a simple step that dramatically enhances your security posture. Don't overlook it – your digital assets will thank you!`
   },
   { 
     id: "3", 
@@ -111,43 +105,18 @@ Enabling 2FA is a simple step that dramatically enhances your security posture. 
     category: "Wallets", 
     tags: ["wallets", "hot wallet", "cold wallet", "hardware", "software"], 
     externalLink: "https://www.blockchain-council.org/cryptocurrency/types-of-wallets/",
-    content: `Choosing the right cryptocurrency wallet is crucial for managing and securing your digital assets. There isn't a one-size-fits-all solution, as different wallets offer varying levels of security, convenience, and control. Let's explore the main types:
-
-**1. Hot Wallets:**
-These are wallets connected to the internet. They include:
-*   **Web Wallets:** Accessed through a web browser. Often found on exchanges. Convenient for frequent trading but can be vulnerable if the exchange is hacked.
-*   **Mobile Wallets:** Apps on your smartphone. Convenient for on-the-go transactions. Security depends on your phone's security and the app itself.
-*   **Desktop Wallets:** Software installed on your computer. Offers a balance of security and convenience but can be vulnerable if your computer is compromised by malware.
-**Pros:** Easy to use, convenient for quick access and frequent transactions.
-**Cons:** Generally less secure than cold wallets due to their internet connectivity.
-
-**2. Cold Wallets (Cold Storage):**
-These wallets store your private keys offline, making them highly resistant to online hacking attempts.
-*   **Hardware Wallets:** Physical devices (like a USB drive) that store your private keys offline. Transactions are signed on the device itself, so keys never leave it. Examples include Ledger and Trezor.
-    **Pros:** Highest level of security for storing significant amounts of crypto.
-    **Cons:** Less convenient for frequent transactions, cost money to purchase.
-*   **Paper Wallets:** A piece of paper on which your public and private keys are printed (often as QR codes).
-    **Pros:** Completely offline, can be very secure if generated and stored correctly.
-    **Cons:** Susceptible to physical damage (fire, water), loss, or theft. Can be cumbersome to use for transactions.
-
-**Key Considerations When Choosing:**
-*   **Security:** How much crypto are you storing? For large amounts, a hardware wallet is highly recommended.
-*   **Convenience:** How often do you plan to transact? Hot wallets are better for daily use.
-*   **Control:** Do you want full control over your private keys (non-custodial), or are you okay with a third party (like an exchange) managing them (custodial)?
-*   **Technical Skill:** Some wallets are more user-friendly than others.
-
-Understanding these differences will help you make an informed decision to protect your crypto investments.` 
+    content: `Choosing the right cryptocurrency wallet is crucial for managing and securing your digital assets. There isn't a one-size-fits-all solution, as different wallets offer varying levels of security, convenience, and control. Let's explore the main types:\n\n**1. Hot Wallets:**\nThese are wallets connected to the internet. They include:\n*   **Web Wallets:** Accessed through a web browser. Often found on exchanges. Convenient for frequent trading but can be vulnerable if the exchange is hacked.\n*   **Mobile Wallets:** Apps on your smartphone. Convenient for on-the-go transactions. Security depends on your phone's security and the app itself.\n*   **Desktop Wallets:** Software installed on your computer. Offers a balance of security and convenience but can be vulnerable if your computer is compromised by malware.\n**Pros:** Easy to use, convenient for quick access and frequent transactions.\n**Cons:** Generally less secure than cold wallets due to their internet connectivity.\n\n**2. Cold Wallets (Cold Storage):**\nThese wallets store your private keys offline, making them highly resistant to online hacking attempts.\n*   **Hardware Wallets:** Physical devices (like a USB drive) that store your private keys offline. Transactions are signed on the device itself, so keys never leave it. Examples include Ledger and Trezor.\n    **Pros:** Highest level of security for storing significant amounts of crypto.\n    **Cons:** Less convenient for frequent transactions, cost money to purchase.\n*   **Paper Wallets:** A piece of paper on which your public and private keys are printed (often as QR codes).\n    **Pros:** Completely offline, can be very secure if generated and stored correctly.\n    **Cons:** Susceptible to physical damage (fire, water), loss, or theft. Can be cumbersome to use for transactions.\n\n**Key Considerations When Choosing:**\n*   **Security:** How much crypto are you storing? For large amounts, a hardware wallet is highly recommended.\n*   **Convenience:** How often do you plan to transact? Hot wallets are better for daily use.\n*   **Control:** Do you want full control over your private keys (non-custodial), or are you okay with a third party (like an exchange) managing them (custodial)?\n*   **Technical Skill:** Some wallets are more user-friendly than others.\n\nUnderstanding these differences will help you make an informed decision to protect your crypto investments.` 
   },
   { 
     id: "4", 
     title: "The Concept of Decentralization Explained", 
     summary: "Dive into what decentralization means in the context of cryptocurrencies and beyond.", 
-    imageUrl: "https://placehold.co/300x200.png", 
-    dataAiHint: "decentralization network", 
+    imageUrl: "https://www.investopedia.com/thmb/F_lMbEKfu7Bj_3QpqhvoFjOOnJw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/decentralized-finance-defi-5113835-3bd35e94d7414f9abd030bea7910b467.png", 
     date: "2024-06-10", 
     category: "Concepts", 
     tags: ["decentralization", "web3", "dao"], 
-    content: "Dive into what decentralization means in the context of cryptocurrencies and beyond. Decentralization refers to the transfer of control and decision-making from a centralized entity (individual, organization, or group thereof) to a distributed network. In cryptocurrencies, this means no single entity like a bank controls the currency or transaction ledger. This can lead to increased transparency, censorship resistance, and reduced reliance on intermediaries, forming a core tenet of Web3 and DAOs (Decentralized Autonomous Organizations)." 
+    externalLink: "https://www.techtarget.com/searchcio/definition/blockchain-decentralization",
+    content: "Decentralization is a core principle in the world of blockchain and cryptocurrencies. It refers to the transfer of control and decision-making from a centralized entity (like a single company, government, or individual) to a distributed network. Instead of relying on a central point of authority, decentralized systems operate through a network of participants who often collaborate to maintain and validate the system's state. In the context of cryptocurrencies, this typically means there's no central bank controlling the currency or a single server processing all transactions. Instead, transactions are verified and recorded by multiple computers (nodes) in the network. This distribution offers several key benefits: increased transparency (as the ledger is often public), enhanced security (as there's no single point of failure to attack), censorship resistance (as it's harder for one entity to block or reverse transactions), and reduced reliance on intermediaries. This concept is foundational to Web3, Decentralized Autonomous Organizations (DAOs), and various other applications aiming to create more open and user-controlled systems."
   },
 ];
 
