@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; 
 import { Label } from "@/components/ui/label"; 
 import { useToast } from "@/hooks/use-toast";
-import { Bitcoin, CreditCard, MessageCircle, ChevronDown, Info } from "lucide-react";
+import { Bitcoin, CreditCard, ChevronDown, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const DollarSign = ({className}: {className?:string}) => (
@@ -166,17 +166,7 @@ export function DepositForm() {
           <CreditCard className="mr-2 h-5 w-5" />
           Buy {currentAsset.symbol} with card
         </Button>
-         <Button variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground relative" onClick={() => toast({title: "Live Support (Demo)", description: "This is a placeholder for a live chat feature. In a real app, this would connect you to a support agent."})}>
-          <MessageCircle className="mr-2 h-5 w-5" />
-          Live support
-           <span className="absolute -top-1 -right-1 flex h-4 w-4">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold-accent opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-gold-accent text-xs items-center justify-center text-primary">1</span>
-          </span>
-        </Button>
       </CardFooter>
     </Card>
   );
 }
-
-    
