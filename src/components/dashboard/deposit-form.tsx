@@ -14,6 +14,11 @@ import { useToast } from "@/hooks/use-toast";
 import { Bitcoin, CreditCard, MessageCircle, ChevronDown, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// Moved DollarSign component definition before its use in mockCryptoAssets
+const DollarSign = ({className}: {className?:string}) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+);
+
 const mockCryptoAssets = [
   {
     id: "btc",
@@ -57,10 +62,6 @@ const StepIndicator = ({ number, label, isActive }: { number: number; label: str
     </div>
     <span className={cn("text-lg font-medium", isActive ? "text-gold-accent" : "text-foreground")}>{label}</span>
   </div>
-);
-
-const DollarSign = ({className}: {className?:string}) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
 );
 
 
