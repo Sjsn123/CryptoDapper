@@ -75,7 +75,17 @@ export const TUTORIALS_DATA: Tutorial[] = [
 
 export const BLOG_POSTS_DATA: BlogPost[] = [
   { id: "1", title: "What is Blockchain Technology?", summary: "An introductory guide to the revolutionary technology powering cryptocurrencies.", imageUrl: "https://placehold.co/300x200.png", dataAiHint: "blockchain technology", date: "2024-07-01", category: "Basics", tags: ["blockchain", "crypto", "technology"] },
-  { id: "2", title: "Why 2FA Matters for Your Crypto Security", summary: "Understand the importance of Two-Factor Authentication in protecting your digital assets.", imageUrl: "https://placehold.co/300x200.png", dataAiHint: "cyber security", date: "2024-06-25", category: "Security", tags: ["2fa", "security", "best practices"] },
+  { 
+    id: "2", 
+    title: "Why 2FA Matters for Your Crypto Security", 
+    summary: "Understand the importance of Two-Factor Authentication in protecting your digital assets.", 
+    imageUrl: "https://placehold.co/300x200.png", 
+    dataAiHint: "security shield", 
+    date: "2024-06-25", 
+    category: "Security", 
+    tags: ["2fa", "security", "best practices"],
+    externalLink: "https://sinch.com/blog/security-now-why-two-factor-authentication-must-have/"
+  },
   { id: "3", title: "Exploring Different Types of Crypto Wallets", summary: "A look into various crypto wallet types: hot, cold, hardware, and software.", imageUrl: "https://placehold.co/300x200.png", dataAiHint: "crypto wallet", date: "2024-06-18", category: "Wallets", tags: ["wallets", "hot wallet", "cold wallet"] },
   { id: "4", title: "The Concept of Decentralization Explained", summary: "Dive into what decentralization means in the context of cryptocurrencies and beyond.", imageUrl: "https://placehold.co/300x200.png", dataAiHint: "decentralization network", date: "2024-06-10", category: "Concepts", tags: ["decentralization", "web3", "dao"] },
 ];
@@ -124,3 +134,4 @@ export const MOCK_PORTFOLIO_ASSETS_DATA: PortfolioAsset[] = [
     change24h: 5.7,
   },
 ];
+

@@ -8,7 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, CalendarDays, UserCircle } from 'lucide-react';
+import { ArrowLeft, CalendarDays, UserCircle, ExternalLink as ExternalLinkIcon } from 'lucide-react'; // Renamed to avoid conflict
 import { Card, CardContent } from '@/components/ui/card';
 
 export default function BlogPostPage() {
@@ -81,6 +81,16 @@ export default function BlogPostPage() {
             ))}
           </CardContent>
         </Card>
+        
+        {post.externalLink && (
+          <div className="my-6 text-center">
+            <Button asChild className="btn-silver">
+              <a href={post.externalLink} target="_blank" rel="noopener noreferrer">
+                Read Full Article on Sinch.com <ExternalLinkIcon className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+          </div>
+        )}
 
         <footer className="pt-4 border-t border-border/50">
           <h3 className="text-md font-semibold text-muted-foreground mb-2">Tags:</h3>
@@ -94,3 +104,4 @@ export default function BlogPostPage() {
     </div>
   );
 }
+

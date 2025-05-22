@@ -50,6 +50,7 @@ export interface BlogPost {
   tags: string[];
   content?: string; // Full content for individual post page
   author?: string;
+  externalLink?: string; // Added external link
 }
 
 export interface TutorialRecommendation {
@@ -76,3 +77,4 @@ export interface AICryptoEvent {
   description?: string;
   priority?: 'high' | 'regular';
 }
+
