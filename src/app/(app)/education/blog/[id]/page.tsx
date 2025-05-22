@@ -1,3 +1,4 @@
+
 // This is a mock page for individual blog posts.
 // In a real application, you would fetch the specific post data based on the ID.
 "use client";
@@ -44,7 +45,7 @@ export default function BlogPostPage() {
         </Link>
       </Button>
 
-      <article className="space-y-6">
+      <article key={postId} className="space-y-6"> {/* Added key={postId} here */}
         <header className="space-y-3">
           <h1 className="text-4xl font-bold tracking-tight text-foreground text-gradient-gold">{post.title}</h1>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
@@ -86,7 +87,7 @@ export default function BlogPostPage() {
           <div className="my-6 text-center">
             <Button asChild className="btn-silver">
               <a href={post.externalLink} target="_blank" rel="noopener noreferrer">
-                Read Full Article on Sinch.com <ExternalLinkIcon className="ml-2 h-4 w-4" />
+                Read Full Article <ExternalLinkIcon className="ml-2 h-4 w-4" />
               </a>
             </Button>
           </div>
@@ -104,4 +105,3 @@ export default function BlogPostPage() {
     </div>
   );
 }
-
