@@ -61,7 +61,13 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'blog.prestmit.io', // Added new domain
+        hostname: 'blog.prestmit.io',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'vovsoft.com', // Added new domain
         port: '',
         pathname: '/**',
       }

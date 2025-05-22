@@ -96,7 +96,8 @@ export const TUTORIALS_DATA: Tutorial[] = [
     title: "What are DD Coins?", 
     description: "Learn about the mock currency used on the CryptoDapper Demo platform.", 
     category: "Platform Features",
-    content: "DD Coins (Dapper Demo Coins) are a simulated currency used within the CryptoDapper platform. They have no real-world value and are designed to help you explore features like mock trading, promo code redemption, and simulated transaction fees without any financial risk. Your DD Coin balance can be found on your dashboard. Use them to learn and experiment!"
+    videoUrl: "https://youtu.be/ZClDO5PHPUo",
+    imageUrl: "https://vovsoft.com/blog/imagelarge/cryptocurrencies-1200-675.jpg"
   },
 ];
 
@@ -199,4 +200,3 @@ export interface AICryptoEvent {
   description?: string;
   priority?: 'high' | 'regular';
 }
-
