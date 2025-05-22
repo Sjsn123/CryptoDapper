@@ -2,11 +2,11 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth.tsx"; 
-import { User, LogOut, MailCheck, MailWarning, Loader2, Phone, Info } from "lucide-react";
+import { User, LogOut, MailCheck, MailWarning, Loader2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function ProfilePage() {
@@ -43,7 +43,6 @@ export default function ProfilePage() {
         </div>
       )
   }
-
 
   return (
     <div className="space-y-8">
@@ -112,23 +111,6 @@ export default function ProfilePage() {
               )}
             </div>
           )}
-
-          <div className="space-y-2">
-            <h3 className="text-sm font-medium text-muted-foreground">Phone Number</h3>
-            {user.phoneNumber ? (
-              <p className="text-foreground flex items-center">
-                <Phone className="mr-2 h-4 w-4 text-accent" /> {user.phoneNumber}
-              </p>
-            ) : (
-               <Alert variant="default" className="bg-muted/50">
-                  <Info className="h-5 w-5 text-muted-foreground" />
-                  <AlertTitle className="text-muted-foreground">No Phone Number Added</AlertTitle>
-                  <AlertDescription className="text-muted-foreground">
-                    You can add and verify a phone number during registration or by signing in with the phone option. Advanced phone management will be available here soon.
-                  </AlertDescription>
-                </Alert>
-            )}
-          </div>
           
           <p className="text-xs text-center text-muted-foreground pt-4">
             More profile settings and details can be added here in future updates.

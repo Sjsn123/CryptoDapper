@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -16,10 +16,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { LogIn, Mail, KeyRound, Loader2, Phone, ShieldCheck } from "lucide-react";
+import { LogIn, Mail, KeyRound, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth.tsx";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 
 // SVG Icon for Google
 const GoogleIcon = () => (
@@ -38,23 +36,10 @@ const loginSchema = z.object({
 });
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const phoneSchema = z.object({
-  phoneNumber: z.string().min(10, {message: "Phone number must be at least 10 digits."})
-    .regex(/^\+[1-9]\d{1,14}$/, { message: "Invalid phone number format. Include country code e.g. +12223334444"}),
-  otp: z.string().optional(), // OTP is optional in the initial schema, handled by multi-step logic
-});
-type PhoneFormValues = z.infer<typeof phoneSchema>;
-
-
 export function LoginForm() {
-  const { logInWithEmail, signInWithGoogle, requestOtpForPhoneNumber, verifyOtpAndSignIn, isLoading: authLoading } = useAuth();
+  const { logInWithEmail, signInWithGoogle, isLoading: authLoading } = useAuth();
   const [isSubmittingEmail, setIsSubmittingEmail] = useState(false);
   const [isSubmittingSocial, setIsSubmittingSocial] = useState(false);
-  const [isSubmittingPhone, setIsSubmittingPhone] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  const [activeTab, setActiveTab] = useState("email");
-  const RECAPTCHA_CONTAINER_ID = "login-recaptcha-container";
-
 
   const emailForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -64,161 +49,67 @@ export function LoginForm() {
     },
   });
 
-  const phoneForm = useForm<PhoneFormValues>({
-    resolver: zodResolver(phoneSchema), // OTP validation is not part of this Zod schema
-    defaultValues: {
-      phoneNumber: "",
-      otp: "",
-    },
-  });
-
-
   async function onEmailSubmit(data: LoginFormValues) {
     setIsSubmittingEmail(true);
     await logInWithEmail(data.email, data.password);
-    setIsSubmittingEmail(false);
+    setIsSubmittingEmail(false); // Will likely not be reached if redirect happens
   }
-
-  async function onPhoneFormSubmit(data: PhoneFormValues) {
-    setIsSubmittingPhone(true);
-    if (!otpSent) {
-      const confirmationResult = await requestOtpForPhoneNumber(data.phoneNumber, RECAPTCHA_CONTAINER_ID);
-      if (confirmationResult) {
-        setOtpSent(true);
-      }
-    } else {
-      if (data.otp) {
-        await verifyOtpAndSignIn(data.otp);
-        // On success, useAuth hook will redirect. If error, toast is shown.
-        // Reset otpSent if verification fails and user needs to retry phone number or OTP.
-        // For now, this is handled by toast and user can manually retry.
-      }
-    }
-    setIsSubmittingPhone(false);
-  }
-
 
   const handleGoogleLogin = async () => {
     setIsSubmittingSocial(true);
     await signInWithGoogle();
-    setIsSubmittingSocial(false);
+    setIsSubmittingSocial(false); // Will likely not be reached if redirect happens
   };
 
-  const currentIsLoading = authLoading || isSubmittingEmail || isSubmittingSocial || isSubmittingPhone;
-
-  useEffect(() => {
-    // Reset OTP state if tab changes
-    setOtpSent(false);
-    phoneForm.resetField("otp");
-  }, [activeTab, phoneForm]);
+  const currentIsLoading = authLoading || isSubmittingEmail || isSubmittingSocial;
 
   return (
     <div className="space-y-6">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="email">Email</TabsTrigger>
-          <TabsTrigger value="phone">Phone</TabsTrigger>
-        </TabsList>
-        <TabsContent value="email">
-          <Form {...emailForm}>
-            <form onSubmit={emailForm.handleSubmit(onEmailSubmit)} className="space-y-6 mt-4">
-              <FormField
-                control={emailForm.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-foreground">Email</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <Input placeholder="you@example.com" {...field} className="pl-10" />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={emailForm.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-foreground">Password</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <Input type="password" placeholder="••••••••" {...field} className="pl-10" />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading}>
-                {isSubmittingEmail ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogIn className="mr-2 h-4 w-4" />}
-                Login with Email
-              </Button>
-              <div className="text-sm text-center mt-4">
-                <Link href="/auth/recover" className="font-medium text-gold-accent hover:underline">
-                  Forgot password?
-                </Link>
-              </div>
-            </form>
-          </Form>
-        </TabsContent>
-        <TabsContent value="phone">
-          <Form {...phoneForm}>
-            <form onSubmit={phoneForm.handleSubmit(onPhoneFormSubmit)} className="space-y-6 mt-4">
-              <FormField
-                control={phoneForm.control}
-                name="phoneNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-foreground">Phone Number</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <Input placeholder="+12223334444" {...field} className="pl-10" disabled={otpSent && !currentIsLoading} />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* This div is used by Firebase RecaptchaVerifier. Must be in the DOM. */}
-              {!otpSent && <div id={RECAPTCHA_CONTAINER_ID}></div>}
-              
-              {otpSent && (
-                <FormField
-                  control={phoneForm.control}
-                  name="otp"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-foreground">OTP Code</FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                          <Input type="text" placeholder="Enter OTP" {...field} className="pl-10" maxLength={6} />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-              <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading || (otpSent && !phoneForm.watch("otp")?.trim())}>
-                {isSubmittingPhone ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (otpSent ? <LogIn className="mr-2 h-4 w-4"/> : <Phone className="mr-2 h-4 w-4"/>)}
-                {otpSent ? "Verify OTP & Login" : "Send OTP"}
-              </Button>
-               {otpSent && (
-                <Button variant="link" onClick={() => { setOtpSent(false); phoneForm.resetField("otp"); }} disabled={currentIsLoading} className="text-xs text-muted-foreground">
-                  Change phone number or resend OTP?
-                </Button>
-              )}
-            </form>
-          </Form>
-        </TabsContent>
-      </Tabs>
+      <Form {...emailForm}>
+        <form onSubmit={emailForm.handleSubmit(onEmailSubmit)} className="space-y-6 mt-4">
+          <FormField
+            control={emailForm.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-foreground">Email</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input placeholder="you@example.com" {...field} className="pl-10" />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={emailForm.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-foreground">Password</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input type="password" placeholder="••••••••" {...field} className="pl-10" />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading}>
+            {isSubmittingEmail ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogIn className="mr-2 h-4 w-4" />}
+            Login with Email
+          </Button>
+          <div className="text-sm text-center mt-4">
+            <Link href="/auth/recover" className="font-medium text-gold-accent hover:underline">
+              Forgot password?
+            </Link>
+          </div>
+        </form>
+      </Form>
       
       <div className="relative my-4">
         <div className="absolute inset-0 flex items-center">
@@ -239,5 +130,3 @@ export function LoginForm() {
     </div>
   );
 }
-
-    
