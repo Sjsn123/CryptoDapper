@@ -22,6 +22,18 @@ const nextConfig: NextConfig = {
         hostname: 'sdmntprwestus2.oaiusercontent.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'sdmntprwestcentralus.oaiusercontent.com', // Added previously
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.trisearch.com.au', // New domain
+        port: '',
+        pathname: '/**',
       }
     ],
   },

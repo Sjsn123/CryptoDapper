@@ -65,7 +65,7 @@ export const TUTORIALS_DATA: Tutorial[] = [
     title: "Understanding Seed Phrases",
     description: "Watch this video to discover what seed phrases are, why they are important, and how to manage them securely.",
     videoUrl: "https://video.pictory.ai/v2/preview/49976340139528182917241747749055095",
-    imageUrl: "https://sdmntprwestus2.oaiusercontent.com/files/00000000-8c38-61f8-b123-227517f3e36d/raw?se=2025-05-19T15%3A55%3A43Z&sp=r&sv=2024-08-04&sr=b&scid=00000000-0000-0000-0000-000000000000&skoid=24a7dec3-38fc-4904-b888-8abe0855c442&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-19T13%3A06%3A29Z&ske=2025-05-20T13%3A06%3A29Z&sks=b&skv=2024-08-04&sig=surTUW0PdsISkCBxipvKHB8YqvDaeIDI6HO1xpSD3Q4%3D",
+    imageUrl: "https://sdmntprwestus2.oaiusercontent.com/files/00000000-8c38-61f8-b123-227517f3e36d/raw?se=2025-05-19T15%3A55%3A43Z&sp=r&sv=2024-08-04&sr=b&scid=00000000-0000-0000-0000-000000000000&skoid=24a7dec3-38fc-4904-b888-8abe0855c442&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-19T13%3A06%3A29Z&ske=2025-05-20T13%3A06%3A29Z&sks=b&skv=2024-08-04&sig=surTUW0PdsISkCBxipvKHB8YqvDaeIDI6HO1xpSD3Q4%3D", // Previous specific image
     category: "Basics"
   },
   { id: "3", title: "How to Use Promo Codes", description: "A quick guide on finding and applying promo codes on the CryptoDapper platform.", category: "Platform Features" },
@@ -79,8 +79,8 @@ export const BLOG_POSTS_DATA: BlogPost[] = [
     id: "2",
     title: "Why 2FA Matters for Your Crypto Security",
     summary: "Understand the importance of Two-Factor Authentication in protecting your digital assets.",
-    imageUrl: "https://placehold.co/300x200.png",
-    dataAiHint: "security shield",
+    imageUrl: "https://www.trisearch.com.au/wp-content/uploads/2024/12/Blog-Why-2FA-matters-in-2025.png", // Updated image URL
+    // dataAiHint removed as it's now a specific image
     date: "2024-06-25",
     category: "Security",
     tags: ["2fa", "security", "best practices"],
@@ -141,3 +141,11 @@ export const MOCK_PORTFOLIO_ASSETS_DATA: PortfolioAsset[] = [
     change24h: 5.7,
   },
 ];
+
+// Schema for AI-generated Crypto Events
+export interface AICryptoEvent {
+  title: string;
+  date: string; // Expecting YYYY-MM-DD from AI
+  description?: string;
+  priority?: 'high' | 'regular';
+}
