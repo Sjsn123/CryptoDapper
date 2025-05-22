@@ -72,10 +72,17 @@ export const TUTORIALS_DATA: Tutorial[] = [
     title: "Understanding Seed Phrases",
     description: "Watch this video to discover what seed phrases are, why they are important, and how to manage them securely.",
     videoUrl: "https://video.pictory.ai/v2/preview/49976340139528182917241747749055095",
-    imageUrl: "https://sdmntprwestus2.oaiusercontent.com/files/00000000-8c38-61f8-b123-227517f3e36d/raw?se=2025-05-19T15%3A55%3A43Z&sp=r&sv=2024-08-04&sr=b&scid=00000000-0000-0000-0000-000000000000&skoid=24a7dec3-38fc-4904-b888-8abe0855c442&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-19T13%3A06%3A29Z&ske=2025-05-20T13%3A06%3A29Z&sks=b&skv=2024-08-04&sig=surTUW0PdsISkCBxipvKHB8YqvDaeIDI6HO1xpSD3Q4%3D", 
+    imageUrl: "https://sdmntprwestus2.oaiusercontent.com/files/00000000-8c38-61f8-b123-227517f3e36d/raw?se=2025-05-19T15%3A55%3A43Z&sp=r&sv=2024-08-04&sr=b&scid=00000000-0000-0000-0000-000000000000&skoid=24a7dec3-38fc-4904-b888-8abe0855c442&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-19T13%3A06%3A29Z&ske=2025-05-20T13%3A06%3A29Z&sks=b&skv=2024-08-04&sig=surTUW0PdsISkCBxipvKHB8YqvDaeIDI6HO1xpSD3Q4%3D",
     category: "Basics"
   },
-  { id: "3", title: "How to Use Promo Codes", description: "A quick guide on finding and applying promo codes on the CryptoDapper platform.", category: "Platform Features" },
+  { 
+    id: "3", 
+    title: "How to Use Promo Codes", 
+    description: "A quick guide on finding and applying promo codes on the CryptoDapper platform. Watch this video for a demonstration.",
+    videoUrl: "https://youtu.be/RfrRBfaU70M?si=7iiXXXIqLaajNSFp",
+    imageUrl: "https://blog.prestmit.io/wp-content/uploads/2024/11/Dark-Background-1-min.webp",
+    category: "Platform Features" 
+  },
   { 
     id: "4", 
     title: "Introduction to Blockchain", 
@@ -84,7 +91,13 @@ export const TUTORIALS_DATA: Tutorial[] = [
     videoUrl: "https://www.youtube.com/live/V6Yqr7prI2I?si=H9licwTx-9ajfZ-D",
     imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIvzUGOC3BaK5shiZXogscLVHM7DQ4xWPTRg&s"
   },
-  { id: "5", title: "What are DD Coins?", description: "Learn about the mock currency used on the CryptoDapper Demo platform.", category: "Platform Features"},
+  { 
+    id: "5", 
+    title: "What are DD Coins?", 
+    description: "Learn about the mock currency used on the CryptoDapper Demo platform.", 
+    category: "Platform Features",
+    content: "DD Coins (Dapper Demo Coins) are a simulated currency used within the CryptoDapper platform. They have no real-world value and are designed to help you explore features like mock trading, promo code redemption, and simulated transaction fees without any financial risk. Your DD Coin balance can be found on your dashboard. Use them to learn and experiment!"
+  },
 ];
 
 export const BLOG_POSTS_DATA: BlogPost[] = [
