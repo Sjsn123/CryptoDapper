@@ -74,20 +74,27 @@ export const TUTORIALS_DATA: Tutorial[] = [
 ];
 
 export const BLOG_POSTS_DATA: BlogPost[] = [
-  { id: "1", title: "What is Blockchain Technology?", summary: "An introductory guide to the revolutionary technology powering cryptocurrencies.", imageUrl: "https://placehold.co/300x200.png", dataAiHint: "blockchain technology", date: "2024-07-01", category: "Basics", tags: ["blockchain", "crypto", "technology"] },
-  { 
-    id: "2", 
-    title: "Why 2FA Matters for Your Crypto Security", 
-    summary: "Understand the importance of Two-Factor Authentication in protecting your digital assets.", 
-    imageUrl: "https://placehold.co/300x200.png", 
-    dataAiHint: "security shield", 
-    date: "2024-06-25", 
-    category: "Security", 
+  { id: "1", title: "What is Blockchain Technology?", summary: "An introductory guide to the revolutionary technology powering cryptocurrencies.", imageUrl: "https://placehold.co/300x200.png", dataAiHint: "blockchain technology", date: "2024-07-01", category: "Basics", tags: ["blockchain", "crypto", "technology"], content: "An introductory guide to the revolutionary technology powering cryptocurrencies. Blockchain is a distributed ledger technology that allows for secure, transparent, and tamper-proof recording of transactions. It consists of a chain of blocks, where each block contains a batch of transactions and is cryptographically linked to the previous one, ensuring data integrity and security. This decentralized nature removes the need for a central authority, making it a groundbreaking innovation for various industries beyond just finance." },
+  {
+    id: "2",
+    title: "Why 2FA Matters for Your Crypto Security",
+    summary: "Understand the importance of Two-Factor Authentication in protecting your digital assets.",
+    imageUrl: "https://placehold.co/300x200.png",
+    dataAiHint: "security shield",
+    date: "2024-06-25",
+    category: "Security",
     tags: ["2fa", "security", "best practices"],
-    externalLink: "https://sinch.com/blog/security-now-why-two-factor-authentication-must-have/"
+    externalLink: "https://sinch.com/blog/security-now-why-two-factor-authentication-must-have/",
+    content: `Understand the importance of Two-Factor Authentication in protecting your digital assets.
+In the world of cryptocurrency, where you are often your own bank, security is paramount. One of the most effective layers of protection you can add to your accounts is Two-Factor Authentication, commonly known as 2FA.
+Simply put, 2FA adds a second step to your login process. Beyond just your username and password (something you know), it requires a second piece of information – something you have (like a code from an authenticator app on your phone) or something you are (like a fingerprint).
+Why is this crucial? If a hacker manages to steal or guess your password, they still won't be able to access your account without also having access to your second factor. This significantly reduces the risk of unauthorized access and potential theft of your valuable crypto assets.
+Common methods for 2FA include authenticator apps (like Google Authenticator or Authy), SMS codes (though less secure), or hardware security keys. For crypto accounts, authenticator apps or hardware keys are generally recommended over SMS due to the risk of SIM-swapping attacks.
+Enabling 2FA is a simple step that dramatically enhances your security posture. Don't overlook it – your digital assets will thank you! For a deeper dive into 2FA mechanisms, check out the [external article on Sinch.com](https://sinch.com/blog/security-now-why-two-factor-authentication-must-have/).
+`
   },
-  { id: "3", title: "Exploring Different Types of Crypto Wallets", summary: "A look into various crypto wallet types: hot, cold, hardware, and software.", imageUrl: "https://placehold.co/300x200.png", dataAiHint: "crypto wallet", date: "2024-06-18", category: "Wallets", tags: ["wallets", "hot wallet", "cold wallet"] },
-  { id: "4", title: "The Concept of Decentralization Explained", summary: "Dive into what decentralization means in the context of cryptocurrencies and beyond.", imageUrl: "https://placehold.co/300x200.png", dataAiHint: "decentralization network", date: "2024-06-10", category: "Concepts", tags: ["decentralization", "web3", "dao"] },
+  { id: "3", title: "Exploring Different Types of Crypto Wallets", summary: "A look into various crypto wallet types: hot, cold, hardware, and software.", imageUrl: "https://placehold.co/300x200.png", dataAiHint: "crypto wallet", date: "2024-06-18", category: "Wallets", tags: ["wallets", "hot wallet", "cold wallet"], content: "A look into various crypto wallet types: hot, cold, hardware, and software. Understanding the differences is key to managing your crypto securely and effectively. Hot wallets are connected to the internet and offer convenience for frequent transactions, while cold wallets (like hardware wallets or paper wallets) are kept offline, providing a higher level of security for long-term storage. Software wallets can be desktop, mobile, or web-based, each with its own set of features and security considerations." },
+  { id: "4", title: "The Concept of Decentralization Explained", summary: "Dive into what decentralization means in the context of cryptocurrencies and beyond.", imageUrl: "https://placehold.co/300x200.png", dataAiHint: "decentralization network", date: "2024-06-10", category: "Concepts", tags: ["decentralization", "web3", "dao"], content: "Dive into what decentralization means in the context of cryptocurrencies and beyond. Decentralization refers to the transfer of control and decision-making from a centralized entity (individual, organization, or group thereof) to a distributed network. In cryptocurrencies, this means no single entity like a bank controls the currency or transaction ledger. This can lead to increased transparency, censorship resistance, and reduced reliance on intermediaries, forming a core tenet of Web3 and DAOs (Decentralized Autonomous Organizations)." },
 ];
 
 export const NAV_LINKS_AUTHENTICATED = [
@@ -134,4 +141,3 @@ export const MOCK_PORTFOLIO_ASSETS_DATA: PortfolioAsset[] = [
     change24h: 5.7,
   },
 ];
-
