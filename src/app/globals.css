@@ -40,7 +40,7 @@ body {
     --destructive: 0 72% 51%; /* A brighter red for destructive actions */
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 30%; /* Darker silver/grey for subtle borders */
+    --border: 215 15% 35%; /* Desaturated dark blue-grey for subtle borders */
     --input: 220 28% 20%; /* Slightly darker blue for inputs */
     --ring: 0 0% 75%; /* #C0C0C0 - Metallic silver for focus rings */
 
@@ -58,7 +58,7 @@ body {
     --sidebar-primary-foreground: 216 38% 15%; /* Dark blue text on silver */
     --sidebar-accent: 220 28% 20%; /* Slightly darker blue for hover/accent in sidebar */
     --sidebar-accent-foreground: 0 0% 100%; /* White text on sidebar accent */
-    --sidebar-border: 0 0% 25%; /* Darker border for sidebar */
+    --sidebar-border: 215 15% 20%; /* Darker desaturated blue-grey border for sidebar */
     --sidebar-ring: 0 0% 75%; /* Silver for focus rings in sidebar */
   }
 
@@ -91,7 +91,7 @@ body {
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 30%;
+    --border: 215 15% 35%; 
     --input: 220 28% 20%;
     --ring: 0 0% 75%;
 
@@ -107,7 +107,7 @@ body {
     --sidebar-primary-foreground: 216 38% 15%;
     --sidebar-accent: 220 28% 20%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 25%;
+    --sidebar-border: 215 15% 20%; 
     --sidebar-ring: 0 0% 75%;
   }
 }
@@ -130,7 +130,7 @@ body {
   color: hsl(var(--gold-accent-foreground));
 }
 .btn-gold:hover {
-   box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+   box-shadow: 0 0 15px hsl(var(--gold-accent) / 0.5);
 }
 
 .btn-silver {
@@ -138,7 +138,7 @@ body {
   color: hsl(var(--accent-foreground));
 }
 .btn-silver:hover {
-   box-shadow: 0 0 15px rgba(192, 192, 192, 0.5);
+   box-shadow: 0 0 15px hsl(var(--accent) / 0.5);
 }
 
 /* Custom text gradient for metallic effect - not universally supported but good for highlights */
@@ -153,14 +153,14 @@ body {
 /* Custom border gradient effect for cards */
 .card-border-gold {
   @apply border-transparent border-2 rounded-lg p-px bg-clip-padding;
-  background-image: linear-gradient(hsl(var(--card)), hsl(var(--card))), linear-gradient(145deg, #FFD700, #F0C040);
+  background-image: linear-gradient(hsl(var(--card)), hsl(var(--card))), linear-gradient(145deg, hsl(var(--gold-accent)), hsl(var(--gold-accent) / 0.7));
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
 
 .card-border-silver {
   @apply border-transparent border-2 rounded-lg p-px bg-clip-padding;
-  background-image: linear-gradient(hsl(var(--card)), hsl(var(--card))), linear-gradient(145deg, #C0C0C0, #A8A8A8);
+  background-image: linear-gradient(hsl(var(--card)), hsl(var(--card))), linear-gradient(145deg, hsl(var(--accent)), hsl(var(--accent) / 0.7));
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
