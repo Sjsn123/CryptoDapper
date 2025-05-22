@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { DollarSign, Banknote, Bitcoin, ArrowRight, ShieldCheck, Info, CreditCard } from "lucide-react";
+import { DollarSign, Banknote, Bitcoin, ArrowRight, ShieldCheck, Info, CreditCard, Loader2, ArrowUpFromLine } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
@@ -75,7 +75,7 @@ export function WithdrawForm() {
     toast({
       title: "Withdrawal Initiated (Mock)",
       description: `Your withdrawal of ${amount} DD Coins via ${selectedPaymentMethod} has been initiated. This is a demo.`,
-      action: <CheckCircle className="text-green-500" />,
+      // action: <CheckCircle className="text-green-500" />, // CheckCircle was not imported
     });
     setAmount("");
     setCryptoAddress("");
