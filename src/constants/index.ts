@@ -65,7 +65,7 @@ export const TUTORIALS_DATA: Tutorial[] = [
     title: "Understanding Seed Phrases",
     description: "Watch this video to discover what seed phrases are, why they are important, and how to manage them securely.",
     videoUrl: "https://video.pictory.ai/v2/preview/49976340139528182917241747749055095",
-    imageUrl: "https://sdmntprwestus2.oaiusercontent.com/files/00000000-8c38-61f8-b123-227517f3e36d/raw?se=2025-05-19T15%3A55%3A43Z&sp=r&sv=2024-08-04&sr=b&scid=00000000-0000-0000-0000-000000000000&skoid=24a7dec3-38fc-4904-b888-8abe0855c442&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-19T13%3A06%3A29Z&ske=2025-05-20T13%3A06%3A29Z&sks=b&skv=2024-08-04&sig=surTUW0PdsISkCBxipvKHB8YqvDaeIDI6HO1xpSD3Q4%3D", // Previous specific image
+    imageUrl: "https://sdmntprwestus2.oaiusercontent.com/files/00000000-8c38-61f8-b123-227517f3e36d/raw?se=2025-05-19T15%3A55%3A43Z&sp=r&sv=2024-08-04&sr=b&scid=00000000-0000-0000-0000-000000000000&skoid=24a7dec3-38fc-4904-b888-8abe0855c442&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-19T13%3A06%3A29Z&ske=2025-05-20T13%3A06%3A29Z&sks=b&skv=2024-08-04&sig=surTUW0PdsISkCBxipvKHB8YqvDaeIDI6HO1xpSD3Q4%3D",
     category: "Basics"
   },
   { id: "3", title: "How to Use Promo Codes", description: "A quick guide on finding and applying promo codes on the CryptoDapper platform.", category: "Platform Features" },
@@ -74,13 +74,22 @@ export const TUTORIALS_DATA: Tutorial[] = [
 ];
 
 export const BLOG_POSTS_DATA: BlogPost[] = [
-  { id: "1", title: "What is Blockchain Technology?", summary: "An introductory guide to the revolutionary technology powering cryptocurrencies.", imageUrl: "https://placehold.co/300x200.png", dataAiHint: "blockchain technology", date: "2024-07-01", category: "Basics", tags: ["blockchain", "crypto", "technology"], content: "An introductory guide to the revolutionary technology powering cryptocurrencies. Blockchain is a distributed ledger technology that allows for secure, transparent, and tamper-proof recording of transactions. It consists of a chain of blocks, where each block contains a batch of transactions and is cryptographically linked to the previous one, ensuring data integrity and security. This decentralized nature removes the need for a central authority, making it a groundbreaking innovation for various industries beyond just finance." },
+  {
+    id: "1",
+    title: "What is Blockchain Technology?",
+    summary: "An introductory guide to the revolutionary technology powering cryptocurrencies.",
+    imageUrl: "https://www.investopedia.com/thmb/pzT2wbISy-wNtMypVlBjr39dydg=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Blockchain_final-086b5b7b9ef74ecf9f20fe627dba1e34.png",
+    date: "2024-07-01",
+    category: "Basics",
+    tags: ["blockchain", "crypto", "technology"],
+    externalLink: "https://www.geeksforgeeks.org/blockchain-technology-introduction/",
+    content: "An introductory guide to the revolutionary technology powering cryptocurrencies. Blockchain is a distributed ledger technology that allows for secure, transparent, and tamper-proof recording of transactions. It consists of a chain of blocks, where each block contains a batch of transactions and is cryptographically linked to the previous one, ensuring data integrity and security. This decentralized nature removes the need for a central authority, making it a groundbreaking innovation for various industries beyond just finance."
+  },
   {
     id: "2",
     title: "Why 2FA Matters for Your Crypto Security",
     summary: "Understand the importance of Two-Factor Authentication in protecting your digital assets.",
-    imageUrl: "https://www.trisearch.com.au/wp-content/uploads/2024/12/Blog-Why-2FA-matters-in-2025.png", // Updated image URL
-    // dataAiHint removed as it's now a specific image
+    imageUrl: "https://www.trisearch.com.au/wp-content/uploads/2024/12/Blog-Why-2FA-matters-in-2025.png",
     date: "2024-06-25",
     category: "Security",
     tags: ["2fa", "security", "best practices"],

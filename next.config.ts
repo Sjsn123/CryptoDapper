@@ -25,13 +25,19 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'sdmntprwestcentralus.oaiusercontent.com', // Added previously
+        hostname: 'sdmntprwestcentralus.oaiusercontent.com',
         port: '',
         pathname: '/**',
       },
       {
         protocol: 'https',
-        hostname: 'www.trisearch.com.au', // New domain
+        hostname: 'www.trisearch.com.au',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.investopedia.com', // Added new domain
         port: '',
         pathname: '/**',
       }
