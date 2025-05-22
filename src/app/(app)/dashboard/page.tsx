@@ -12,13 +12,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { PROMO_CODES_DATA, MOCK_PORTFOLIO_ASSETS_DATA } from "@/constants";
 import type { PromoCode, PortfolioAsset } from "@/types";
-import { DollarSign, Gift, Bell, CheckCircle, XCircle, ExternalLink, Loader2, Briefcase, ArrowUpRight, ArrowDownRight, CreditCard, MessageCircle, ArrowDownToLine, ArrowUpFromLine, ArrowRightLeft } from "lucide-react";
+import { DollarSign, Gift, Bell, CheckCircle, XCircle, ExternalLink, Loader2, Briefcase, ArrowUpRight, ArrowDownRight, ArrowDownToLine, ArrowUpFromLine } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { WithdrawForm } from "@/components/dashboard/withdraw-form";
-import { DepositForm } from "@/components/dashboard/deposit-form"; // New import
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { DepositForm } from "@/components/dashboard/deposit-form";
+// ScrollArea import removed as it's no longer used here for WithdrawForm
 
 const MOCK_ACCOUNT_BALANCE_KEY = 'cryptoDapperMockBalance';
 const INITIAL_BALANCE = 10000; // DD Coins
@@ -91,9 +91,6 @@ export default function DashboardPage() {
           <TabsTrigger value="withdraw">
             <ArrowUpFromLine className="mr-2 h-4 w-4" /> Withdraw
           </TabsTrigger>
-          {/* <TabsTrigger value="transfer">
-            <ArrowRightLeft className="mr-2 h-4 w-4" /> Transfer (Soon)
-          </TabsTrigger> */}
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -250,15 +247,13 @@ export default function DashboardPage() {
         </TabsContent>
 
         <TabsContent value="withdraw">
-          <ScrollArea className="h-full">
-             <WithdrawForm />
-          </ScrollArea>
+          {/* ScrollArea removed from here */}
+          <WithdrawForm />
         </TabsContent>
 
-        {/* <TabsContent value="transfer">
-          <p className="text-muted-foreground">Transfer functionality coming soon.</p>
-        </TabsContent> */}
       </Tabs>
     </div>
   );
 }
+
+    
