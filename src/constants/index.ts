@@ -2,7 +2,7 @@
 import type { Feature, CryptoEvent, PromoCode, FAQ, Tutorial, BlogPost, PortfolioAsset } from "@/types";
 import { ShieldCheck, Gift, Newspaper, KeyRound, FileText, Video, Search, Rss, Settings, LayoutDashboard, BookOpen } from "lucide-react";
 
-export const APP_NAME = "Digital Dapper Demo";
+export const APP_NAME = "Digital Dapper";
 export const APP_TAGLINE = "Discover Digital Assets, Safely";
 
 export const FEATURES_DATA: Feature[] = [
@@ -46,7 +46,7 @@ export const MOCK_CRYPTO_EVENTS: CryptoEvent[] = [
 
 export const PROMO_CODES_DATA: PromoCode[] = [
   { code: "DAPPER10", value: 1.1, message: "Success! 10% bonus applied to your DD Coins." },
-  { code: "DIGITALFUN", value: 1.05, message: "Awesome! 5% bonus added." }, // Changed from CRYPTOFUN
+  { code: "DIGITALFUN", value: 1.05, message: "Awesome! 5% bonus added." },
   { code: "WELCOME24", value: 1.15, message: "Welcome aboard! Enjoy a 15% bonus." },
   {
     code: "BTCBONUS",
@@ -57,7 +57,7 @@ export const PROMO_CODES_DATA: PromoCode[] = [
 
 export const FAQS_DATA: FAQ[] = [
   { id: "1", question: "What is a seed phrase?", answer: "A seed phrase is a series of words that gives you access to your crypto wallet. It's like a master key. Keep it secret, keep it safe!" },
-  { id: "2", question: "How do promo codes work on Digital Dapper?", answer: "Promo codes on Digital Dapper Demo are for simulation. Enter a valid code, and your mock DD Coin balance will update, mimicking real promotional bonuses." },
+  { id: "2", question: "How do promo codes work on Digital Dapper?", answer: "Promo codes on Digital Dapper are for simulation. Enter a valid code, and your mock DD Coin balance will update, mimicking real promotional bonuses." },
   { id: "3", question: "What is Two-Factor Authentication (2FA)?", answer: "2FA adds an extra layer of security to your account. Besides your password, you'll need a second code, usually from an authenticator app, to log in." },
   { id: "4", question: "Are the crypto events real-time?", answer: "The events displayed are mock data for demonstration purposes, designed to simulate real-time updates in the crypto space." },
   { id: "5", question: "Is Digital Dapper a real exchange?", answer: "No, Digital Dapper is a demo platform. All assets, transactions, and features are simulated for educational and illustrative purposes only." },
@@ -99,7 +99,7 @@ export const TUTORIALS_DATA: Tutorial[] = [
   {
     id: "5",
     title: "What are DD Coins?",
-    description: "Learn about the mock currency used on the Digital Dapper Demo platform.",
+    description: "Learn about the mock currency used on the Digital Dapper platform.",
     category: "Platform Features",
     videoUrl: "https://youtu.be/ZClDO5PHPUo",
     imageUrl: "https://vovsoft.com/blog/imagelarge/cryptocurrencies-1200-675.jpg"
@@ -127,7 +127,7 @@ export const BLOG_POSTS_DATA: BlogPost[] = [
     category: "Security",
     tags: ["2fa", "security", "best practices"],
     externalLink: "https://sinch.com/blog/security-now-why-two-factor-authentication-must-have/",
-    content: `In the world of cryptocurrency, where you are often your own bank, security is paramount. One of the most effective layers of protection you can add to your accounts is Two-Factor Authentication, commonly known as 2FA. Simply put, 2FA adds a second step to your login process. Beyond just your username and password (something you know), it requires a second piece of information – typically something you have (like a code from an authenticator app on your phone) or something you are (like a fingerprint scan).\n\nWhy is this crucial? If a hacker manages to steal or guess your password, they still won't be able to access your account without also having access to your second factor. This significantly reduces the risk of unauthorized access and potential theft of your valuable crypto assets.\n\nCommon methods for 2FA include authenticator apps (like Google Authenticator or Authy), SMS codes (though generally considered less secure due to SIM-swapping risks), or hardware security keys (like YubiKey). For crypto accounts, authenticator apps or hardware keys are generally recommended over SMS.\n\nEnabling 2FA is a simple step that dramatically enhances your security posture. Don't overlook it – your digital assets will thank you! Remember, on the Digital Dapper Demo platform, 2FA features are simulated to help you understand the concept.`
+    content: `In the world of cryptocurrency, where you are often your own bank, security is paramount. One of the most effective layers of protection you can add to your accounts is Two-Factor Authentication, commonly known as 2FA. Simply put, 2FA adds a second step to your login process. Beyond just your username and password (something you know), it requires a second piece of information – typically something you have (like a code from an authenticator app on your phone) or something you are (like a fingerprint scan).\n\nWhy is this crucial? If a hacker manages to steal or guess your password, they still won't be able to access your account without also having access to your second factor. This significantly reduces the risk of unauthorized access and potential theft of your valuable crypto assets.\n\nCommon methods for 2FA include authenticator apps (like Google Authenticator or Authy), SMS codes (though generally considered less secure due to SIM-swapping risks), or hardware security keys (like YubiKey). For crypto accounts, authenticator apps or hardware keys are generally recommended over SMS.\n\nEnabling 2FA is a simple step that dramatically enhances your security posture. Don't overlook it – your digital assets will thank you! Remember, on the Digital Dapper platform, 2FA features are simulated to help you understand the concept.`
   },
   {
     id: "3",

@@ -21,7 +21,7 @@ export default function FaqsPage() {
       <header className="space-y-2">
         <h1 className="text-3xl font-bold text-foreground">Frequently Asked Questions</h1>
         <p className="text-muted-foreground">
-          Find answers to common questions about Digital Dapper Demo and digital asset concepts.
+          Find answers to common questions about Digital Dapper and digital asset concepts.
         </p>
       </header>
       

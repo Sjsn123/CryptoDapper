@@ -63,7 +63,7 @@ export function TutorialRecommendationEngine() {
           Personalized Tutorial Recommendations
         </CardTitle>
         <CardDescription>
-          Tell us what you&apos;re doing or interested in (e.g., &quot;how wallets work&quot; or &quot;DeFi security&quot;), and our AI will suggest relevant tutorials from the Digital Dapper Demo platform.
+          Tell us what you&apos;re doing or interested in (e.g., &quot;how wallets work&quot; or &quot;DeFi security&quot;), and our AI will suggest relevant tutorials from the Digital Dapper platform.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

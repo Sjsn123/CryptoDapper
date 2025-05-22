@@ -28,30 +28,30 @@ export default function TermsOfUsePage() {
         <div className="prose prose-invert max-w-none text-muted-foreground prose-headings:text-foreground">
           <p><strong>Last Updated:</strong> {lastUpdated || 'Loading...'}</p>
 
-          <p>Welcome to Digital Dapper Demo! These Terms of Use govern your use of the Digital Dapper Demo application. By accessing or using the application, you agree to be bound by these terms.</p>
+          <p>Welcome to Digital Dapper! These Terms of Use govern your use of the Digital Dapper application. By accessing or using the application, you agree to be bound by these terms.</p>
 
           <h2>1. Acceptance of Terms</h2>
-          <p>Digital Dapper Demo is a demonstration application provided for illustrative and educational purposes only. It does not offer real financial services, cryptocurrency trading, or investment advice.</p>
+          <p>Digital Dapper is a demonstration application provided for illustrative and educational purposes only. It does not offer real financial services, cryptocurrency trading, or investment advice.</p>
 
           <h2>2. Use of the Application</h2>
           <ul>
             <li><strong>Eligibility:</strong> There are no eligibility requirements as this is a demo application.</li>
-            <li><strong>Mock Nature:</strong> You acknowledge that all features, functionalities, account balances, transactions, promo codes, and events within Digital Dapper Demo are simulated and do not represent real assets or market activities.</li>
+            <li><strong>Mock Nature:</strong> You acknowledge that all features, functionalities, account balances, transactions, promo codes, and events within Digital Dapper are simulated and do not represent real assets or market activities.</li>
             <li><strong>Prohibited Conduct:</strong> You agree not to use the application for any unlawful purpose or in any way that could harm, disable, overburden, or impair the demonstration.</li>
           </ul>
 
           <h2>3. Intellectual Property</h2>
-          <p>The Digital Dapper Demo application, including its design, text, graphics, and underlying code (excluding third-party libraries or assets used under license), is the property of its creators and is protected by copyright and other intellectual property laws. This is a placeholder statement.</p>
+          <p>The Digital Dapper application, including its design, text, graphics, and underlying code (excluding third-party libraries or assets used under license), is the property of its creators and is protected by copyright and other intellectual property laws. This is a placeholder statement.</p>
 
           <h2>4. Disclaimers</h2>
           <ul>
-            <li><strong>No Financial Advice:</strong> Digital Dapper Demo does not provide financial, investment, legal, or tax advice. Any information presented is for demonstration purposes only.</li>
+            <li><strong>No Financial Advice:</strong> Digital Dapper does not provide financial, investment, legal, or tax advice. Any information presented is for demonstration purposes only.</li>
             <li><strong>As-Is Basis:</strong> The application is provided "as is" and "as available" without any warranties of any kind, express or implied. We do not warrant that the application will be error-free or uninterrupted.</li>
-            <li><strong>No Real Value:</strong> Any "coins," "tokens," or "balances" shown in Digital Dapper Demo have no real-world value.</li>
+            <li><strong>No Real Value:</strong> Any "coins," "tokens," or "balances" shown in Digital Dapper have no real-world value.</li>
           </ul>
           
           <h2>5. Limitation of Liability</h2>
-          <p>To the fullest extent permitted by applicable law, the creators of Digital Dapper Demo shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, arising from your use of this demonstration application.</p>
+          <p>To the fullest extent permitted by applicable law, the creators of Digital Dapper shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, arising from your use of this demonstration application.</p>
 
           <h2>6. Modifications to Terms</h2>
           <p>We reserve the right to modify these Terms of Use at any time. Any changes will be effective immediately upon posting the revised terms. Your continued use of the application after such changes constitutes your acceptance of the new terms.</p>

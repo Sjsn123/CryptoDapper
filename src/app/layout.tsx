@@ -18,8 +18,8 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Digital Dapper Demo',
-  description: 'Discover Digital Assets, Safely. A demo platform for exploring digital asset concepts.',
+  title: 'Digital Dapper',
+  description: 'Discover Digital Assets, Safely. A platform for exploring digital asset concepts.',
 };
 
 export default function RootLayout({

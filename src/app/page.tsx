@@ -1,5 +1,5 @@
 
-"use client"; // Make this a client component
+"use client"; 
 
 import Link from "next/link";
 import { Header } from "@/components/layout/header";
@@ -68,7 +68,7 @@ export default function HomePage() {
                   Learn by Doing, Risk-Free
                 </h2>
                 <p className="text-lg text-muted-foreground mb-6">
-                  Digital Dapper Demo provides a safe sandbox environment to understand complex crypto interactions without using real assets. Perfect for beginners and those curious about blockchain technology.
+                  Digital Dapper provides a safe sandbox environment to understand complex crypto interactions without using real assets. Perfect for beginners and those curious about blockchain technology.
                 </p>
                 <ul className="space-y-3 text-muted-foreground">
                   <li className="flex items-start">

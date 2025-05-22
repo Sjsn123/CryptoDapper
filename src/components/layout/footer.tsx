@@ -25,12 +25,12 @@ export function Footer() {
       <div className="container mx-auto max-w-screen-2xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div>
-            <Link href="/" className="flex items-center gap-2" aria-label="Digital Dapper Demo Home">
+            <Link href="/" className="flex items-center gap-2" aria-label="Digital Dapper Home">
               <DynamicLogo size="sm" />
               <span className="font-bold text-foreground">Digital Dapper</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">
-              Discover Digital Assets, Safely. A demo platform for exploring digital asset concepts.
+              Discover Digital Assets, Safely. A platform for exploring digital asset concepts.
             </p>
           </div>
 
@@ -62,7 +62,7 @@ export function Footer() {
         </div>
         <div className="mt-8 border-t border-border/40 pt-8">
           <p className="text-center text-xs text-muted-foreground">
-            &copy; {currentYear || 'Loading...'} Digital Dapper Demo. All rights reserved. For demonstration purposes only.
+            &copy; {currentYear || 'Loading...'} Digital Dapper. All rights reserved. For demonstration purposes only.
           </p>
         </div>
       </div>
