@@ -1,4 +1,6 @@
 
+"use client"; // Make this a client component
+
 import Link from "next/link";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -9,12 +11,15 @@ import { EventTicker } from "@/components/core/event-ticker";
 import { FEATURES_DATA, MOCK_CRYPTO_EVENTS, APP_NAME, APP_TAGLINE } from "@/constants";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import Image from "next/image";
-
+import { useAuth } from "@/hooks/use-auth.tsx"; // Import useAuth
 
 export default function HomePage() {
+  const { user, isLoading } = useAuth(); // Get auth state
+
   return (
     <div className="flex flex-col min-h-screen">
-      <Header isAuthenticated={false} /> {/* Mock: user is not authenticated on homepage */}
+      {/* Pass the correct authentication state to the Header */}
+      <Header isAuthenticated={!!user && !isLoading} />
       
       <main className="flex-grow">
         {/* Hero Section */}
