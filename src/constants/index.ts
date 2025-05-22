@@ -102,8 +102,53 @@ Common methods for 2FA include authenticator apps (like Google Authenticator or 
 Enabling 2FA is a simple step that dramatically enhances your security posture. Don't overlook it – your digital assets will thank you! For a deeper dive into 2FA mechanisms, check out the [external article on Sinch.com](https://sinch.com/blog/security-now-why-two-factor-authentication-must-have/).
 `
   },
-  { id: "3", title: "Exploring Different Types of Crypto Wallets", summary: "A look into various crypto wallet types: hot, cold, hardware, and software.", imageUrl: "https://placehold.co/300x200.png", dataAiHint: "crypto wallet", date: "2024-06-18", category: "Wallets", tags: ["wallets", "hot wallet", "cold wallet"], content: "A look into various crypto wallet types: hot, cold, hardware, and software. Understanding the differences is key to managing your crypto securely and effectively. Hot wallets are connected to the internet and offer convenience for frequent transactions, while cold wallets (like hardware wallets or paper wallets) are kept offline, providing a higher level of security for long-term storage. Software wallets can be desktop, mobile, or web-based, each with its own set of features and security considerations." },
-  { id: "4", title: "The Concept of Decentralization Explained", summary: "Dive into what decentralization means in the context of cryptocurrencies and beyond.", imageUrl: "https://placehold.co/300x200.png", dataAiHint: "decentralization network", date: "2024-06-10", category: "Concepts", tags: ["decentralization", "web3", "dao"], content: "Dive into what decentralization means in the context of cryptocurrencies and beyond. Decentralization refers to the transfer of control and decision-making from a centralized entity (individual, organization, or group thereof) to a distributed network. In cryptocurrencies, this means no single entity like a bank controls the currency or transaction ledger. This can lead to increased transparency, censorship resistance, and reduced reliance on intermediaries, forming a core tenet of Web3 and DAOs (Decentralized Autonomous Organizations)." },
+  { 
+    id: "3", 
+    title: "Exploring Different Types of Crypto Wallets", 
+    summary: "A look into various crypto wallet types: hot, cold, hardware, and software, and their pros and cons.", 
+    imageUrl: "https://101blockchains.com/wp-content/uploads/2021/10/Types-of-Crypto-Wallets-2.png", 
+    date: "2024-06-18", 
+    category: "Wallets", 
+    tags: ["wallets", "hot wallet", "cold wallet", "hardware", "software"], 
+    externalLink: "https://www.blockchain-council.org/cryptocurrency/types-of-wallets/",
+    content: `Choosing the right cryptocurrency wallet is crucial for managing and securing your digital assets. There isn't a one-size-fits-all solution, as different wallets offer varying levels of security, convenience, and control. Let's explore the main types:
+
+**1. Hot Wallets:**
+These are wallets connected to the internet. They include:
+*   **Web Wallets:** Accessed through a web browser. Often found on exchanges. Convenient for frequent trading but can be vulnerable if the exchange is hacked.
+*   **Mobile Wallets:** Apps on your smartphone. Convenient for on-the-go transactions. Security depends on your phone's security and the app itself.
+*   **Desktop Wallets:** Software installed on your computer. Offers a balance of security and convenience but can be vulnerable if your computer is compromised by malware.
+**Pros:** Easy to use, convenient for quick access and frequent transactions.
+**Cons:** Generally less secure than cold wallets due to their internet connectivity.
+
+**2. Cold Wallets (Cold Storage):**
+These wallets store your private keys offline, making them highly resistant to online hacking attempts.
+*   **Hardware Wallets:** Physical devices (like a USB drive) that store your private keys offline. Transactions are signed on the device itself, so keys never leave it. Examples include Ledger and Trezor.
+    **Pros:** Highest level of security for storing significant amounts of crypto.
+    **Cons:** Less convenient for frequent transactions, cost money to purchase.
+*   **Paper Wallets:** A piece of paper on which your public and private keys are printed (often as QR codes).
+    **Pros:** Completely offline, can be very secure if generated and stored correctly.
+    **Cons:** Susceptible to physical damage (fire, water), loss, or theft. Can be cumbersome to use for transactions.
+
+**Key Considerations When Choosing:**
+*   **Security:** How much crypto are you storing? For large amounts, a hardware wallet is highly recommended.
+*   **Convenience:** How often do you plan to transact? Hot wallets are better for daily use.
+*   **Control:** Do you want full control over your private keys (non-custodial), or are you okay with a third party (like an exchange) managing them (custodial)?
+*   **Technical Skill:** Some wallets are more user-friendly than others.
+
+Understanding these differences will help you make an informed decision to protect your crypto investments.` 
+  },
+  { 
+    id: "4", 
+    title: "The Concept of Decentralization Explained", 
+    summary: "Dive into what decentralization means in the context of cryptocurrencies and beyond.", 
+    imageUrl: "https://placehold.co/300x200.png", 
+    dataAiHint: "decentralization network", 
+    date: "2024-06-10", 
+    category: "Concepts", 
+    tags: ["decentralization", "web3", "dao"], 
+    content: "Dive into what decentralization means in the context of cryptocurrencies and beyond. Decentralization refers to the transfer of control and decision-making from a centralized entity (individual, organization, or group thereof) to a distributed network. In cryptocurrencies, this means no single entity like a bank controls the currency or transaction ledger. This can lead to increased transparency, censorship resistance, and reduced reliance on intermediaries, forming a core tenet of Web3 and DAOs (Decentralized Autonomous Organizations)." 
+  },
 ];
 
 export const NAV_LINKS_AUTHENTICATED = [

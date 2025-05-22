@@ -37,7 +37,13 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'www.investopedia.com', // Added new domain
+        hostname: 'www.investopedia.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '101blockchains.com', // Added new domain
         port: '',
         pathname: '/**',
       }
