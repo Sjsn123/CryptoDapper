@@ -79,19 +79,6 @@ export function DepositForm() {
     });
   };
   
-  const handleTrustedPartners = () => {
-     toast({
-      title: "Navigation (Mock)",
-      description: "You would be redirected to 'our trusted partners' page.",
-    });
-  }
-
-  const handleBuyCryptoSection = () => {
-     toast({
-      title: "Navigation (Mock)",
-      description: "You would be redirected to the 'Buy Cryptocurrency' section.",
-    });
-  }
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl card-border-silver">
@@ -176,22 +163,7 @@ export function DepositForm() {
           </p>
         </div>
         
-        <Card className="bg-card/70 p-4 mt-6">
-          <CardHeader className="p-0 pb-2">
-            <CardTitle className="text-md font-semibold">Don&apos;t have cryptocurrency?</CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            <p className="text-sm text-muted-foreground">
-              To top up your balance on our exchange, you can use the services of 
-              <Button variant="link" className="p-0 h-auto text-gold-accent hover:underline ml-1" onClick={handleTrustedPartners}>
-                our trusted partners
-              </Button> in the 
-              <Button variant="link" className="p-0 h-auto text-gold-accent hover:underline ml-1" onClick={handleBuyCryptoSection}>
-                &quot;Buy Cryptocurrency&quot;
-              </Button> section. (This is a mock demo)
-            </p>
-          </CardContent>
-        </Card>
+        {/* The "Don't have cryptocurrency?" section has been removed. */}
 
       </CardContent>
       <CardFooter className="flex flex-col gap-4 border-t pt-6">
@@ -212,4 +184,3 @@ export function DepositForm() {
   );
 }
 
-    
