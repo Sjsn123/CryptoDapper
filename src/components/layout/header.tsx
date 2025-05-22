@@ -39,7 +39,10 @@ export function Header({ isAuthenticated = false }: HeaderProps) {
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className={cn(
+                "text-sm font-medium text-muted-foreground transition-colors hover:text-foreground",
+                "nav-link-hover-gradient-border" // Added class for hover effect
+              )}
             >
               {item.label}
             </Link>
@@ -107,5 +110,3 @@ export function Header({ isAuthenticated = false }: HeaderProps) {
     </header>
   );
 }
-
-    

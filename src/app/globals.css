@@ -117,7 +117,9 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    /* Updated background with a gradient */
+    @apply text-foreground;
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(210, 30%, 25%) 50%, hsl(var(--background)) 100%);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -147,7 +149,7 @@ body {
 }
 
 .text-gradient-silver {
-  @apply bg-gradient-to-r from-[#C0C0C0] to-[#A8A8A8] bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-slate-300 via-slate-400 to-slate-500 bg-clip-text text-transparent;
 }
 
 /* Custom border gradient effect for cards */
@@ -163,4 +165,29 @@ body {
   background-image: linear-gradient(hsl(var(--card)), hsl(var(--card))), linear-gradient(145deg, hsl(var(--accent)), hsl(var(--accent) / 0.7));
   background-origin: border-box;
   background-clip: padding-box, border-box;
+}
+
+/* New class for navigation link hover gradient border */
+.nav-link-hover-gradient-border {
+  position: relative;
+  padding-bottom: 4px; /* Add some padding for the border to sit below */
+}
+
+.nav-link-hover-gradient-border::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0px; /* Position at the bottom */
+  height: 2px; /* Border thickness */
+  background: linear-gradient(to right, hsl(var(--accent)), hsl(var(--primary)));
+  opacity: 0;
+  transform: scaleX(0);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transform-origin: center;
+}
+
+.nav-link-hover-gradient-border:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
 }

@@ -27,7 +27,7 @@ export default function HomePage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <DynamicLogo size="lg" className="mx-auto mb-8 animate-pulse-glow" />
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground">
-              Welcome to <span className="text-gradient-gold">{APP_NAME}</span>
+              <span className="text-accent">Welcome to </span><span className="text-gradient-gold">{APP_NAME}</span>
             </h1>
             <p className="mt-6 max-w-2xl mx-auto text-lg sm:text-xl text-muted-foreground">
               {APP_TAGLINE}
@@ -43,7 +43,7 @@ export default function HomePage() {
         </section>
 
         {/* Features Overview Section */}
-        <section className="py-16 md:py-24 bg-background">
+        <section className="py-16 md:py-24 bg-background/80 backdrop-blur-sm"> {/* Added backdrop blur for depth */}
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-bold text-foreground">Explore Digital Asset Concepts</h2>
@@ -60,7 +60,7 @@ export default function HomePage() {
         </section>
 
         {/* How it works / Value Proposition Section */}
-        <section className="py-16 md:py-24 bg-primary/30">
+        <section className="py-16 md:py-24 bg-primary/50 backdrop-blur-sm"> {/* Added backdrop blur */}
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-1 gap-12 items-center"> 
               <div>
@@ -102,5 +102,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
