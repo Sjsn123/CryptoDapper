@@ -13,7 +13,9 @@ import {
   sendPasswordResetEmail,
   sendEmailVerification,
   type AuthProvider as FirebaseAuthProvider,
-  GoogleAuthProvider,
+  // RecaptchaVerifier, // No longer used
+  // signInWithPhoneNumber, // No longer used
+  // type ConfirmationResult // No longer used
 } from 'firebase/auth';
 import { auth, googleProvider } from '@/lib/firebase.ts';
 import { useToast } from '@/hooks/use-toast.ts';
@@ -21,11 +23,15 @@ import { useToast } from '@/hooks/use-toast.ts';
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
+  // phoneAuthConfirmationResult: ConfirmationResult | null; // No longer used
+  // setPhoneAuthConfirmationResult: React.Dispatch<React.SetStateAction<ConfirmationResult | null>>; // No longer used
   signInWithGoogle: () => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<User | null>;
   logInWithEmail: (email: string, password: string) => Promise<User | null>;
   sendPasswordReset: (email: string) => Promise<void>;
   sendVerificationEmail: () => Promise<void>;
+  // requestOtpForPhoneNumber: (phoneNumber: string, recaptchaContainerId: string) => Promise<boolean>; // No longer used
+  // verifyOtpAndSignIn: (otp: string) => Promise<void>; // No longer used
   logout: () => Promise<void>;
 }
 
@@ -34,6 +40,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  // const [phoneAuthConfirmationResult, setPhoneAuthConfirmationResult] = useState<ConfirmationResult | null>(null); // No longer used
   const router = useRouter();
   const { toast } = useToast();
 
@@ -42,7 +49,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(currentUser);
       setIsLoading(false);
       const isAuthPage =
-        typeof window !== 'undefined' && (window.location.pathname.startsWith('/auth/login') || window.location.pathname.startsWith('/auth/register') || window.location.pathname.startsWith('/auth/recover'));
+        typeof window !== 'undefined' && (window.location.pathname.startsWith('/auth/login') || window.location.pathname.startsWith('/auth/register'));
+      
+      // Define protected paths more broadly
       const protectedPaths = ['/dashboard', '/education', '/events', '/profile'];
       const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
       
@@ -71,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           description = 'This email address is already in use. Try logging in or use a different email.';
           break;
         case 'auth/wrong-password':
-        case 'auth/user-not-found':
+        case 'auth/user-not-found': // Bundled with invalid-credential in recent Firebase versions
         case 'auth/invalid-credential':
           description = 'Invalid credentials. Please check and try again.';
           break;
@@ -82,7 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           description = 'This action requires a recent login. Please log out and log back in.';
           break;
         case 'auth/unauthorized-domain':
-            description = `This domain is not authorized for OAuth operations for your Firebase project. Check the Firebase console. Current domain: ${window.location.hostname}`;
+            description = `This domain is not authorized for OAuth operations for your Firebase project. Check the Firebase console. Current domain: ${typeof window !== 'undefined' ? window.location.hostname : 'Unknown'}`;
             break;
         case 'auth/operation-not-allowed':
             description = `The ${context} method is not enabled. Please enable it in your Firebase console under Authentication -> Sign-in method.`;
@@ -90,7 +99,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         case 'auth/too-many-requests':
             description = 'Too many requests. Please try again later.';
             break;
+        case 'auth/missing-phone-number':
+            description = 'Phone number is missing. Please enter a valid phone number.';
+            break;
+        case 'auth/invalid-phone-number':
+            description = 'The phone number is invalid. Please enter it in E.164 format (e.g., +12223334444).';
+            break;
+        case 'auth/quota-exceeded':
+             description = 'SMS quota exceeded for this project. Please try again later or check project billing.';
+            break;
+        case 'auth/user-disabled':
+            description = 'This user account has been disabled.';
+            break;
+        case 'auth/invalid-verification-code':
+            description = 'Invalid OTP. Please try again.';
+            break;
+        case 'auth/session-expired':
+            description = 'The OTP has expired. Please request a new one.';
+            break;
+        case 'auth/missing-recaptcha-token':
+        case 'auth/invalid-recaptcha-token':
+        case 'auth/app-not-verified':
+            description = 'reCAPTCHA verification failed. Please ensure reCAPTCHA is set up correctly and try again.';
+            break;
+        case 'auth/captcha-check-failed':
+            description = 'reCAPTCHA check failed, possibly due to an invalid site key or domain not being whitelisted for reCAPTCHA. Please try again.';
+            break;
+        case 'auth/billing-not-enabled':
+            description = 'Phone authentication requires billing to be enabled for this project. Please update your Firebase project settings.';
+            break;
         default:
+          // For other errors, use the default description
           break;
       }
     toast({ variant: 'destructive', title: `${context} Error`, description });
@@ -101,20 +140,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [toast]);
 
   const signInWithGoogle = useCallback(async () => {
+    // setIsLoading(true); // isLoading is managed by the broader auth state
     try {
-      await signInWithPopup(auth, googleProvider as FirebaseAuthProvider);
+      await signInWithPopup(auth, googleProvider); // Removed unnecessary cast
       handleAuthSuccess('Google Sign-In');
       router.replace('/dashboard');
-    } catch (error) {
+    } catch (error: any) {
       handleAuthError(error, "Google Sign-In");
     }
   }, [handleAuthError, handleAuthSuccess, router]);
 
+
   const signUpWithEmail = async (email: string, password: string): Promise<User | null> => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await sendEmailVerification(userCredential.user);
-      handleAuthSuccess('Registration', 'Account created! A verification email has been sent.');
+      // Send verification email upon successful registration
+      if (userCredential.user) {
+        await sendEmailVerification(userCredential.user);
+        handleAuthSuccess('Registration', 'Account created! A verification email has been sent.');
+      } else {
+        handleAuthSuccess('Registration', 'Account created!');
+      }
       router.replace('/dashboard');
       return userCredential.user;
     } catch (error) {
@@ -167,9 +213,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [handleAuthError, toast]);
 
+
   const logout = useCallback(async () => {
     try {
       await firebaseSignOut(auth);
+      // setUser(null); // onAuthStateChanged will handle this
       toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
       router.replace('/auth/login');
     } catch (error) {
@@ -180,11 +228,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const authContextValue: AuthContextType = {
     user,
     isLoading,
+    // phoneAuthConfirmationResult, // No longer used
+    // setPhoneAuthConfirmationResult, // No longer used
     signInWithGoogle,
     signUpWithEmail,
     logInWithEmail,
     sendPasswordReset,
     sendVerificationEmail,
+    // requestOtpForPhoneNumber, // No longer used
+    // verifyOtpAndSignIn, // No longer used
     logout,
   };
 
