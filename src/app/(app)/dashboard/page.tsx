@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,10 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useToast } from "@/hooks/use-toast.ts";
+import { useToast } from "@/hooks/use-toast";
 import { PROMO_CODES_DATA, MOCK_PORTFOLIO_ASSETS_DATA } from "@/constants";
 import type { PromoCode, PortfolioAsset } from "@/types";
-import { DollarSign, Gift, Bell, CheckCircle, XCircle, ExternalLink, Loader2, Briefcase, ArrowUpRight, ArrowDownRight, ArrowDownToLine, ArrowUpFromLine } from "lucide-react";
+import { DollarSign, Gift, Bell, CheckCircle, XCircle, ExternalLink, Loader2, Briefcase, ArrowUpRight, ArrowDownRight, ArrowDownToLine, ArrowUpFromLine, Phone } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -22,6 +22,7 @@ import { DepositForm } from "@/components/dashboard/deposit-form";
 const MOCK_ACCOUNT_BALANCE_KEY = 'digitalDapperMockBalance';
 const APPLIED_PROMO_CODES_KEY = 'digitalDapperAppliedPromos';
 const INITIAL_BALANCE = 10000; // DD Coins
+const PORTFOLIO_UPDATE_INTERVAL = 3000; // Update every 3 seconds
 
 export default function DashboardPage() {
   const [accountBalance, setAccountBalance] = useState(INITIAL_BALANCE);
@@ -29,7 +30,7 @@ export default function DashboardPage() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const { toast } = useToast();
   const [isApplyingPromo, setIsApplyingPromo] = useState(false);
-  const [portfolioAssets, setPortfolioAssets] = useState<PortfolioAsset[]>([]);
+  const [portfolioAssets, setPortfolioAssets] = useState<PortfolioAsset[]>(MOCK_PORTFOLIO_ASSETS_DATA);
   const [appliedPromoCodes, setAppliedPromoCodes] = useState<string[]>([]);
 
   useEffect(() => {
@@ -44,9 +45,37 @@ export default function DashboardPage() {
     if (storedAppliedCodes) {
       setAppliedPromoCodes(JSON.parse(storedAppliedCodes));
     }
-
-    setPortfolioAssets(MOCK_PORTFOLIO_ASSETS_DATA);
   }, []);
+
+  // Effect for real-time portfolio updates
+  useEffect(() => {
+    const updatePortfolio = () => {
+      setPortfolioAssets(prevAssets =>
+        prevAssets.map(asset => {
+          // Simulate price fluctuation: +/- up to 0.5% of current price
+          const priceChangePercent = (Math.random() - 0.5) * 0.01; // Max 0.5% change
+          let newPrice = asset.currentPriceUsd * (1 + priceChangePercent);
+          newPrice = Math.max(0.01, newPrice); // Ensure price doesn't go to zero or negative
+
+          // Simulate 24h change fluctuation: +/- up to 0.5 points
+          let newChange24h = asset.change24h + (Math.random() - 0.5) * 1; // Max 0.5 point change
+          // Clamp change24h to a reasonable range, e.g., -15% to +15% to avoid extreme values
+          newChange24h = Math.max(-15, Math.min(15, newChange24h));
+          
+          return {
+            ...asset,
+            currentPriceUsd: newPrice,
+            valueUsd: asset.amount * newPrice,
+            change24h: newChange24h,
+          };
+        })
+      );
+    };
+
+    const intervalId = setInterval(updatePortfolio, PORTFOLIO_UPDATE_INTERVAL);
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
+  }, []);
+
 
   const handleApplyPromoCode = async () => {
     setIsApplyingPromo(true);
@@ -71,7 +100,7 @@ export default function DashboardPage() {
       let newBalance = accountBalance;
       if (foundCode.fixedBonusAmount !== undefined) {
         newBalance += foundCode.fixedBonusAmount;
-      } else if (foundCode.value !== undefined) {
+      } else if (foundCode.value !== undefined) { // Added check for foundCode.value
         newBalance *= foundCode.value;
       }
       setAccountBalance(newBalance);
@@ -231,7 +260,7 @@ export default function DashboardPage() {
                 </div>
               </div>
               <CardDescription>
-                Overview of your simulated cryptocurrency holdings. This data is for demonstration only.
+                Overview of your simulated cryptocurrency holdings. Data updates every {PORTFOLIO_UPDATE_INTERVAL / 1000} seconds.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -285,5 +314,6 @@ export default function DashboardPage() {
     </div>
   );
 }
+    
 
     
