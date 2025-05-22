@@ -165,7 +165,7 @@ export default function DashboardPage() {
                   {accountBalance.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} DD Coins
                 </div>
                 <p className="text-xs text-muted-foreground pt-1">
-                  Platform-specific mock currency.
+                  Platform-specific currency.
                 </p>
               </CardContent>
             </Card>
@@ -250,7 +250,7 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Briefcase className="mr-2 h-6 w-6 text-accent" />
-                  <CardTitle className="text-xl">Mock Crypto Portfolio</CardTitle>
+                  <CardTitle className="text-xl">Crypto Portfolio</CardTitle>
                 </div>
                 <div className="text-right">
                     <p className="text-sm text-muted-foreground">Total Value</p>
@@ -260,7 +260,7 @@ export default function DashboardPage() {
                 </div>
               </div>
               <CardDescription>
-                Overview of your simulated cryptocurrency holdings (mock USD values). Data updates every {PORTFOLIO_UPDATE_INTERVAL / 1000} seconds.
+                Overview of your simulated cryptocurrency holdings (USD values). Data updates every {PORTFOLIO_UPDATE_INTERVAL / 1000} seconds.
               </CardDescription>
             </CardHeader>
             <CardContent>
