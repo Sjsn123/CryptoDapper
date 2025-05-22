@@ -73,9 +73,8 @@ export function WithdrawForm() {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
     toast({
-      title: "Withdrawal Initiated (Mock)",
+      title: "Withdrawal Initiated (Demo)",
       description: `Your withdrawal of ${amount} DD Coins via ${selectedPaymentMethod} has been initiated. This is a demo.`,
-      // action: <CheckCircle className="text-green-500" />, // CheckCircle was not imported
     });
     setAmount("");
     setCryptoAddress("");
@@ -104,7 +103,7 @@ export function WithdrawForm() {
               className="pl-10 text-lg font-mono"
             />
           </div>
-          <p className="text-xs text-muted-foreground mt-1">Available Balance: 10,000 DD Coins (Mock)</p>
+          <p className="text-xs text-muted-foreground mt-1">Available Balance: 10,000 DD Coins (Demo)</p>
         </div>
 
         <div>
@@ -176,11 +175,13 @@ export function WithdrawForm() {
           {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <ArrowUpFromLine className="mr-2 h-5 w-5" />}
           Withdraw DD Coins
         </Button>
-        <Button variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground" onClick={() => toast({title: "Action (Mock)", description: "Limit increase request simulation."})}>
+        <Button variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground" onClick={() => toast({title: "Action (Demo)", description: "Limit increase request simulation for this demo."})}>
             <Info className="mr-2 h-4 w-4" />
-            Increase withdrawal limit (Mock)
+            Increase withdrawal limit
         </Button>
       </CardFooter>
     </Card>
   );
 }
+
+    

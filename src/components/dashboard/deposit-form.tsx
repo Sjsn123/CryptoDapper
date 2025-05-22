@@ -7,14 +7,12 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-// import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"; // Temporarily remove
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; // Use RadioGroup instead
-import { Label } from "@/components/ui/label"; // For RadioGroup
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; 
+import { Label } from "@/components/ui/label"; 
 import { useToast } from "@/hooks/use-toast";
 import { Bitcoin, CreditCard, MessageCircle, ChevronDown, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Moved DollarSign component definition before its use in mockCryptoAssets
 const DollarSign = ({className}: {className?:string}) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
 );
@@ -74,8 +72,8 @@ export function DepositForm() {
 
   const handleBuyWithCard = () => {
     toast({
-      title: "Action Triggered",
-      description: "Buy BTC with card functionality would be initiated here.",
+      title: "Action Triggered (Demo)",
+      description: `Buy ${currentAsset.symbol} with card functionality would be initiated here. This is a demo feature.`,
     });
   };
   
@@ -136,7 +134,6 @@ export function DepositForm() {
         
         <div className="space-y-3">
           <StepIndicator number={2} label="Select network" isActive={!!selectedCrypto} />
-          {/* Temporarily using RadioGroup instead of ToggleGroup */}
           <RadioGroup
             value={selectedNetwork}
             onValueChange={(value) => { if (value) setSelectedNetwork(value); }}
@@ -163,15 +160,13 @@ export function DepositForm() {
           </p>
         </div>
         
-        {/* The "Don't have cryptocurrency?" section has been removed. */}
-
       </CardContent>
       <CardFooter className="flex flex-col gap-4 border-t pt-6">
         <Button className="w-full btn-gold" onClick={handleBuyWithCard}>
           <CreditCard className="mr-2 h-5 w-5" />
           Buy {currentAsset.symbol} with card
         </Button>
-         <Button variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground relative">
+         <Button variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground relative" onClick={() => toast({title: "Live Support (Demo)", description: "This is a placeholder for a live chat feature. In a real app, this would connect you to a support agent."})}>
           <MessageCircle className="mr-2 h-5 w-5" />
           Live support
            <span className="absolute -top-1 -right-1 flex h-4 w-4">
@@ -184,3 +179,4 @@ export function DepositForm() {
   );
 }
 
+    
