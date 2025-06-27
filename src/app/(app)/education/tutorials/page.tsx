@@ -6,7 +6,7 @@ import { TutorialCard } from "@/components/core/tutorial-card";
 import { TutorialRecommendationEngine } from "@/components/core/tutorial-recommendation-engine";
 import { TUTORIALS_DATA } from "@/constants";
 import type { Tutorial } from "@/types";
-import { useLocalStorage } from "@/hooks/use-local-storage.ts";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 

@@ -11,7 +11,7 @@ import { EventTicker } from "@/components/core/event-ticker";
 import { FEATURES_DATA, MOCK_CRYPTO_EVENTS, APP_NAME, APP_TAGLINE } from "@/constants";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import Image from "next/image";
-import { useAuth } from "@/hooks/use-auth.tsx"; 
+import { useAuth } from "@/hooks/use-auth"; 
 
 export default function HomePage() {
   const { user, isLoading } = useAuth(); 
@@ -22,7 +22,7 @@ export default function HomePage() {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative py-20 md:py-32 bg-gradient-to-b from-primary to-background text-center overflow-hidden">
+        <section className="relative py-20 md:py-32 bg-gradient-to-b from-primary to-background text-center overflow-hidden flex items-center justify-center">
           <div className="absolute inset-0 opacity-10 bg-[url('https://placehold.co/1920x1080/222D3B/1A2533/png?text=Digital+Nodes&font=roboto')] bg-cover bg-center" data-ai-hint="abstract blockchain"></div>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <DynamicLogo size="lg" className="mx-auto mb-8 animate-pulse-glow" />

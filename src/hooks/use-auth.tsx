@@ -17,8 +17,8 @@ import {
   // signInWithPhoneNumber, // No longer used
   // type ConfirmationResult // No longer used
 } from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/firebase.ts';
-import { useToast } from '@/hooks/use-toast.ts';
+import { auth, googleProvider } from '@/lib/firebase';
+import { useToast } from '@/hooks/use-toast';
 
 interface AuthContextType {
   user: User | null;
@@ -57,15 +57,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       const isProtectedPage = protectedPaths.some(path => currentPath.startsWith(path));
 
+      // Only redirect if the user is not on the target page already
       if (!currentUser && isProtectedPage) {
-        router.replace('/auth/login');
+        if (currentPath !== '/auth/login') {
+          router.replace('/auth/login');
+        }
       } else if (currentUser && isAuthPage) {
-        router.replace('/dashboard');
+        if (currentPath !== '/dashboard') {
+          router.replace('/dashboard');
+        }
       }
     });
     return () => unsubscribe();
   }, [router]);
-
   const handleAuthError = useCallback((error: any, context: string) => {
     console.error(`${context} Error:`, error, error.code, error.message);
     let description = `Failed to ${context}. ${error.message || ''}`;

@@ -15,6 +15,13 @@ export default {
       },
       colors: {
         background: 'hsl(var(--background))',
+        'background-base': '#0D0D0D',
+        'secondary-sections': '#1A2533',
+        'accent-panels': '#2C2F36',
+        'primary-text': '#FFFFFF',
+        'secondary-text': '#CCCCCC',
+        'cta-gold': '#FFD700',
+        'cta-silver': '#C0C0C0',
         foreground: 'hsl(var(--foreground))',
         card: {
           DEFAULT: 'hsl(var(--card))',
