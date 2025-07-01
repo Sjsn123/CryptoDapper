@@ -96,3 +96,112 @@
   0% { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
 }
+
+/* Starfield Background */
+@function random_range($min, $max) {
+  $rand: random();
+  $random_range: $min + floor($rand * ($max - $min + 1));
+  @return $random_range;
+}
+
+.stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -3;
+}
+
+.star {
+  $star-count: 50;
+  --star-color: hsl(var(--primary-foreground));
+  --star-size: 3px;
+  --star-speed: 20s;
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--star-color);
+  opacity: 0.1;
+  will-change: transform;
+  
+  @for $i from 1 through $star-count {
+    &:nth-child(#{$i}) {
+      $size: random(3) * 1px;
+      $speed: random_range(20, 50) * 1s;
+      --star-size: #{$size};
+      --star-speed: #{$speed};
+      top: calc(random(100) * 1%);
+      left: calc(random(100) * 1%);
+      animation: move-stars var(--star-speed) linear infinite;
+    }
+  }
+}
+
+#stars1 {
+  .star {
+    --star-color: hsl(var(--primary-foreground));
+  }
+}
+#stars2 {
+  .star {
+    $star-count: 50;
+    --star-color: hsl(var(--primary));
+    @for $i from 1 through $star-count {
+      &:nth-child(#{$i}) {
+        $size: random(2) * 1px + 1;
+        $speed: random_range(50, 100) * 1s;
+        --star-size: #{$size};
+        --star-speed: #{$speed};
+      }
+    }
+  }
+}
+#stars3 {
+  .star {
+    $star-count: 50;
+    --star-color: hsl(var(--secondary-foreground));
+    @for $i from 1 through $star-count {
+      &:nth-child(#{$i}) {
+        $size: random(1) * 1px + 2;
+        $speed: random_range(100, 150) * 1s;
+        --star-size: #{$size};
+        --star-speed: #{$speed};
+      }
+    }
+  }
+}
+
+@keyframes move-stars {
+  from {
+    transform: translateY(-10vh);
+  }
+  to {
+    transform: translateY(110vh);
+  }
+}
+
+/* Glimmering Hover Effect for Nav Links */
+.glimmer-hover {
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease-in-out;
+}
+
+.glimmer-hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, hsla(var(--primary-foreground), 0.3), transparent);
+  transition: transform 0.6s ease-in-out;
+}
+
+.glimmer-hover:hover::after {
+  transform: translateX(200%);
+}
+
+.glimmer-hover:hover {
+  color: hsl(var(--primary-foreground));
+}

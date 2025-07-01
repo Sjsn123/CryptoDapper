@@ -21,7 +21,7 @@ export function Footer() {
   }, []);
 
   return (
-    <footer className="mt-auto border-t border-border/40 bg-background">
+    <footer className="mt-auto border-t border-border/40 bg-background/80 backdrop-blur-sm z-10 relative">
       <div className="container mx-auto max-w-screen-2xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div>
@@ -69,5 +69,3 @@ export function Footer() {
     </footer>
   );
 }
-
-    
