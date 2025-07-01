@@ -1,9 +1,9 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { EventCard } from "@/components/core/event-card";
 import { getAICryptoEvents } from "@/ai/flows/crypto-events-flow";
+import { MOCK_CRYPTO_EVENTS } from "@/constants";
 import type { CryptoEvent } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Newspaper } from "lucide-react";
@@ -17,10 +17,16 @@ export default function EventsPage() {
     async function fetchEvents() {
       try {
         const aiEvents = await getAICryptoEvents();
-        setEvents(aiEvents);
+        if (aiEvents && aiEvents.length > 0) {
+          setEvents(aiEvents);
+        } else {
+          console.warn("AI-generated events were empty, falling back to mock data.");
+          setEvents(MOCK_CRYPTO_EVENTS);
+        }
       } catch (error) {
         console.error("Failed to fetch AI-generated crypto events:", error);
-        // Silently fail, which will result in the "No Events" message.
+        console.warn("Falling back to mock data due to an error.");
+        setEvents(MOCK_CRYPTO_EVENTS);
       } finally {
         setIsLoading(false);
       }
