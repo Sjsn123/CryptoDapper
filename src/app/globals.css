@@ -4,77 +4,53 @@
  
 @layer base {
   :root {
-    --background: 222 83.3% 4.9%;
+    --background: 215.4 20.3% 16.9%;
     --foreground: 210 20% 98%;
-
-    --card: 222 83.3% 7.8%;
+    --card: 215.4 20.3% 20.9%;
     --card-foreground: 210 20% 98%;
- 
-    --popover: 222 83.3% 4.9%;
+    --popover: 215.4 20.3% 16.9%;
     --popover-foreground: 210 20% 98%;
- 
     --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 210 20% 98%;
- 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 20% 98%;
- 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
- 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 20% 98%;
- 
+    --accent: 210 20% 98%;
+    --accent-foreground: 215.4 20.3% 25.9%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
-
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 217.2 91.2% 59.8%;
- 
     --radius: 0.5rem;
-
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
-
+ 
   .dark {
-    --background: 222 83.3% 4.9%;
+    --background: 215.4 20.3% 16.9%;
     --foreground: 210 20% 98%;
-
-    --card: 222 83.3% 7.8%;
+    --card: 215.4 20.3% 20.9%;
     --card-foreground: 210 20% 98%;
- 
-    --popover: 222 83.3% 4.9%;
+    --popover: 215.4 20.3% 16.9%;
     --popover-foreground: 210 20% 98%;
- 
     --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 210 20% 98%;
- 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 20% 98%;
- 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
- 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 20% 98%;
- 
+    --accent: 210 20% 98%;
+    --accent-foreground: 215.4 20.3% 25.9%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
-
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 217.2 91.2% 59.8%;
-
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
   }
 }
  
@@ -98,12 +74,6 @@
 }
 
 /* Starfield Background */
-@function random_range($min, $max) {
-  $rand: random();
-  $random_range: $min + floor($rand * ($max - $min + 1));
-  @return $random_range;
-}
-
 .stars {
   position: fixed;
   top: 0;
@@ -111,65 +81,24 @@
   width: 100%;
   height: 100%;
   z-index: -3;
+  pointer-events: none; /* Make sure stars don't interfere with clicks */
 }
 
 .star {
-  $star-count: 50;
-  --star-color: hsl(var(--primary-foreground));
-  --star-size: 3px;
-  --star-speed: 20s;
   position: absolute;
   border-radius: 50%;
-  background-color: var(--star-color);
-  opacity: 0.1;
+  opacity: 0.7; /* Increased opacity a bit */
   will-change: transform;
-  
-  @for $i from 1 through $star-count {
-    &:nth-child(#{$i}) {
-      $size: random(3) * 1px;
-      $speed: random_range(20, 50) * 1s;
-      --star-size: #{$size};
-      --star-speed: #{$speed};
-      top: calc(random(100) * 1%);
-      left: calc(random(100) * 1%);
-      animation: move-stars var(--star-speed) linear infinite;
-    }
-  }
+  animation-name: move-stars;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  background-color: var(--star-color);
 }
 
-#stars1 {
-  .star {
-    --star-color: hsl(var(--primary-foreground));
-  }
-}
-#stars2 {
-  .star {
-    $star-count: 50;
-    --star-color: hsl(var(--primary));
-    @for $i from 1 through $star-count {
-      &:nth-child(#{$i}) {
-        $size: random(2) * 1px + 1;
-        $speed: random_range(50, 100) * 1s;
-        --star-size: #{$size};
-        --star-speed: #{$speed};
-      }
-    }
-  }
-}
-#stars3 {
-  .star {
-    $star-count: 50;
-    --star-color: hsl(var(--secondary-foreground));
-    @for $i from 1 through $star-count {
-      &:nth-child(#{$i}) {
-        $size: random(1) * 1px + 2;
-        $speed: random_range(100, 150) * 1s;
-        --star-size: #{$size};
-        --star-speed: #{$speed};
-      }
-    }
-  }
-}
+#stars1 .star { --star-color: hsl(var(--primary-foreground)); }
+#stars2 .star { --star-color: hsl(var(--primary)); }
+#stars3 .star { --star-color: hsl(var(--secondary-foreground)); }
+
 
 @keyframes move-stars {
   from {
@@ -179,6 +108,7 @@
     transform: translateY(110vh);
   }
 }
+
 
 /* Glimmering Hover Effect for Nav Links */
 .glimmer-hover {
@@ -204,4 +134,27 @@
 
 .glimmer-hover:hover {
   color: hsl(var(--primary-foreground));
+}
+
+.nav-link-hover-gradient-border {
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.nav-link-hover-gradient-border::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background-image: linear-gradient(to right, hsl(var(--accent)), hsl(var(--primary)));
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+}
+
+.nav-link-hover-gradient-border:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
