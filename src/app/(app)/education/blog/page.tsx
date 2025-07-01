@@ -2,12 +2,13 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { BlogPostCard } from "@/components/core/blog-post-card";
 import { BLOG_POSTS_DATA } from "@/constants";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Search, Filter, PlusCircle } from "lucide-react";
 
 export default function BlogPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,11 +28,19 @@ export default function BlogPage() {
 
   return (
     <div className="space-y-8">
-      <header className="space-y-2">
-        <h1 className="text-3xl font-bold text-foreground">Digital Dapper Blog</h1>
-        <p className="text-muted-foreground">
-          Insights and articles on digital asset concepts, security, and platform updates.
-        </p>
+      <header className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+        <div className="space-y-2">
+            <h1 className="text-3xl font-bold text-foreground">Digital Dapper Blog</h1>
+            <p className="text-muted-foreground">
+            Insights and articles on digital asset concepts, security, and platform updates.
+            </p>
+        </div>
+        <Button asChild className="shrink-0">
+            <Link href="/education/blog/create">
+                <PlusCircle className="mr-2 h-5 w-5" />
+                Create Post
+            </Link>
+        </Button>
       </header>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -91,5 +100,3 @@ export default function BlogPage() {
     </div>
   );
 }
-
-    

@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { EventCard } from "@/components/core/event-card";
-import { MOCK_CRYPTO_EVENTS } from "@/constants"; // Import static mock events
+import { getAICryptoEvents } from "@/ai/flows/crypto-events-flow";
 import type { CryptoEvent } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Newspaper } from "lucide-react";
@@ -11,12 +11,21 @@ import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
 
 export default function EventsPage() {
   const [events, setEvents] = useState<CryptoEvent[]>([]);
-  const [isLoading, setIsLoading] = useState(true); // Keep loading state for consistency, but it will be quick
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load static mock events
-    setEvents(MOCK_CRYPTO_EVENTS);
-    setIsLoading(false);
+    async function fetchEvents() {
+      try {
+        const aiEvents = await getAICryptoEvents();
+        setEvents(aiEvents);
+      } catch (error) {
+        console.error("Failed to fetch AI-generated crypto events:", error);
+        // Silently fail, which will result in the "No Events" message.
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchEvents();
   }, []);
 
   return (
@@ -27,7 +36,7 @@ export default function EventsPage() {
           Crypto Events Showcase
         </h1>
         <p className="text-muted-foreground">
-          Stay informed with important (curated, mock) news and updates from the crypto world.
+          Stay informed with the latest AI-generated news and updates from the crypto world.
         </p>
       </header>
 
@@ -56,7 +65,7 @@ export default function EventsPage() {
         <div className="text-center py-12 bg-card rounded-lg shadow-md">
             <Newspaper className="mx-auto h-16 w-16 text-muted-foreground mb-4" />
             <h2 className="text-xl font-semibold text-muted-foreground">No Events Available</h2>
-            <p className="text-muted-foreground mt-2">Check back later for updates.</p>
+            <p className="text-muted-foreground mt-2">Could not fetch events. Please check back later.</p>
         </div>
       )}
 

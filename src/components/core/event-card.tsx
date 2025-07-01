@@ -2,7 +2,6 @@ import type { CryptoEvent } from "@/types";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, ArrowRight } from "lucide-react";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 interface EventCardProps {
@@ -27,15 +26,17 @@ export function EventCard({ event }: EventCardProps) {
         </CardContent>
       )}
       <CardFooter className="border-t pt-4 mt-auto">
-        {event.link ? (
-          <Button variant="link" asChild className="text-primary px-0 hover:underline">
-            <Link href={event.link}>
-              Read More <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        ) : (
-          <span className="text-sm text-muted-foreground italic">No further details available.</span>
-        )}
+        <Button variant="link" asChild className="text-primary px-0 hover:underline">
+          <a
+            href={event.link || `https://www.google.com/search?q=${encodeURIComponent(event.title)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center"
+          >
+            {event.link ? "Read More" : "Learn More"}
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </a>
+        </Button>
       </CardFooter>
     </Card>
   );
