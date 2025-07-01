@@ -194,9 +194,9 @@
 .crypto-shape {
   position: absolute;
   border-radius: 1rem;
-  background-color: hsla(var(--primary), 0.1);
-  border: 1px solid hsla(var(--primary), 0.2);
+  background-color: hsla(var(--foreground), 0.05);
+  border: 1px solid hsla(var(--foreground), 0.1);
   animation: float-crypto 20s infinite ease-in-out;
   will-change: transform, opacity;
-  box-shadow: 0 0 15px hsla(var(--primary), 0.1);
+  box-shadow: 0 0 15px hsla(var(--foreground), 0.05);
 }
