@@ -11,28 +11,24 @@ export const FEATURES_DATA: Feature[] = [
     title: "Secure Authentication",
     description: "Experience a simulated secure login with mock credentials and 2FA.",
     icon: ShieldCheck,
-    borderColorClass: "card-border-silver",
   },
   {
     id: "promo-codes",
     title: "Promo Code Redemption",
     description: "Input promo codes to see your account balance adjust instantly.",
     icon: Gift,
-    borderColorClass: "card-border-silver",
   },
   {
     id: "crypto-events",
     title: "Crypto Events Display",
     description: "Stay updated with news-style crypto events from a mock feed.",
     icon: Newspaper,
-    borderColorClass: "card-border-silver",
   },
   {
     id: "seed-phrase",
     title: "Seed Phrase Recovery",
     description: "Simulate account recovery using a mock seed phrase with interactive feedback.",
     icon: KeyRound,
-    borderColorClass: "card-border-silver",
   },
 ];
 

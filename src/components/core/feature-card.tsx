@@ -9,9 +9,9 @@ interface FeatureCardProps {
 export function FeatureCard({ feature }: FeatureCardProps) {
   const IconComponent = feature.icon;
   return (
-    <Card className={cn("h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1", feature.borderColorClass)}>
+    <Card className={cn("h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1")}>
       <CardHeader>
-        <div className="mb-4 flex justify-center items-center h-12 w-12 rounded-lg bg-primary/10 text-gold-accent">
+        <div className="mb-4 flex justify-center items-center h-12 w-12 rounded-lg bg-primary/10 text-primary">
           <IconComponent className="h-6 w-6" />
         </div>
         <CardTitle className="text-xl font-semibold text-foreground">{feature.title}</CardTitle>

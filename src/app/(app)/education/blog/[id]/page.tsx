@@ -24,7 +24,7 @@ export default function BlogPostPage() {
       <div className="text-center py-12">
         <h1 className="text-2xl font-bold text-destructive">Post not found</h1>
         <p className="text-muted-foreground mt-2">The blog post you are looking for does not exist or has been moved.</p>
-        <Button asChild variant="link" className="mt-4 text-gold-accent">
+        <Button asChild variant="link" className="mt-4 text-primary">
           <Link href="/education/blog">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Blog
           </Link>
@@ -39,7 +39,7 @@ export default function BlogPostPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4 sm:px-0">
-      <Button asChild variant="outline" className="mb-8 border-accent text-accent hover:bg-accent hover:text-accent-foreground">
+      <Button asChild variant="outline" className="mb-8">
         <Link href="/education/blog">
           <ArrowLeft className="mr-2 h-4 w-4" /> Back to Blog
         </Link>
@@ -47,7 +47,7 @@ export default function BlogPostPage() {
 
       <article key={postId} className="space-y-6"> {/* Added key={postId} here */}
         <header className="space-y-3">
-          <h1 className="text-4xl font-bold tracking-tight text-foreground text-gradient-gold">{post.title}</h1>
+          <h1 className="text-4xl font-bold tracking-tight text-primary">{post.title}</h1>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
             <div className="flex items-center">
               <CalendarDays className="mr-1.5 h-4 w-4" />
@@ -74,7 +74,7 @@ export default function BlogPostPage() {
         </div>
         
         <Card className="bg-card/50">
-          <CardContent className="prose prose-invert prose-lg max-w-none py-6 text-foreground prose-headings:text-foreground prose-a:text-gold-accent prose-strong:text-foreground">
+          <CardContent className="prose prose-invert prose-lg max-w-none py-6 text-foreground prose-headings:text-foreground prose-a:text-primary prose-strong:text-foreground">
             {/* For a real app, render Markdown here */}
             <p className="lead text-lg text-muted-foreground mb-6">{post.summary}</p>
             {fullContent.split('\n').map((paragraph, index) => (
@@ -85,7 +85,7 @@ export default function BlogPostPage() {
         
         {post.externalLink && (
           <div className="my-6 text-center">
-            <Button asChild className="btn-silver">
+            <Button asChild variant="secondary">
               <a href={post.externalLink} target="_blank" rel="noopener noreferrer">
                 Read Full Article <ExternalLinkIcon className="ml-2 h-4 w-4" />
               </a>
@@ -97,7 +97,7 @@ export default function BlogPostPage() {
           <h3 className="text-md font-semibold text-muted-foreground mb-2">Tags:</h3>
           <div className="flex flex-wrap gap-2">
             {post.tags.map(tag => (
-              <Badge key={tag} variant="outline" className="border-accent text-accent">{tag}</Badge>
+              <Badge key={tag} variant="secondary">{tag}</Badge>
             ))}
           </div>
         </footer>

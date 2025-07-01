@@ -155,13 +155,13 @@ export default function DashboardPage() {
 
         <TabsContent value="overview" className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Card className="card-border-gold">
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">DD Coin Balance</CardTitle>
-                <DollarSign className="h-5 w-5 text-gold-accent" />
+                <DollarSign className="h-5 w-5 text-primary" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-gold-accent">
+                <div className="text-3xl font-bold text-primary">
                   {accountBalance.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} DD Coins
                 </div>
                 <p className="text-xs text-muted-foreground pt-1">
@@ -170,7 +170,7 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="col-span-1 lg:col-span-2 card-border-silver">
+            <Card className="col-span-1 lg:col-span-2">
               <CardHeader>
                 <CardTitle className="flex items-center text-xl">
                   <Gift className="mr-2 h-6 w-6 text-accent" />
@@ -189,7 +189,7 @@ export default function DashboardPage() {
                     onChange={(e) => setPromoCode(e.target.value)}
                     className="font-mono"
                   />
-                  <Button onClick={handleApplyPromoCode} className="btn-silver" disabled={isApplyingPromo}>
+                  <Button onClick={handleApplyPromoCode} variant="secondary" disabled={isApplyingPromo}>
                     {isApplyingPromo ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Apply"}
                   </Button>
                 </div>
@@ -213,7 +213,7 @@ export default function DashboardPage() {
                     id="notifications-toggle"
                     checked={notificationsEnabled}
                     onCheckedChange={handleNotificationToggle}
-                    className="data-[state=checked]:bg-gold-accent"
+                    className="data-[state=checked]:bg-primary"
                   />
                   <Label htmlFor="notifications-toggle" className="text-muted-foreground">
                     Enable real-time crypto event alerts (simulated)
@@ -227,16 +227,16 @@ export default function DashboardPage() {
                 <CardTitle className="text-xl">Quick Links</CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-2 gap-4">
-                <Button variant="outline" asChild className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
+                <Button variant="outline" asChild>
                   <Link href="/education/tutorials">Tutorials <ExternalLink className="ml-2 h-4 w-4" /></Link>
                 </Button>
-                <Button variant="outline" asChild className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
+                <Button variant="outline" asChild>
                   <Link href="/education/faqs">FAQs <ExternalLink className="ml-2 h-4 w-4" /></Link>
                 </Button>
-                <Button variant="outline" asChild className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
+                <Button variant="outline" asChild>
                   <Link href="/education/blog">Blog <ExternalLink className="ml-2 h-4 w-4" /></Link>
                 </Button>
-                <Button variant="outline" asChild className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
+                <Button variant="outline" asChild>
                   <Link href="/events">Crypto Events <ExternalLink className="ml-2 h-4 w-4" /></Link>
                 </Button>
               </CardContent>

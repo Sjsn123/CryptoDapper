@@ -4,7 +4,6 @@ export interface Feature {
   title: string;
   description: string;
   icon: React.ElementType; // Lucide icon component
-  borderColorClass: string;
 }
 
 export interface CryptoEvent {

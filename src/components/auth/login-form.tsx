@@ -99,12 +99,12 @@ export function LoginForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading}>
+          <Button type="submit" className="w-full" disabled={currentIsLoading}>
             {isSubmittingEmail ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogIn className="mr-2 h-4 w-4" />}
             Login with Email
           </Button>
           <div className="text-sm text-center mt-4">
-            <Link href="/auth/recover" className="font-medium text-gold-accent hover:underline">
+            <Link href="/auth/recover" className="font-medium text-primary hover:underline">
               Forgot password?
             </Link>
           </div>

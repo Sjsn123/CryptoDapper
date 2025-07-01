@@ -10,7 +10,7 @@ interface EventCardProps {
 }
 
 export function EventCard({ event }: EventCardProps) {
-  const borderColorClass = event.priority === 'high' ? 'card-border-gold' : 'card-border-silver';
+  const borderColorClass = event.priority === 'high' ? 'border-primary' : 'border-border';
   
   return (
     <Card className={cn("flex flex-col h-full hover:shadow-xl transition-shadow duration-300", borderColorClass)}>
@@ -28,7 +28,7 @@ export function EventCard({ event }: EventCardProps) {
       )}
       <CardFooter className="border-t pt-4 mt-auto">
         {event.link ? (
-          <Button variant="link" asChild className="text-gold-accent px-0 hover:underline">
+          <Button variant="link" asChild className="text-primary px-0 hover:underline">
             <Link href={event.link}>
               Read More <ArrowRight className="ml-2 h-4 w-4" />
             </Link>

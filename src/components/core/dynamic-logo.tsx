@@ -15,12 +15,12 @@ export function DynamicLogo({ className, size = 'md' }: DynamicLogoProps) {
   return (
     <div
       className={cn(
-        "font-mono font-bold text-gold-accent select-none",
+        "font-mono font-bold text-primary select-none",
         "animate-spin-y [animation-duration:10s]", // Slower spin
         sizeClasses[size],
         className
       )}
-      style={{ textShadow: "0 0 8px hsl(var(--gold-accent) / 0.7)" }}
+      style={{ textShadow: "0 0 8px hsl(var(--primary) / 0.5)" }}
     >
       DD
     </div>

@@ -54,11 +54,11 @@ const StepIndicator = ({ number, label, isActive }: { number: number; label: str
   <div className="flex items-center space-x-3 mb-3">
     <div className={cn(
       "flex items-center justify-center w-8 h-8 rounded-full border-2",
-      isActive ? "bg-gold-accent border-gold-accent text-gold-accent-foreground" : "bg-muted border-border text-muted-foreground"
+      isActive ? "bg-primary border-primary text-primary-foreground" : "bg-muted border-border text-muted-foreground"
     )}>
       {number}
     </div>
-    <span className={cn("text-lg font-medium", isActive ? "text-gold-accent" : "text-foreground")}>{label}</span>
+    <span className={cn("text-lg font-medium", isActive ? "text-primary" : "text-foreground")}>{label}</span>
   </div>
 );
 
@@ -79,14 +79,14 @@ export function DepositForm() {
   
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-xl card-border-silver">
+    <Card className="w-full max-w-2xl mx-auto shadow-xl">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-foreground">Deposit Funds</CardTitle>
       </CardHeader>
       <CardContent className="space-y-8">
         <Alert className="bg-primary/20 border-primary/50 text-foreground">
-          <Info className="h-5 w-5 text-gold-accent" />
-          <AlertTitle className="text-gold-accent">Welcome Promotion!</AlertTitle>
+          <Info className="h-5 w-5 text-primary" />
+          <AlertTitle className="text-primary">Welcome Promotion!</AlertTitle>
           <AlertDescription>
             Make your first deposit and receive a <span className="font-bold">190 USDT Bonus!</span> (Demo offer)
           </AlertDescription>
@@ -147,7 +147,7 @@ export function DepositForm() {
                   htmlFor={`network-${network}`}
                   className={cn(
                     "flex-1 text-center cursor-pointer rounded-md border-2 border-muted bg-popover p-3 hover:bg-accent hover:text-accent-foreground",
-                    "peer-data-[state=checked]:border-gold-accent peer-data-[state=checked]:ring-2 peer-data-[state=checked]:ring-gold-accent peer-data-[state=checked]:bg-gold-accent/10 peer-data-[state=checked]:text-gold-accent"
+                    "peer-data-[state=checked]:border-primary peer-data-[state=checked]:ring-2 peer-data-[state=checked]:ring-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary"
                   )}
                 >
                   {network}
@@ -162,7 +162,7 @@ export function DepositForm() {
         
       </CardContent>
       <CardFooter className="flex flex-col gap-4 border-t pt-6">
-        <Button className="w-full btn-gold" onClick={handleBuyWithCard}>
+        <Button className="w-full" onClick={handleBuyWithCard}>
           <CreditCard className="mr-2 h-5 w-5" />
           Buy {currentAsset.symbol} with card
         </Button>

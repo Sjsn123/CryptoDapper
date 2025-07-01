@@ -56,10 +56,10 @@ export function TutorialRecommendationEngine() {
   };
 
   return (
-    <Card className="mt-8 shadow-lg card-border-gold">
+    <Card className="mt-8 shadow-lg">
       <CardHeader>
         <CardTitle className="flex items-center text-xl">
-          <Wand2 className="mr-2 h-6 w-6 text-gold-accent" />
+          <Wand2 className="mr-2 h-6 w-6 text-primary" />
           Personalized Tutorial Recommendations
         </CardTitle>
         <CardDescription>
@@ -74,7 +74,7 @@ export function TutorialRecommendationEngine() {
           rows={3}
           className="bg-input"
         />
-        <Button onClick={handleSubmit} disabled={isLoading} className="btn-gold w-full sm:w-auto">
+        <Button onClick={handleSubmit} disabled={isLoading} className="w-full sm:w-auto">
           {isLoading ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
@@ -89,7 +89,7 @@ export function TutorialRecommendationEngine() {
           <ul className="list-disc list-inside space-y-1 text-muted-foreground">
             {recommendations.map((rec, index) => (
               <li key={index} className="flex items-start">
-                <Lightbulb className="h-4 w-4 mr-2 mt-1 text-gold-accent shrink-0" />
+                <Lightbulb className="h-4 w-4 mr-2 mt-1 text-primary shrink-0" />
                 {rec.title}
               </li>
             ))}

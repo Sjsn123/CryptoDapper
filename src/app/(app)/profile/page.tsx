@@ -30,7 +30,7 @@ export default function ProfilePage() {
   if (authIsLoading && !user) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
-        <Loader2 className="h-8 w-8 animate-spin text-gold-accent" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -59,9 +59,9 @@ export default function ProfilePage() {
         </Button>
       </div>
       
-      <Card className="max-w-xl mx-auto card-border-gold">
+      <Card className="max-w-xl mx-auto">
         <CardHeader className="text-center">
-          <Avatar className="w-24 h-24 mx-auto mb-4 border-2 border-gold-accent">
+          <Avatar className="w-24 h-24 mx-auto mb-4 border-2 border-primary">
             <AvatarImage src={user?.photoURL || undefined} alt={user?.displayName || "User"} />
             <AvatarFallback>
               {user?.displayName ? (
@@ -71,7 +71,7 @@ export default function ProfilePage() {
               )}
             </AvatarFallback>
           </Avatar>
-          <CardTitle className="text-2xl text-gradient-gold">{user?.displayName || "User Name"}</CardTitle>
+          <CardTitle className="text-2xl text-primary">{user?.displayName || "User Name"}</CardTitle>
           <CardDescription className="text-muted-foreground">{user?.email || "No email provided"}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">

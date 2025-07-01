@@ -10,7 +10,7 @@ export default function RecoveryPage() {
        footerContent={
         <p>
           Remembered your password?{" "}
-          <Link href="/auth/login" className="font-medium text-gold-accent hover:underline">
+          <Link href="/auth/login" className="font-medium text-primary hover:underline">
             Log in
           </Link>
         </p>

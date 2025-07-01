@@ -123,7 +123,7 @@ export function RegisterForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full btn-gold" disabled={currentIsLoading}>
+          <Button type="submit" className="w-full" disabled={currentIsLoading}>
             {isSubmittingEmail ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
             Register with Email
           </Button>

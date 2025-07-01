@@ -86,7 +86,7 @@ export function RecoveryForm() {
               <AlertDescription>{feedback.message}</AlertDescription>
             </Alert>
           )}
-          <Button type="submit" className="w-full btn-silver" disabled={currentIsLoading}>
+          <Button type="submit" variant="secondary" className="w-full" disabled={currentIsLoading}>
             {currentIsLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
             Send Reset Link
           </Button>
@@ -96,7 +96,7 @@ export function RecoveryForm() {
         Firebase Auth typically relies on email/password or social provider recovery.
         The UI for seed phrase can be kept for demo but won't be functional with standard Firebase.
         <div className="mt-4 text-center text-sm">
-          <Button variant="link" onClick={() => setShowEmailReset(false)} className="text-gold-accent hover:underline">
+          <Button variant="link" onClick={() => setShowEmailReset(false)} className="text-primary hover:underline">
             Recover with Seed Phrase (Demo)
           </Button>
         </div> 

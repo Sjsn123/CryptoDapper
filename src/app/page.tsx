@@ -23,17 +23,17 @@ export default function HomePage() {
       <main className="flex-grow">
         {/* Hero Section */}
         <section className="relative py-20 md:py-32 bg-gradient-to-b from-primary to-background text-center overflow-hidden flex items-center justify-center">
-          <div className="absolute inset-0 opacity-10 bg-[url('https://placehold.co/1920x1080/222D3B/1A2533/png?text=Digital+Nodes&font=roboto')] bg-cover bg-center" data-ai-hint="abstract blockchain"></div>
+          <div className="absolute inset-0 opacity-10 bg-[url('https://placehold.co/1920x1080.png')] bg-cover bg-center" data-ai-hint="abstract blockchain"></div>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <DynamicLogo size="lg" className="mx-auto mb-8 animate-pulse-glow" />
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground">
-              <span className="text-accent">Welcome to </span><span className="text-gradient-gold">{APP_NAME}</span>
+              <span className="text-muted-foreground">Welcome to </span><span className="text-primary">{APP_NAME}</span>
             </h1>
             <p className="mt-6 max-w-2xl mx-auto text-lg sm:text-xl text-muted-foreground">
               {APP_TAGLINE}
             </p>
             <div className="mt-10">
-              <Button size="lg" className="btn-gold px-8 py-3 text-lg" asChild>
+              <Button size="lg" className="px-8 py-3 text-lg" asChild>
                 <Link href="/auth/register">
                   Get Started <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
@@ -60,7 +60,7 @@ export default function HomePage() {
         </section>
 
         {/* How it works / Value Proposition Section */}
-        <section className="py-16 md:py-24 bg-primary/50 backdrop-blur-sm"> {/* Added backdrop blur */}
+        <section className="py-16 md:py-24 bg-primary/5 backdrop-blur-sm"> {/* Added backdrop blur */}
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-1 gap-12 items-center"> 
               <div>
@@ -72,19 +72,19 @@ export default function HomePage() {
                 </p>
                 <ul className="space-y-3 text-muted-foreground">
                   <li className="flex items-start">
-                    <CheckCircle className="h-6 w-6 text-gold-accent mr-3 mt-1 shrink-0" />
+                    <CheckCircle className="h-6 w-6 text-primary mr-3 mt-1 shrink-0" />
                     <span>Interactive simulations of wallet features and transactions.</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-6 w-6 text-gold-accent mr-3 mt-1 shrink-0" />
+                    <CheckCircle className="h-6 w-6 text-primary mr-3 mt-1 shrink-0" />
                     <span>Understand security concepts like 2FA and seed phrases.</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-6 w-6 text-gold-accent mr-3 mt-1 shrink-0" />
+                    <CheckCircle className="h-6 w-6 text-primary mr-3 mt-1 shrink-0" />
                     <span>Get a feel for crypto events and market dynamics through mock data.</span>
                   </li>
                 </ul>
-                 <Button variant="link" className="text-gold-accent mt-6 px-0 text-lg" asChild>
+                 <Button variant="link" className="text-primary mt-6 px-0 text-lg" asChild>
                     <Link href="/education/tutorials">
                         Browse Tutorials <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>

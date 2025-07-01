@@ -23,7 +23,7 @@ export default function EventsPage() {
     <div className="space-y-8">
       <header className="space-y-2">
         <h1 className="text-3xl font-bold text-foreground flex items-center">
-          <Newspaper className="mr-3 h-8 w-8 text-gold-accent" />
+          <Newspaper className="mr-3 h-8 w-8 text-primary" />
           Crypto Events Showcase
         </h1>
         <p className="text-muted-foreground">

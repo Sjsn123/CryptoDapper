@@ -39,10 +39,7 @@ export function Header({ isAuthenticated = false }: HeaderProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={cn(
-                "text-sm font-medium text-muted-foreground transition-colors hover:text-foreground",
-                "nav-link-hover-gradient-border" // Added class for hover effect
-              )}
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {item.label}
             </Link>
@@ -58,12 +55,12 @@ export function Header({ isAuthenticated = false }: HeaderProps) {
             </Button>
           ) : (
             <div className="hidden md:flex gap-2">
-              <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground" asChild>
+              <Button variant="outline" asChild>
                 <Link href="/auth/login">
                   <LogIn className="mr-2 h-4 w-4" /> Login
                 </Link>
               </Button>
-              <Button className="btn-gold" asChild>
+              <Button asChild>
                 <Link href="/auth/register">
                   <UserPlus className="mr-2 h-4 w-4" /> Register
                 </Link>
@@ -83,19 +80,19 @@ export function Header({ isAuthenticated = false }: HeaderProps) {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="text-lg font-medium text-foreground transition-colors hover:text-gold-accent"
+                    className="text-lg font-medium text-foreground transition-colors hover:text-primary"
                   >
                     {item.label}
                   </Link>
                 ))}
                  {!isAuthenticated && (
                   <>
-                    <Button variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground" asChild>
+                    <Button variant="outline" className="w-full" asChild>
                       <Link href="/auth/login">
                         <LogIn className="mr-2 h-4 w-4" /> Login
                       </Link>
                     </Button>
-                    <Button className="btn-gold w-full" asChild>
+                    <Button className="w-full" asChild>
                       <Link href="/auth/register">
                         <UserPlus className="mr-2 h-4 w-4" /> Register
                       </Link>

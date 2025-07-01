@@ -38,9 +38,9 @@ export default function TutorialsPage() {
       <div>
         <div className="flex justify-between items-center mb-2">
           <h3 className="text-sm font-medium text-muted-foreground">Your Progress</h3>
-          <span className="text-sm font-medium text-gold-accent">{completedTutorials.length} / {allTutorials.length} completed</span>
+          <span className="text-sm font-medium text-primary">{completedTutorials.length} / {allTutorials.length} completed</span>
         </div>
-        <Progress value={progressPercentage} className="w-full h-3 [&>div]:bg-gradient-to-r [&>div]:from-gold-accent [&>div]:to-yellow-400" />
+        <Progress value={progressPercentage} className="w-full h-3" />
       </div>
 
       <TutorialRecommendationEngine />

@@ -12,7 +12,7 @@ interface BlogPostCardProps {
 
 export function BlogPostCard({ post }: BlogPostCardProps) {
   return (
-    <Card className="flex flex-col h-full overflow-hidden hover:shadow-xl transition-shadow duration-300 card-border-silver">
+    <Card className="flex flex-col h-full overflow-hidden hover:shadow-xl transition-shadow duration-300">
       <div className="relative w-full aspect-[16/9]">
         <Image
           src={post.imageUrl}
@@ -28,7 +28,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
           <CalendarDays className="h-3.5 w-3.5 mr-1.5" />
           {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
         </p>
-        <CardTitle className="text-xl text-foreground hover:text-gold-accent transition-colors">
+        <CardTitle className="text-xl text-foreground hover:text-primary transition-colors">
           <Link href={`/education/blog/${post.id}`}>{post.title}</Link>
         </CardTitle>
          <div className="flex flex-wrap gap-1 pt-1">
@@ -41,7 +41,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
         <CardDescription className="line-clamp-3 text-muted-foreground">{post.summary}</CardDescription>
       </CardContent>
       <CardFooter className="border-t pt-4">
-        <Button variant="link" asChild className="text-gold-accent px-0 hover:underline">
+        <Button variant="link" asChild className="text-primary px-0 hover:underline">
           <Link href={`/education/blog/${post.id}`}>
             Read More <ArrowRight className="ml-2 h-4 w-4" />
           </Link>

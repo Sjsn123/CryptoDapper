@@ -29,12 +29,12 @@ export const TutorialCard = React.memo(function TutorialCard({ tutorial, onToggl
   };
 
   return (
-    <Card className="flex flex-col h-full hover:shadow-xl transition-shadow duration-300 card-border-silver">
+    <Card className="flex flex-col h-full hover:shadow-xl transition-shadow duration-300">
       <CardHeader>
         {tutorial.videoUrl ? (
            <button
             onClick={handleVideoAreaClick}
-            className="relative aspect-video mb-4 rounded-md overflow-hidden focus:outline-none focus:ring-2 focus:ring-gold-accent group cursor-pointer"
+            className="relative aspect-video mb-4 rounded-md overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary group cursor-pointer"
             aria-label={`Watch tutorial: ${tutorial.title}`}
            >
              <Image 
@@ -84,7 +84,7 @@ export const TutorialCard = React.memo(function TutorialCard({ tutorial, onToggl
             id={`complete-${tutorial.id}`}
             checked={isCompleted}
             onCheckedChange={handleCheckedChange}
-            className="border-accent data-[state=checked]:bg-gold-accent data-[state=checked]:text-primary"
+            className="border-accent data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
           />
           <label
             htmlFor={`complete-${tutorial.id}`}

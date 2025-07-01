@@ -1,220 +1,94 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-body {
-  font-family: var(--font-inter), sans-serif;
-  /* Use the new background base color */
- @apply bg-background-base;
-  /* Use the new primary text color */
- @apply text-primary-text;
-}
-
-.font-mono {
-  font-family: var(--font-roboto-mono), monospace;
-}
-
+ 
 @layer base {
   :root {
-    /* Existing shadcn/ui colors (will be overridden by new palette where applicable) */
-    --background: 213 20% 18%; /* #222D3B - Near-black desaturated dark blue */
-    --foreground: 0 0% 100%; /* #FFFFFF - White */
+    --background: 222 83.3% 4.9%;
+    --foreground: 210 20% 98%;
 
-    --card: 220 28% 25%; /* #2E3B55 - Lighter blue for cards */
-    --card-foreground: 0 0% 100%; /* #FFFFFF */
+    --card: 222 83.3% 7.8%;
+    --card-foreground: 210 20% 98%;
+ 
+    --popover: 222 83.3% 4.9%;
+    --popover-foreground: 210 20% 98%;
+ 
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 210 20% 98%;
+ 
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 20% 98%;
+ 
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 20% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
 
-    --popover: 216 38% 12%; /* Darker blue for popovers, slightly darker than primary */
-    --popover-foreground: 0 0% 100%; /* #FFFFFF */
-
-    --primary: 216 38% 15%; /* #1A2533 - Dark blue */
-    --primary-foreground: 0 0% 100%; /* #FFFFFF */
-
-    --secondary: 220 28% 25%; /* #2E3B55 - Lighter blue (same as card for now) */
-    --secondary-foreground: 0 0% 100%; /* #FFFFFF */
-
-    --muted: 213 20% 28%; /* A muted version of the background */
-    --muted-foreground: 0 0% 70%; /* Lighter grey for muted text */
-
-    --accent: 0 0% 75%; /* #C0C0C0 - Metallic silver */
-    --accent-foreground: 216 38% 15%; /* Dark blue for text on silver accents */
-    
-    /* Gold accent for specific elements like high-priority events or primary CTAs */
-    --gold-accent: 51 100% 50%; /* #FFD700 */
-    --gold-accent-foreground: 216 38% 15%; /* Dark blue for text on gold */
-
-    --destructive: 0 72% 51%; /* A brighter red for destructive actions */
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 215 15% 35%; /* Desaturated dark blue-grey for subtle borders */
-    --input: 220 28% 20%; /* Slightly darker blue for inputs */
-    --ring: 0 0% 75%; /* #C0C0C0 - Metallic silver for focus rings */
-
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 217.2 91.2% 59.8%;
+ 
     --radius: 0.5rem;
-
-    /* New Crypto Palette Colors */
-    --background-base: 0 0% 5.1%; /* #0D0D0D */
-    --secondary-sections: 216 38% 15%; /* #1A2533 */
-    --accent-panels: 220 8% 21%; /* #2C2F36 */
-    --primary-text: 0 0% 100%; /* #FFFFFF */
-    --secondary-text: 0 0% 80%; /* #CCCCCC */
-    --cta-gold: 51 100% 50%; /* #FFD700 */
-    --cta-silver: 0 0% 75%; /* #C0C0C0 */
-
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-
-    --sidebar-background: 216 38% 15%; /* #1A2533 - Dark blue for sidebar */
-    --sidebar-foreground: 0 0% 85%; /* Lighter grey for sidebar text */
-    --sidebar-primary: 0 0% 75%; /* Silver for active/primary items in sidebar */
-    --sidebar-primary-foreground: 216 38% 15%; /* Dark blue text on silver */
-    --sidebar-accent: 220 28% 20%; /* Slightly darker blue for hover/accent in sidebar */
-    --sidebar-accent-foreground: 0 0% 100%; /* White text on sidebar accent */
-    --sidebar-border: 215 15% 20%; /* Darker desaturated blue-grey border for sidebar */
-    --sidebar-ring: 0 0% 75%; /* Silver for focus rings in sidebar */
-
-  }
-
-  .dark {
-    /* Dark theme is the default, so these variables are the same as :root */
-    --background: 213 20% 18%;
-    --foreground: 0 0% 100%;
-
-    --card: 220 28% 25%;
-    --card-foreground: 0 0% 100%;
-
-    --popover: 216 38% 12%;
-    --popover-foreground: 0 0% 100%;
-
-    --primary: 216 38% 15%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 220 28% 25%;
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 213 20% 28%;
-    --muted-foreground: 0 0% 70%;
-
-    --accent: 0 0% 75%;
-    --accent-foreground: 216 38% 15%;
-    
-    --gold-accent: 51 100% 50%;
-    --gold-accent-foreground: 216 38% 15%;
-
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 215 15% 35%; 
-    --input: 220 28% 20%;
-    --ring: 0 0% 75%;
 
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+  }
 
-    --sidebar-background: 216 38% 15%;
-    --sidebar-foreground: 0 0% 85%;
-    --sidebar-primary: 0 0% 75%;
-    --sidebar-primary-foreground: 216 38% 15%;
-    --sidebar-accent: 220 28% 20%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 215 15% 20%; 
-    --sidebar-ring: 0 0% 75%;
+  .dark {
+    --background: 222 83.3% 4.9%;
+    --foreground: 210 20% 98%;
+
+    --card: 222 83.3% 7.8%;
+    --card-foreground: 210 20% 98%;
+ 
+    --popover: 222 83.3% 4.9%;
+    --popover-foreground: 210 20% 98%;
+ 
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 210 20% 98%;
+ 
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 20% 98%;
+ 
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 20% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 217.2 91.2% 59.8%;
+
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
   }
 }
+ 
 @layer base {
   * {
     @apply border-border;
   }
   body {
-    /* Set body background and text color using the new palette colors from Tailwind config */
- @apply bg-background-base text-primary-text;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    @apply bg-background text-foreground;
+    font-family: var(--font-inter), sans-serif;
   }
-
-  /* Base styles for wide spacing and rounded corners */
-  body > * {
-    margin-bottom: 40px; /* Example of wide spacing between main sections */
+  .font-mono {
+    font-family: var(--font-roboto-mono), monospace;
   }
-
-  /* Base style for cards (can be overridden by specific card components) */
-  .card {
-    @apply rounded-xl; /* Rounded corners 8-12px, using 12px as an example */
-    /* Use shadows instead of borders - Tailwind shadow classes can be applied directly */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Example shadow */
-  }
-}
-
-/* Custom metallic button styles */
-.btn-gold {
-  @apply bg-gradient-to-br from-[#FFD700] to-[#F0C040] text-primary hover:from-[#FFDF33] hover:to-[#F2C852] shadow-md transition-all duration-300;
-  color: hsl(var(--gold-accent-foreground));
-}
-.btn-gold:hover {
-   box-shadow: 0 0 15px hsl(var(--gold-accent) / 0.5);
-}
-
-.btn-silver {
-  @apply bg-gradient-to-br from-[#C0C0C0] to-[#A8A8A8] text-primary hover:from-[#D3D3D3] hover:to-[#B0B0B0] shadow-md transition-all duration-300;
-  color: hsl(var(--accent-foreground));
-}
-.btn-silver:hover {
-   box-shadow: 0 0 15px hsl(var(--accent) / 0.5);
-}
-
-/* Custom text gradient for metallic effect - not universally supported but good for highlights */
-.text-gradient-gold {
-  @apply bg-gradient-to-r from-[#FFD700] to-[#F0C040] bg-clip-text text-transparent;
-}
-
-.text-gradient-silver {
-  @apply bg-gradient-to-r from-slate-300 via-slate-400 to-slate-500 bg-clip-text text-transparent;
-}
-
-/* Custom border gradient effect for cards */
-.card-border-gold {
-  @apply border-transparent border-2 rounded-lg p-px bg-clip-padding;
-  background-image: linear-gradient(hsl(var(--card)), hsl(var(--card))), linear-gradient(145deg, hsl(var(--gold-accent)), hsl(var(--gold-accent) / 0.7));
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-}
-
-.card-border-silver {
-  @apply border-transparent border-2 rounded-lg p-px bg-clip-padding;
-  background-image: linear-gradient(hsl(var(--card)), hsl(var(--card))), linear-gradient(145deg, hsl(var(--accent)), hsl(var(--accent) / 0.7));
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-}
-
-/* New class for navigation link hover gradient border */
-.nav-link-hover-gradient-border {
-  position: relative;
-  padding-bottom: 4px; /* Add some padding for the border to sit below */
-}
-
-.nav-link-hover-gradient-border::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0px; /* Position at the bottom */
-  height: 2px; /* Border thickness */
-  background: linear-gradient(to right, hsl(var(--accent)), hsl(var(--primary)));
-  opacity: 0;
-  transform: scaleX(0);
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-  transform-origin: center;
-}
-
-.nav-link-hover-gradient-border:hover::after {
-  opacity: 1;
-  transform: scaleX(1);
 }
 
 /* Keyframes for the scrolling text animation using transform */
@@ -222,4 +96,3 @@ body {
   0% { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
 }
-

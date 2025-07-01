@@ -51,7 +51,7 @@ const BankTransferIcon = () => (
 );
 
 const paymentMethods = [
-  { id: "card", label: "Credit/Debit Card", icon: <CreditCard className="h-6 w-6 text-gold-accent" />, component: VisaIcon },
+  { id: "card", label: "Credit/Debit Card", icon: <CreditCard className="h-6 w-6 text-primary" />, component: VisaIcon },
   { id: "paypal", label: "PayPal", icon: <PayPalIcon />, component: PayPalIcon },
   { id: "bank", label: "Bank Transfer (SWIFT)", icon: <BankTransferIcon />, component: BankTransferIcon },
 ];
@@ -82,7 +82,7 @@ export function WithdrawForm() {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-xl card-border-gold">
+    <Card className="w-full max-w-2xl mx-auto shadow-xl">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-foreground">Withdraw Funds</CardTitle>
         <CardDescription className="text-muted-foreground">
@@ -121,7 +121,7 @@ export function WithdrawForm() {
                   htmlFor={`method-${method.id}`}
                   className={cn(
                     "flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer transition-all",
-                    selectedPaymentMethod === method.id && "border-gold-accent ring-2 ring-gold-accent shadow-lg"
+                    selectedPaymentMethod === method.id && "border-primary ring-2 ring-primary shadow-lg"
                   )}
                 >
                   <RadioGroupItem value={method.id} id={`method-${method.id}`} className="sr-only" />
@@ -162,7 +162,7 @@ export function WithdrawForm() {
         )}
 
         <Alert variant="default" className="bg-primary/20 border-primary/50">
-            <ShieldCheck className="h-5 w-5 text-gold-accent" />
+            <ShieldCheck className="h-5 w-5 text-primary" />
           <AlertTitle className="font-semibold text-foreground">Security Note</AlertTitle>
           <AlertDescription className="text-muted-foreground">
             Ensure your withdrawal details are correct. Transactions on the blockchain are irreversible. (This is a demo, no real transactions will occur).
@@ -171,11 +171,11 @@ export function WithdrawForm() {
 
       </CardContent>
       <CardFooter className="flex flex-col gap-4 border-t pt-6">
-        <Button onClick={handleWithdraw} className="w-full btn-gold text-lg py-3" disabled={isLoading}>
+        <Button onClick={handleWithdraw} className="w-full text-lg py-3" disabled={isLoading}>
           {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <ArrowUpFromLine className="mr-2 h-5 w-5" />}
           Withdraw DD Coins
         </Button>
-        <Button variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground" onClick={() => toast({title: "Action (Demo)", description: "Limit increase request simulation for this demo."})}>
+        <Button variant="outline" className="w-full" onClick={() => toast({title: "Action (Demo)", description: "Limit increase request simulation for this demo."})}>
             <Info className="mr-2 h-4 w-4" />
             Increase withdrawal limit
         </Button>
@@ -183,5 +183,3 @@ export function WithdrawForm() {
     </Card>
   );
 }
-
-    

@@ -6,11 +6,11 @@ export default function RegisterPage() {
   return (
     <AuthFormWrapper
       title="Create Your Account"
-      description="Join CryptoDapper Demo to explore the world of crypto."
+      description="Join CryptoDapper to explore the world of crypto."
       footerContent={
         <p>
           Already have an account?{" "}
-          <Link href="/auth/login" className="font-medium text-gold-accent hover:underline">
+          <Link href="/auth/login" className="font-medium text-primary hover:underline">
             Log in
           </Link>
         </p>

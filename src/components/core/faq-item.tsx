@@ -13,7 +13,7 @@ interface FaqItemProps {
 export function FaqItem({ faq }: FaqItemProps) {
   return (
     <AccordionItem value={faq.id} className="border-b-border/50">
-      <AccordionTrigger className="text-left text-lg hover:no-underline text-foreground hover:text-gold-accent">
+      <AccordionTrigger className="text-left text-lg hover:no-underline text-foreground hover:text-primary">
         <div className="flex items-center">
           <HelpCircle className="mr-3 h-5 w-5 text-accent shrink-0" /> 
           {faq.question}

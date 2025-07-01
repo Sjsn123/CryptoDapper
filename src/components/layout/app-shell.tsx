@@ -26,7 +26,7 @@ export function AppShell({ children }: AppShellProps) {
   if (authIsLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background text-foreground">
-        <Loader2 className="h-8 w-8 animate-spin text-gold-accent" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
         <span className="ml-2">Loading application...</span>
       </div>
     );
@@ -35,7 +35,7 @@ export function AppShell({ children }: AppShellProps) {
   if (!user) {
     return (
        <div className="flex items-center justify-center min-h-screen bg-background text-foreground">
-        <Loader2 className="h-8 w-8 animate-spin text-gold-accent" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
         <span className="ml-2">Redirecting to login...</span>
       </div>
     );
@@ -53,11 +53,11 @@ export function AppShell({ children }: AppShellProps) {
         {/* Sidebar */}
         <aside 
           className={cn(
-            "bg-sidebar text-sidebar-foreground border-r border-sidebar-border transition-all duration-300 ease-in-out flex flex-col",
+            "bg-card text-foreground border-r border-border transition-all duration-300 ease-in-out flex flex-col",
             isSidebarOpen ? "w-64" : "w-20"
           )}
         >
-          <div className="p-4 border-b border-sidebar-border flex items-center justify-between">
+          <div className="p-4 border-b border-border flex items-center justify-between">
             {isSidebarOpen && (
               <Link href="/dashboard" className="flex items-center gap-2">
                 <DynamicLogo size="sm" />
@@ -68,7 +68,7 @@ export function AppShell({ children }: AppShellProps) {
               variant="ghost" 
               size="icon" 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="text-sidebar-foreground hover:bg-sidebar-accent"
+              className="text-foreground hover:bg-accent"
               aria-label={isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
             >
               {isSidebarOpen ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
@@ -85,8 +85,8 @@ export function AppShell({ children }: AppShellProps) {
                     className={cn(
                       "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors mb-1",
                       isActive
-                        ? "bg-sidebar-primary text-sidebar-primary-foreground"
-                        : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                        ? "bg-primary text-primary-foreground"
+                        : "text-foreground hover:bg-accent hover:text-accent-foreground",
                       !isSidebarOpen && "justify-center"
                     )}
                     title={!isSidebarOpen ? item.label : undefined}
@@ -98,11 +98,11 @@ export function AppShell({ children }: AppShellProps) {
               })}
             </nav>
           </ScrollArea>
-          <div className="p-4 border-t border-sidebar-border">
+          <div className="p-4 border-t border-border">
             <Button 
               variant="ghost" 
               className={cn(
-                "w-full flex items-center gap-3 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                "w-full flex items-center gap-3 text-foreground hover:bg-accent hover:text-accent-foreground",
                 !isSidebarOpen && "justify-center"
                 )} 
               onClick={handleLogout}
@@ -123,5 +123,3 @@ export function AppShell({ children }: AppShellProps) {
     </div>
   );
 }
-
-    
