@@ -16,6 +16,16 @@ import { useAuth } from "@/hooks/use-auth";
 export default function HomePage() {
   const { user, isLoading } = useAuth(); 
 
+  const cryptoShapes = [
+    { size: 80, top: '10%', left: '15%', duration: '25s', delay: '0s' },
+    { size: 40, top: '20%', left: '80%', duration: '18s', delay: '3s' },
+    { size: 120, top: '70%', left: '5%', duration: '30s', delay: '1s' },
+    { size: 60, top: '80%', left: '90%', duration: '22s', delay: '5s' },
+    { size: 50, top: '40%', left: '50%', duration: '15s', delay: '2s' },
+    { size: 90, top: '60%', left: '75%', duration: '28s', delay: '8s' },
+    { size: 30, top: '90%', left: '30%', duration: '17s', delay: '6s' },
+  ];
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header isAuthenticated={!!user && !isLoading} />
@@ -23,7 +33,22 @@ export default function HomePage() {
       <main className="flex-grow">
         {/* Hero Section */}
         <section className="relative py-20 md:py-32 bg-gradient-to-b from-primary to-background text-center overflow-hidden flex items-center justify-center">
-          <div className="absolute inset-0 opacity-10 bg-[url('https://placehold.co/1920x1080.png')] bg-cover bg-center" data-ai-hint="abstract blockchain"></div>
+          <div className="crypto-animation-container">
+            {cryptoShapes.map((shape, i) => (
+              <div
+                key={i}
+                className="crypto-shape"
+                style={{
+                  width: `${shape.size}px`,
+                  height: `${shape.size}px`,
+                  top: shape.top,
+                  left: shape.left,
+                  animationDuration: shape.duration,
+                  animationDelay: shape.delay,
+                }}
+              />
+            ))}
+          </div>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <DynamicLogo size="lg" className="mx-auto mb-8 animate-pulse-glow" />
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground">
