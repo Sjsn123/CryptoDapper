@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -63,14 +64,22 @@ const tutorialRecommendationsFlow = ai.defineFlow(
     outputSchema: TutorialRecommendationsOutputSchema,
   },
   async input => {
-    // The prompt now has the tutorial list baked in, so we just call it.
-    const {output} = await prompt(input);
-    
-    if (!output?.tutorialRecommendations) {
-       console.error("AI did not return any recommendations.");
-       return { tutorialRecommendations: [] };
-    }
+    try {
+      // The prompt now has the tutorial list baked in, so we just call it.
+      const { output } = await prompt(input);
 
-    return output;
+      if (!output?.tutorialRecommendations || output.tutorialRecommendations.length === 0) {
+        console.warn("AI did not return any recommendations, returning default suggestions.");
+        // Fallback for when AI returns an empty list
+        return { tutorialRecommendations: ["Setting up 2FA", "Understanding Seed Phrases"] };
+      }
+
+      return output;
+    } catch (error) {
+      console.error("AI recommendation flow failed due to an error:", error);
+      console.warn("Falling back to default mock recommendations.");
+      // Fallback for when the AI call itself fails (e.g., API key issue)
+      return { tutorialRecommendations: ["Setting up 2FA", "Understanding Seed Phrases"] };
+    }
   }
 );
