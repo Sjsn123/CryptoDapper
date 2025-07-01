@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
 const AICryptoEventSchema = z.object({
   title: z.string().describe('A catchy and plausible, but fictional, crypto news headline.'),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('The date of the event in YYYY-MM-DD format. Should be recent (e.g., within the last 1-2 weeks).'),
-  description: z.string().optional().describe('A short, 1-2 sentence fictional description of the event.'),
+  description: z.string().optional().describe('A detailed paragraph (3-5 sentences) describing the fictional event, providing some plausible context or impact.'),
   priority: z.enum(['high', 'regular']).optional().describe("The priority of the event, either 'high' or 'regular'. Default to 'regular' if unsure."),
 });
 
@@ -48,7 +48,7 @@ Generate a list of 4 recent crypto events.
 For each event, provide:
 - A 'title': A catchy and plausible, but fictional, crypto news headline.
 - A 'date': The date of the event in YYYY-MM-DD format. Make the dates appear recent, like within the last 7-10 days from today.
-- An optional 'description': A short, 1-2 sentence fictional description of the event.
+- An optional 'description': A detailed paragraph (3-5 sentences) describing the fictional event, providing some plausible context or impact. Make it sound professional and newsworthy.
 - An optional 'priority': Can be 'high' or 'regular'. Default to 'regular' if unsure or not highly impactful.
 
 Focus on events that sound like typical crypto news (e.g., network upgrades, new partnerships, market analysis insights, new (fictional) project launches, security alerts on (fictional) protocols).

@@ -22,7 +22,7 @@ export function EventCard({ event }: EventCardProps) {
       </CardHeader>
       {event.description && (
         <CardContent className="flex-grow">
-          <CardDescription className="line-clamp-3 text-muted-foreground">{event.description}</CardDescription>
+          <CardDescription className="text-muted-foreground">{event.description}</CardDescription>
         </CardContent>
       )}
       <CardFooter className="border-t pt-4 mt-auto">
