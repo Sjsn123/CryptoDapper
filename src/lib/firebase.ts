@@ -6,14 +6,15 @@ import { getAnalytics, type Analytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 // IMPORTANT: This configuration now uses values directly provided by the user.
+// The below code will be availbale to you when you create a project in firebase to use the firebase authentication.
 const firebaseConfig = {
-  apiKey: "AIzaSyB6niuaoLLfhEAUpD7xeznclSh1zN9yuEw", // User confirmed this key
-  authDomain: "cryptodapper-demo.firebaseapp.com",
-  projectId: "cryptodapper-demo",
-  storageBucket: "cryptodapper-demo.appspot.com", // Corrected format
-  messagingSenderId: "977690515468", // From user
-  appId: "1:977690515468:web:350e0ff093ff3ab8137629", // From user
-  measurementId: "G-63YS5VNJCV" // Retained from previous, user should verify if needed
+  apiKey: "Enter your API key", // User confirmed this key
+  authDomain: "Enter the auth domain",
+  projectId: "Enter the project Ido",
+  storageBucket: "Enter the storage bucket domain", // Corrected format
+  messagingSenderId: "Enter the sender ID", // From user
+  appId: "Enter the app id", // From user
+  measurementId: "Enter the measurement id" // Retained from previous, user should verify if needed
 };
 
 // Initialize Firebase
